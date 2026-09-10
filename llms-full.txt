@@ -1,0 +1,55 @@
+# Katto dot online - Full Documentation (llms-full.txt)
+
+> Comprehensive background information, bio text, services, and structural details for Katto's personal portfolio site.
+
+---
+
+## 1. About Katto
+
+### Full Biography
+Hi! I'm Katto, I am an artist, and tech enthusiast in general. I believe some of you reading this have met me by multiple names, including katt, void, fashui, or even cattleox if you've known me since the beginning.
+
+I plan on studying medicine and pathology in the future, and/or maybe computer science.
+
+I'm a furry, if that wasn't obvious from the header, I have NOT gone to any convention yet, but whenever I get a fursuit I probably will.
+
+I don't like theres a twitch streamer with the same name that I have on my socials, it's pretty confusing to see multiple people with the same name. It makes me a bit sad now that I realize that I WAS the one who copied the name, well not really because a friend gave me the name "Kattosaurus" after I started going as "Kattstarzz" because He was named "Cattosaurus", Its a bit silly but yeah.
+
+### Identity & Pronouns
+- **Orientation:** Bisexual
+- **Gender:** Non-binary
+- **Pronouns:** Any pronouns
+
+---
+
+## 2. Services Offered
+
+### A. Commissions
+- **Description:** Affordable artwork primarily focused on furry art, but capable of drawing feral and human art.
+- **Constraints:** **Strictly NO NSFW.** Available when slots are open.
+- **Links:** `commission.html` / `commission/`
+
+### B. Web Development
+- **Description:** Custom website design and development matching styles like the portfolio or other custom layouts. 
+- **Pricing/Terms:** Prices vary; hosting is not included.
+- **Contact:** `whatever@katto.online` or Discord `@exp009`.
+
+### C. Mod Development (Minecraft)
+- **Description:** Custom Minecraft mod creation (specializing in Forge) or character integration into the custom Minecraft mod *Changed Extras*.
+- **Links:** `portfolio.html` / `portfolio/`
+
+---
+
+## 3. Site Structure & Navigation Pages
+
+- **`index.html` (Home):** Main landing page featuring the animated title header, biography section, and carousel of services.
+- **`portfolio.html`:** Showcase of past coding, design, and modding projects.
+- **`commission.html`:** Detailed commission pricing, guidelines, and terms of service.
+- **`characters.html`:** Information regarding original characters and fursonas.
+
+---
+
+## 4. Contact & Socials
+
+- **Email:** `whatever@katto.online`
+- **Discord:** `@exp009`
