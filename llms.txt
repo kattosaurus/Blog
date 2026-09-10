@@ -1,0 +1,25 @@
+# Katto dot online
+
+> Personal portfolio and services site for Katto (also known as katt, void, fashui, or cattleox), a multi-disciplinary artist, furry, and tech enthusiast.
+
+## About
+- **Identity:** Non-binary, bisexual artist and developer. Uses any pronouns.
+- **Backgrounds/Aliases:** Formerly known as katt, void, fashui, and cattleox. 
+- **Future Goals:** Plans to study medicine and pathology, alongside or followed by computer science.
+- **Community:** Active member of the furry community (fursuit pending future convention attendance).
+
+## Services
+- **Commissions:** Affordable furry artwork (feral and human art also available; strictly **NO NSFW**).
+- **Web Development:** Custom web design and development (hosting not included). Contact: `whatever@katto.online` or Discord `@exp009`.
+- **Mod Development (Minecraft):** Custom Minecraft mods (specializing in Forge) and character additions to the mod *Changed Extras*.
+
+## Site Structure & Navigation
+- **Home / About:** `#about` — Personal bio, identity, and background details.
+- **Services:** `#services` — Carousel outlining commission availability, web design, and Minecraft mod development.
+- **Portfolio:** `portfolio.html` / `portfolio/` — Showcase of past work and projects.
+- **Commissions:** `commission.html` / `commission/` — Pricing, terms, and request information.
+- **Characters:** `characters.html` — Original characters and fursona details.
+
+## Contact & Links
+- **Email:** `whatever@katto.online`
+- **Discord:** `@exp009`
