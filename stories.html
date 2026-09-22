@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:image" content="https://katto.online/Online.png">
+  <meta property="og:title" content="Katto">
+  <meta property="og:description" content="Stories and posts by Katto.">
+  <title>Stories | Katto dot online</title>
+  <link rel="icon" href="favicon.ico">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+  <style>
+    :root {
+      --bg-color: #121212;
+      --header-bg: #000000;
+      --text-main: #ffffff;
+      --text-muted: #ffffff9a;
+      --prof-bg: #ffffff36;
+      --btn-bg: #ffffff20;
+      --btn-text: #ffffff;
+      --dropdown-shadow: rgba(0, 0, 0, 0.5);
+      --card-bg: #1a1a1a;
+      --card-border: #ffffff15;
+      --section-bg: #ffffff08;
+      --price-green: #57F287;
+      --price-red: #ff4747;
+      --blur-purple: #5865F2;
+      --code-bg: #00000055;
+      --quote-border: #5865F2;
+    }
+
+    [data-theme="light"] {
+      --bg-color: #f0f0f0;
+      --header-bg: #e0e0e0;
+      --text-main: #121212;
+      --text-muted: #1212129a;
+      --prof-bg: #0000001a;
+      --btn-bg: #00000015;
+      --btn-text: #121212;
+      --dropdown-shadow: rgba(0, 0, 0, 0.1);
+      --card-bg: #ffffff;
+      --card-border: #00000015;
+      --section-bg: #00000008;
+      --price-green: #2a9d4a;
+      --price-red: #d32f2f;
+      --blur-purple: #3b42b0;
+      --code-bg: #00000010;
+      --quote-border: #3b42b0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background-color: var(--bg-color);
+      transition: background-color 0.3s ease;
+      font-family: system-ui, -apple-system, sans-serif;
+      color: var(--text-main);
+      padding-top: 60px;
+    }
+
+    h1, h2, h3, h4 { margin: 0; }
+    p { font-weight: 300; line-height: 1.6; }
+
+    /* Controls (same as rest of site) */
+    .controls {
+      position: fixed;
+      top: 15px;
+      left: 0;
+      right: 15px;
+      display: flex;
+      gap: 10px;
+      z-index: 20;
+    }
+
+    .control-btn {
+      background-color: var(--btn-bg);
+      color: var(--btn-text);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background-color 0.2s, color 0.2s;
+      -webkit-tap-highlight-color: transparent;
+      font-family: inherit;
+    }
+    .control-btn:hover { background-color: var(--prof-bg); }
+
+    .burger {
+      color: var(--btn-text);
+      padding: 8px 15px;
+      background-color: transparent;
+      border: none;
+      margin-right: auto;
+      cursor: pointer;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      border-radius: 6px;
+      -webkit-tap-highlight-color: transparent;
+      transition: background-color 0.2s;
+      font-family: inherit;
+    }
+    .burger:hover { background-color: var(--btn-bg); }
+
+    .dropdown {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 60px;
+      left: 15px;
+      background-color: var(--header-bg);
+      min-width: 180px;
+      border-radius: 8px;
+      box-shadow: 0px 8px 24px var(--dropdown-shadow);
+      border: 1px solid var(--btn-bg);
+      overflow: hidden;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px) scale(0.98);
+      pointer-events: none;
+      transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s ease, border 0.3s ease;
+    }
+    .dropdown.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    .dropdown a {
+      color: var(--text-main);
+      padding: 12px 16px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background-color 0.2s, color 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .dropdown a:hover { background-color: var(--prof-bg); }
+    .dropdown .separator { height: 1px; background-color: var(--btn-bg); margin: 4px 0; }
+
+    /* Page content */
+    .tab-container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px 20px 60px;
+      animation: slideUp 0.6s ease-out;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .tab-container h2 { font-size: 2rem; margin-bottom: 0.5rem; color: var(--text-main); }
+    .intro-text { font-size: 1.05rem; color: var(--text-muted); margin-bottom: 2rem; }
+    .intro-text a { color: var(--blur-purple); text-decoration: none; }
+    .intro-text a:hover { text-decoration: underline; }
+
+    /* ===== Forum post list (Discord-forum-style rows) ===== */
+    .posts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .post-row {
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      gap: 20px;
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      text-align: left;
+    }
+    .post-row:hover {
+      transform: translateY(-3px);
+      border-color: var(--prof-bg);
+      box-shadow: 0 10px 28px var(--dropdown-shadow);
+    }
+
+    .post-main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .post-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-main);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .post-preview {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .post-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      opacity: 0.7;
+      margin-top: 2px;
+    }
+
+    .post-thumb-wrap {
+      flex-shrink: 0;
+      width: 130px;
+      height: 130px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--section-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .post-thumb-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .post-thumb-wrap.no-image {
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      text-align: center;
+      padding: 8px;
+      opacity: 0.5;
+    }
+
+    .state-msg {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      padding: 30px 10px;
+      text-align: center;
+    }
+
+    @media (max-width: 620px) {
+      .post-row { flex-direction: column; }
+      .post-thumb-wrap { width: 100%; height: 160px; order: -1; }
+    }
+
+    /* ===== Post reader modal ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      z-index: 200;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      padding: 60px 20px 40px;
+      overflow-y: auto;
+    }
+    .modal-overlay.show { opacity: 1; visibility: visible; }
+
+    .reader-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 36px;
+      max-width: 720px;
+      width: 100%;
+      box-shadow: 0 20px 60px var(--dropdown-shadow);
+      transform: translateY(16px) scale(0.98);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative;
+    }
+    .modal-overlay.show .reader-box { transform: translateY(0) scale(1); }
+
+    .reader-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      line-height: 1;
+    }
+    .reader-close:hover { background: var(--prof-bg); }
+
+    /* GitHub-flavored markdown body styling */
+    .md-body {
+      color: var(--text-main);
+      line-height: 1.7;
+      font-size: 0.98rem;
+      word-wrap: break-word;
+    }
+    .md-body h1, .md-body h2, .md-body h3, .md-body h4 {
+      margin: 1.4em 0 0.6em;
+      line-height: 1.3;
+    }
+    .md-body h1 { font-size: 1.7rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.3em; }
+    .md-body h2 { font-size: 1.4rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.3em; }
+    .md-body h3 { font-size: 1.15rem; }
+    .md-body p { margin: 0.9em 0; font-weight: 400; }
+    .md-body img { max-width: 100%; border-radius: 10px; display: block; margin: 1em auto; }
+    .md-body a { color: var(--blur-purple); text-decoration: none; }
+    .md-body a:hover { text-decoration: underline; }
+    .md-body ul, .md-body ol { margin: 0.9em 0; padding-left: 1.6em; }
+    .md-body li { margin: 0.3em 0; }
+    .md-body blockquote {
+      margin: 1em 0;
+      padding: 0.4em 1em;
+      border-left: 3px solid var(--quote-border);
+      color: var(--text-muted);
+      background: var(--section-bg);
+      border-radius: 0 8px 8px 0;
+    }
+    .md-body code {
+      background: var(--code-bg);
+      padding: 0.15em 0.4em;
+      border-radius: 5px;
+      font-size: 0.88em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .md-body pre {
+      background: var(--code-bg);
+      padding: 14px 16px;
+      border-radius: 10px;
+      overflow-x: auto;
+      margin: 1em 0;
+    }
+    .md-body pre code { background: none; padding: 0; }
+    .md-body hr { border: none; border-top: 1px solid var(--card-border); margin: 1.6em 0; }
+    .md-body table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+    .md-body th, .md-body td {
+      border: 1px solid var(--card-border);
+      padding: 8px 12px;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+    .md-body th { background: var(--section-bg); }
+    /* Centering: write  <p align="center">...</p>  or  <div align="center">...</div>
+       directly in your markdown — raw HTML passes through untouched. */
+    .md-body [align="center"] { text-align: center; }
+    .md-body [align="center"] img { margin-left: auto; margin-right: auto; }
+
+    .reader-title { font-size: 1.6rem; margin-bottom: 4px; padding-right: 40px; }
+    .reader-meta { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.4em; opacity: 0.7; }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--btn-bg); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--prof-bg); }
+  </style>
+</head>
+<body>
+
+  <div class="controls">
+    <button id="burger" class="burger" onclick="toggleDropdown()">≡</button>
+    <button id="theme-toggle" class="control-btn" data-en="Theme" data-es="Tema">Theme</button>
+    <button id="lang-toggle" class="control-btn">EN</button>
+  </div>
+
+  <div class="dropdown" id="dropmeow">
+    <a href="index.html" data-en="Home" data-es="Inicio">Home</a>
+    <a href="index.html#about" data-en="About myself" data-es="Sobre mí">About myself</a>
+    <a href="index.html#services" data-en="My services" data-es="Mis servicios">My services</a>
+    <a href="portfolio.html" data-en="Portfolio" data-es="Portafolio">Portfolio</a>
+    <a href="commission.html" data-en="Commission me" data-es="Comisiones">Commission me</a>
+    <div class="separator"></div>
+    <a href="characters.html" data-en="My characters" data-es="Mis personajes">My characters</a>
+    <a href="stories.html" data-en="Stories" data-es="Historias">Stories</a>
+  </div>
+
+  <div class="tab-container">
+    <h2 data-en="Stories" data-es="Historias">Stories</h2>
+    <p class="intro-text" data-en="Posts and writeups by <strong>Katt</strong>. Click a post to read the full thing." data-es="Publicaciones y escritos por <strong>Katt</strong>. Haz clic en una publicación para leerla completa.">Posts and writeups by <strong>Katt</strong>. Click a post to read the full thing.</p>
+
+    <div class="posts-list" id="posts-list">
+      <p class="state-msg" id="state-msg" data-en="Loading posts…" data-es="Cargando publicaciones…">Loading posts…</p>
+    </div>
+  </div>
+
+  <!-- Post reader modal -->
+  <div class="modal-overlay" id="reader-modal">
+    <div class="reader-box">
+      <button class="reader-close" id="reader-close">✕</button>
+      <h2 class="reader-title" id="reader-title"></h2>
+      <div class="reader-meta" id="reader-meta"></div>
+      <div class="md-body" id="reader-body"></div>
+    </div>
+  </div>
+
+  <script>
+    /* ── Language & Theme (same behavior as the rest of the site) ── */
+    let currentLang = 'en';
+    const langBtn = document.getElementById('lang-toggle');
+    langBtn.addEventListener('click', () => {
+      currentLang = currentLang === 'en' ? 'es' : 'en';
+      langBtn.textContent = currentLang.toUpperCase();
+      applyLang();
+    });
+
+    function applyLang() {
+      document.querySelectorAll('[data-en]').forEach(el => {
+        const newText = el.getAttribute(`data-${currentLang}`);
+        if (!newText) return;
+        if (el.children.length === 0) {
+          el.textContent = newText;
+        } else {
+          const firstChild = el.firstChild;
+          if (firstChild && firstChild.nodeType === Node.TEXT_NODE) {
+            firstChild.textContent = newText;
+          }
+        }
+      });
+    }
+
+    const themeBtn = document.getElementById('theme-toggle');
+    themeBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+    });
+
+    function toggleDropdown() {
+      document.getElementById("dropmeow").classList.toggle("show");
+    }
+    window.onclick = function(event) {
+      if (!event.target.matches('.burger')) {
+        document.querySelectorAll('.dropdown.show').forEach(d => d.classList.remove('show'));
+      }
+    };
+
+    const STORIES_DIR = 'stories/';
+    const MANIFEST_URL = STORIES_DIR + 'manifest.json';
+
+    marked.setOptions({ gfm: true, breaks: false });
+
+    function extractMeta(markdown, fallbackName) {
+      const titleMatch = markdown.match(/^#\s+(.+)$/m);
+      const title = titleMatch ? titleMatch[1].trim() : fallbackName;
+
+      const bodyAfterTitle = titleMatch
+        ? markdown.slice(markdown.indexOf(titleMatch[0]) + titleMatch[0].length)
+        : markdown;
+
+      const firstBlock = bodyAfterTitle.trim().split(/\n\s*\n/)[0] || '';
+      let preview = firstBlock
+        .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+        .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+        .replace(/<[^>]+>/g, '')
+        .replace(/[#*_>`~]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+      if (preview.length > 220) preview = preview.slice(0, 220).trim() + '…';
+      if (!preview) preview = '—';
+
+      const imgMatch =
+        markdown.match(/!\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)/) ||
+        markdown.match(/<img[^>]+src=["']([^"']+)["']/i);
+      const image = imgMatch ? imgMatch[1] : null;
+
+      return { title, preview, image };
+    }
+
+    function resolveAsset(path) {
+      if (/^https?:\/\//i.test(path)) return path;
+      return STORIES_DIR + path.replace(/^\/+/, '');
+    }
+
+    function openReader(title, markdown) {
+      document.getElementById('reader-title').textContent = title;
+      document.getElementById('reader-meta').textContent = currentLang === 'es' ? 'Publicación' : 'Post';
+      document.getElementById('reader-body').innerHTML = marked.parse(markdown);
+      const modal = document.getElementById('reader-modal');
+      modal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeReader() {
+      document.getElementById('reader-modal').classList.remove('show');
+      document.body.style.overflow = '';
+    }
+    document.getElementById('reader-close').addEventListener('click', closeReader);
+    document.getElementById('reader-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'reader-modal') closeReader();
+    });
+
+    function renderPostRow(meta, markdown) {
+      const row = document.createElement('div');
+      row.className = 'post-row';
+      row.setAttribute('role', 'button');
+      row.setAttribute('tabindex', '0');
+
+      const thumbHtml = meta.image
+        ? `<img src="${resolveAsset(meta.image)}" alt="">`
+        : '';
+
+      row.innerHTML = `
+        <div class="post-main">
+          <div class="post-title">${meta.title}</div>
+          <div class="post-preview">${meta.preview}</div>
+        </div>
+        <div class="post-thumb-wrap ${meta.image ? '' : 'no-image'}">
+          ${thumbHtml || (currentLang === 'es' ? 'Sin imagen' : 'No image')}
+        </div>
+      `;
+
+      row.addEventListener('click', () => openReader(meta.title, markdown));
+      row.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') openReader(meta.title, markdown);
+      });
+
+      return row;
+    }
+
+    async function loadPosts() {
+      const listEl = document.getElementById('posts-list');
+      const stateMsg = document.getElementById('state-msg');
+
+      try {
+        const manifestRes = await fetch(MANIFEST_URL, { cache: 'no-store' });
+        if (!manifestRes.ok) throw new Error('manifest not found');
+        const files = await manifestRes.json();
+
+        if (!Array.isArray(files) || files.length === 0) {
+          stateMsg.textContent = currentLang === 'es' ? 'Aún no hay publicaciones.' : 'No posts yet.';
+          return;
+        }
+
+        const loaded = await Promise.all(files.map(async (file) => {
+          try {
+            const res = await fetch(STORIES_DIR + file, { cache: 'no-store' });
+            if (!res.ok) return null;
+            const markdown = await res.text();
+            const meta = extractMeta(markdown, file.replace(/\.md$/i, ''));
+            return { meta, markdown };
+          } catch (e) {
+            return null;
+          }
+        }));
+
+        const valid = loaded.filter(Boolean);
+        stateMsg.remove();
+
+        if (valid.length === 0) {
+          const msg = document.createElement('p');
+          msg.className = 'state-msg';
+          msg.textContent = currentLang === 'es' ? 'No se pudieron cargar las publicaciones.' : 'Could not load any posts.';
+          listEl.appendChild(msg);
+          return;
+        }
+
+        valid.forEach(({ meta, markdown }) => {
+          listEl.appendChild(renderPostRow(meta, markdown));
+        });
+
+      } catch (err) {
+        stateMsg.textContent = currentLang === 'es'
+          ? 'No se pudo cargar la lista de publicaciones (stories/manifest.json).'
+          : 'Could not load the post list (stories/manifest.json).';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadPosts);
+  </script>
+</body>
+</html>
