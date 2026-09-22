@@ -395,7 +395,7 @@
 
   <div class="tab-container">
     <h2 data-en="Stories" data-es="Historias">Stories</h2>
-    <p class="intro-text" data-en="Posts and writeups by <strong>Katt</strong>. Click a post to read the full thing." data-es="Publicaciones y escritos por <strong>Katt</strong>. Haz clic en una publicación para leerla completa.">Posts and writeups by <strong>Katt</strong>. Click a post to read the full thing.</p>
+    <p class="intro-text" data-en="Posts and writeups by <strong>me</strong>. Click a post to read the full thing." data-es="Publicaciones y escritos por <strong>yo</strong>. Haz clic en una publicación para leerla completa.">Posts and writeups by <strong>me</strong>. Click a post to read the full thing.</p>
 
     <div class="posts-list" id="posts-list">
       <p class="state-msg" id="state-msg" data-en="Loading posts…" data-es="Cargando publicaciones…">Loading posts…</p>
@@ -453,10 +453,33 @@
       }
     };
 
+    /* ── Forum / posts logic ──
+       Each post is its own folder inside /stories, containing a post.md
+       file plus any images (or other assets) that post uses:
+
+         stories/
+           manifest.json
+           my-trauma/
+             post.md
+             example.png
+           learning-to-draw/
+             post.md
+
+       /stories/manifest.json lists which folders to load, e.g.:
+       ["my-trauma", "learning-to-draw"]
+
+       Inside post.md, reference images/assets by filename only
+       (e.g. ![alt](example.png)) — they resolve relative to that
+       post's own folder automatically.
+
+       To add a new post: make a new folder in /stories, drop a
+       post.md in it plus whatever images it needs, and add the
+       folder name to manifest.json. No other code changes needed. */
+
     const STORIES_DIR = 'stories/';
     const MANIFEST_URL = STORIES_DIR + 'manifest.json';
 
-    marked.setOptions({ gfm: true, breaks: false });
+    marked.setOptions({ gfm: true, breaks: false }); // raw HTML (for align="center" etc.) passes through by default
 
     function extractMeta(markdown, fallbackName) {
       const titleMatch = markdown.match(/^#\s+(.+)$/m);
@@ -485,15 +508,33 @@
       return { title, preview, image };
     }
 
-    function resolveAsset(path) {
-      if (/^https?:\/\//i.test(path)) return path;
-      return STORIES_DIR + path.replace(/^\/+/, '');
+    function resolveAsset(path, folder) {
+      if (!path) return path;
+      if (/^https?:\/\//i.test(path) || path.startsWith('data:')) return path;
+      return STORIES_DIR + folder + '/' + path.replace(/^\.?\/+/, '');
     }
 
-    function openReader(title, markdown) {
+    // After marked renders the markdown to HTML, relative <img src> and
+    // <a href> (including ones written as raw HTML in the post) need to be
+    // pointed at the post's own folder — marked only rewrites markdown
+    // image/link syntax, not raw HTML, so this catches both.
+    function fixRelativeAssets(containerEl, folder) {
+      containerEl.querySelectorAll('img[src]').forEach(img => {
+        img.setAttribute('src', resolveAsset(img.getAttribute('src'), folder));
+      });
+      containerEl.querySelectorAll('a[href]').forEach(a => {
+        const href = a.getAttribute('href');
+        if (!href || /^(https?:|mailto:|#)/i.test(href)) return;
+        a.setAttribute('href', resolveAsset(href, folder));
+      });
+    }
+
+    function openReader(title, markdown, folder) {
       document.getElementById('reader-title').textContent = title;
       document.getElementById('reader-meta').textContent = currentLang === 'es' ? 'Publicación' : 'Post';
-      document.getElementById('reader-body').innerHTML = marked.parse(markdown);
+      const bodyEl = document.getElementById('reader-body');
+      bodyEl.innerHTML = marked.parse(markdown);
+      fixRelativeAssets(bodyEl, folder);
       const modal = document.getElementById('reader-modal');
       modal.classList.add('show');
       document.body.style.overflow = 'hidden';
@@ -508,14 +549,14 @@
       if (e.target.id === 'reader-modal') closeReader();
     });
 
-    function renderPostRow(meta, markdown) {
+    function renderPostRow(meta, markdown, folder) {
       const row = document.createElement('div');
       row.className = 'post-row';
       row.setAttribute('role', 'button');
       row.setAttribute('tabindex', '0');
 
       const thumbHtml = meta.image
-        ? `<img src="${resolveAsset(meta.image)}" alt="">`
+        ? `<img src="${resolveAsset(meta.image, folder)}" alt="">`
         : '';
 
       row.innerHTML = `
@@ -528,9 +569,9 @@
         </div>
       `;
 
-      row.addEventListener('click', () => openReader(meta.title, markdown));
+      row.addEventListener('click', () => openReader(meta.title, markdown, folder));
       row.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') openReader(meta.title, markdown);
+        if (e.key === 'Enter') openReader(meta.title, markdown, folder);
       });
 
       return row;
@@ -543,20 +584,20 @@
       try {
         const manifestRes = await fetch(MANIFEST_URL, { cache: 'no-store' });
         if (!manifestRes.ok) throw new Error('manifest not found');
-        const files = await manifestRes.json();
+        const folders = await manifestRes.json();
 
-        if (!Array.isArray(files) || files.length === 0) {
+        if (!Array.isArray(folders) || folders.length === 0) {
           stateMsg.textContent = currentLang === 'es' ? 'Aún no hay publicaciones.' : 'No posts yet.';
           return;
         }
 
-        const loaded = await Promise.all(files.map(async (file) => {
+        const loaded = await Promise.all(folders.map(async (folder) => {
           try {
-            const res = await fetch(STORIES_DIR + file, { cache: 'no-store' });
+            const res = await fetch(STORIES_DIR + folder + '/post.md', { cache: 'no-store' });
             if (!res.ok) return null;
             const markdown = await res.text();
-            const meta = extractMeta(markdown, file.replace(/\.md$/i, ''));
-            return { meta, markdown };
+            const meta = extractMeta(markdown, folder);
+            return { meta, markdown, folder };
           } catch (e) {
             return null;
           }
@@ -573,8 +614,8 @@
           return;
         }
 
-        valid.forEach(({ meta, markdown }) => {
-          listEl.appendChild(renderPostRow(meta, markdown));
+        valid.forEach(({ meta, markdown, folder }) => {
+          listEl.appendChild(renderPostRow(meta, markdown, folder));
         });
 
       } catch (err) {
