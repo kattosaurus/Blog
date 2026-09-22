@@ -27,6 +27,7 @@
       --blur-purple: #5865F2;
       --code-bg: #00000055;
       --quote-border: #5865F2;
+      --star-gold: #f5b942;
     }
 
     [data-theme="light"] {
@@ -46,6 +47,7 @@
       --blur-purple: #3b42b0;
       --code-bg: #00000010;
       --quote-border: #3b42b0;
+      --star-gold: #d99b1f;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -368,6 +370,68 @@
     .reader-title { font-size: 1.6rem; margin-bottom: 4px; padding-right: 40px; }
     .reader-meta { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.4em; opacity: 0.7; }
 
+    /* ===== Rating widget ===== */
+    .rating-section {
+      margin-top: 2em;
+      padding-top: 1.4em;
+      border-top: 1px solid var(--card-border);
+    }
+    .rating-section h3 {
+      font-size: 1.05rem;
+      margin-bottom: 0.8em;
+      color: var(--text-main);
+      border: none;
+    }
+    .stars {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 1em;
+    }
+    .star {
+      font-size: 1.8rem;
+      line-height: 1;
+      color: var(--btn-bg);
+      cursor: pointer;
+      transition: color 0.15s ease, transform 0.15s ease;
+      user-select: none;
+    }
+    .star:hover { transform: scale(1.15); }
+    .star.filled { color: var(--star-gold); }
+    .rating-comment {
+      display: block;
+      width: 100%;
+      min-height: 70px;
+      resize: vertical;
+      background: var(--section-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: var(--text-main);
+      padding: 10px 12px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      margin-bottom: 0.8em;
+    }
+    .rating-comment:focus { outline: none; border-color: var(--blur-purple); }
+    .rating-submit-btn {
+      background: var(--blur-purple);
+      color: #fff;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: opacity 0.2s;
+      font-family: inherit;
+    }
+    .rating-submit-btn:hover { opacity: 0.85; }
+    .rating-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .rating-feedback {
+      margin-top: 0.7em;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--btn-bg); border-radius: 10px; }
@@ -409,6 +473,27 @@
       <h2 class="reader-title" id="reader-title"></h2>
       <div class="reader-meta" id="reader-meta"></div>
       <div class="md-body" id="reader-body"></div>
+
+      <div class="rating-section" id="rating-section">
+        <h3 data-en="Rate this post" data-es="Califica esta publicación">Rate this post</h3>
+        <div class="stars" id="rating-stars">
+          <span class="star" data-value="1">★</span>
+          <span class="star" data-value="2">★</span>
+          <span class="star" data-value="3">★</span>
+          <span class="star" data-value="4">★</span>
+          <span class="star" data-value="5">★</span>
+        </div>
+        <textarea
+          class="rating-comment"
+          id="rating-comment"
+          rows="3"
+          data-en-placeholder="Add a comment (optional)"
+          data-es-placeholder="Agrega un comentario (opcional)"
+          placeholder="Add a comment (optional)"
+        ></textarea>
+        <button class="rating-submit-btn" id="rating-submit" data-en="Submit rating" data-es="Enviar calificación">Submit rating</button>
+        <div class="rating-feedback" id="rating-feedback"></div>
+      </div>
     </div>
   </div>
 
@@ -435,6 +520,10 @@
             firstChild.textContent = newText;
           }
         }
+      });
+      document.querySelectorAll('[data-en-placeholder]').forEach(el => {
+        const ph = el.getAttribute(`data-${currentLang}-placeholder`);
+        if (ph) el.setAttribute('placeholder', ph);
       });
     }
 
@@ -541,6 +630,114 @@
       });
     }
 
+    /* ── Rating system ──
+       Stars (1-5) + an optional comment. On submit, posts an embed to
+       the Discord webhook below. One rating per post is remembered in
+       localStorage (per-browser) so the same visitor can't spam it
+       from the same reader session, and reopening a rated post shows
+       a "thanks" state instead of the form. */
+    const RATING_WEBHOOK_URL = 'https://discord.com/api/webhooks/1551967052598743050/jyvRUhgqjfec6cIpv7_gp3_wjRV1cTElgXM0LzO-Gh3vmj9LWxOg3lXshCR9OeT194DK';
+
+    let selectedStars = 0;
+    const starsEl = document.getElementById('rating-stars');
+    const starEls = Array.from(starsEl.querySelectorAll('.star'));
+    const commentEl = document.getElementById('rating-comment');
+    const ratingSubmitBtn = document.getElementById('rating-submit');
+    const ratingFeedbackEl = document.getElementById('rating-feedback');
+
+    function paintStars(count) {
+      starEls.forEach(s => {
+        s.classList.toggle('filled', Number(s.dataset.value) <= count);
+      });
+    }
+
+    starEls.forEach(starEl => {
+      starEl.addEventListener('mouseenter', () => paintStars(Number(starEl.dataset.value)));
+      starEl.addEventListener('click', () => {
+        if (ratingSubmitBtn.disabled) return;
+        selectedStars = Number(starEl.dataset.value);
+        paintStars(selectedStars);
+      });
+    });
+    starsEl.addEventListener('mouseleave', () => paintStars(selectedStars));
+
+    function ratedKey(folder) { return 'rated_' + folder; }
+
+    function resetRatingUI() {
+      selectedStars = 0;
+      paintStars(0);
+      commentEl.value = '';
+      commentEl.disabled = false;
+      ratingSubmitBtn.disabled = false;
+      ratingSubmitBtn.textContent = ratingSubmitBtn.getAttribute(`data-${currentLang}`) || 'Submit rating';
+      ratingFeedbackEl.textContent = '';
+    }
+
+    function showAlreadyRated(folder) {
+      const prevStars = Number(localStorage.getItem(ratedKey(folder))) || 0;
+      selectedStars = prevStars;
+      paintStars(prevStars);
+      commentEl.disabled = true;
+      ratingSubmitBtn.disabled = true;
+      ratingFeedbackEl.textContent = currentLang === 'es'
+        ? 'Ya calificaste esta publicación. ¡Gracias!'
+        : 'You already rated this post. Thanks!';
+    }
+
+    async function submitRating(folder, title) {
+      if (selectedStars < 1) {
+        ratingFeedbackEl.textContent = currentLang === 'es'
+          ? 'Selecciona una cantidad de estrellas primero.'
+          : 'Pick a star rating first.';
+        return;
+      }
+
+      ratingSubmitBtn.disabled = true;
+      commentEl.disabled = true;
+      ratingSubmitBtn.textContent = currentLang === 'es' ? 'Enviando…' : 'Sending…';
+      ratingFeedbackEl.textContent = '';
+
+      const comment = commentEl.value.trim();
+      const starsDisplay = '★'.repeat(selectedStars) + '☆'.repeat(5 - selectedStars);
+
+      const payload = {
+        embeds: [{
+          title: 'New story rating',
+          color: 0x5865F2,
+          fields: [
+            { name: 'Post', value: title || folder, inline: true },
+            { name: 'Rating', value: `${starsDisplay} (${selectedStars}/5)`, inline: true },
+            { name: 'Comment', value: comment || '_No comment_' }
+          ],
+          timestamp: new Date().toISOString()
+        }]
+      };
+
+      try {
+        await fetch(RATING_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        localStorage.setItem(ratedKey(folder), String(selectedStars));
+        ratingSubmitBtn.textContent = currentLang === 'es' ? 'Enviado' : 'Sent';
+        ratingFeedbackEl.textContent = currentLang === 'es' ? '¡Gracias por tu calificación!' : 'Thanks for rating!';
+      } catch (err) {
+        ratingSubmitBtn.disabled = false;
+        commentEl.disabled = false;
+        ratingSubmitBtn.textContent = ratingSubmitBtn.getAttribute(`data-${currentLang}`) || 'Submit rating';
+        ratingFeedbackEl.textContent = currentLang === 'es'
+          ? 'No se pudo enviar la calificación. Intenta de nuevo.'
+          : 'Could not send the rating. Try again.';
+      }
+    }
+
+    ratingSubmitBtn.addEventListener('click', () => {
+      if (!openPostFolder) return;
+      const title = document.getElementById('reader-title').textContent;
+      submitRating(openPostFolder, title);
+    });
+
     function openReader(title, markdown, folder) {
       openPostFolder = folder;
       document.getElementById('reader-title').textContent = title;
@@ -548,6 +745,12 @@
       const bodyEl = document.getElementById('reader-body');
       bodyEl.innerHTML = marked.parse(markdown);
       fixRelativeAssets(bodyEl, folder);
+
+      resetRatingUI();
+      if (localStorage.getItem(ratedKey(folder))) {
+        showAlreadyRated(folder);
+      }
+
       const modal = document.getElementById('reader-modal');
       modal.classList.add('show');
       document.body.style.overflow = 'hidden';
