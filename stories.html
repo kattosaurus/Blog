@@ -631,12 +631,12 @@
     }
 
     /* ── Rating system ──
-       Stars (1-5) + an optional comment. On submit, posts an embed to
-       the Discord webhook below. One rating per post is remembered in
+       Stars (1-5) + an optional comment. On submit, sends the rating to the backend proxy (RATING_API_URL),
+       which forwards it to Discord as an embed. One rating per post is remembered in
        localStorage (per-browser) so the same visitor can't spam it
        from the same reader session, and reopening a rated post shows
        a "thanks" state instead of the form. */
-    const RATING_WEBHOOK_URL = 'https://discord.com/api/webhooks/1551967052598743050/jyvRUhgqjfec6cIpv7_gp3_wjRV1cTElgXM0LzO-Gh3vmj9LWxOg3lXshCR9OeT194DK';
+    const RATING_API_URL = 'https://YOUR-RENDER-APP.onrender.com'; // TODO: replace YOUR-RENDER-APP with your Render service name after deploying the backend
 
     let selectedStars = 0;
     const starsEl = document.getElementById('rating-stars');
@@ -698,27 +698,13 @@
       ratingFeedbackEl.textContent = '';
 
       const comment = commentEl.value.trim();
-      const starsDisplay = '★'.repeat(selectedStars) + '☆'.repeat(5 - selectedStars);
-
-      const payload = {
-        embeds: [{
-          title: 'New story rating',
-          color: 0x5865F2,
-          fields: [
-            { name: 'Post', value: title || folder, inline: true },
-            { name: 'Rating', value: `${starsDisplay} (${selectedStars}/5)`, inline: true },
-            { name: 'Comment', value: comment || '_No comment_' }
-          ],
-          timestamp: new Date().toISOString()
-        }]
-      };
-
       try {
-        await fetch(RATING_WEBHOOK_URL, {
+        const res = await fetch(RATING_API_URL + '/api/rating', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          body: JSON.stringify({ post: title || folder, rating: selectedStars, comment: comment || '' })
         });
+        if (!res.ok) throw new Error('Rating API responded with status ' + res.status);
         localStorage.setItem(ratedKey(folder), String(selectedStars));
         ratingSubmitBtn.textContent = currentLang === 'es' ? 'Enviado' : 'Sent';
         ratingFeedbackEl.textContent = currentLang === 'es' ? '¡Gracias por tu calificación!' : 'Thanks for rating!';
