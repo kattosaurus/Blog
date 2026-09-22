@@ -16,6 +16,8 @@ I didn't know I had trauma until some time ago I had a conversation with someone
 
 Until Bill pointed it out to me. I didn't notice I had trauma, well, If you're reading this I believe you want an explanaination of what I believe ~~is~~ are my traumas (Not confirmed!)
 
+![Sad protogen](https://raw.githubusercontent.com/kattosaurus/Blog/refs/heads/main/stories/my-trauma/proto.png)
+
 ## My first trauma: Bullying
 
 Since I entered kindergarden till 1st grade of elementary (1st year of "Primaria"), I was bullied by multiple kids (and on multiple schools).
