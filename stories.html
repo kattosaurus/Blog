@@ -395,7 +395,7 @@
 
   <div class="tab-container">
     <h2 data-en="Stories" data-es="Historias">Stories</h2>
-    <p class="intro-text" data-en="Posts and writeups by <strong>me</strong>. Click a post to read the full thing." data-es="Publicaciones y escritos por <strong>yo</strong>. Haz clic en una publicación para leerla completa.">Posts and writeups by <strong>me</strong>. Click a post to read the full thing.</p>
+    <p class="intro-text" data-en="Posts and writeups by <strong>Katt</strong>. Click a post to read the full thing." data-es="Publicaciones y escritos por <strong>Katt</strong>. Haz clic en una publicación para leerla completa.">Posts and writeups by <strong>Katt</strong>. Click a post to read the full thing.</p>
 
     <div class="posts-list" id="posts-list">
       <p class="state-msg" id="state-msg" data-en="Loading posts…" data-es="Cargando publicaciones…">Loading posts…</p>
@@ -420,6 +420,7 @@
       currentLang = currentLang === 'en' ? 'es' : 'en';
       langBtn.textContent = currentLang.toUpperCase();
       applyLang();
+      refreshPostsForLang();
     });
 
     function applyLang() {
@@ -454,30 +455,41 @@
     };
 
     /* ── Forum / posts logic ──
-       Each post is its own folder inside /stories, containing a post.md
-       file plus any images (or other assets) that post uses:
+       Each post is its own folder inside /stories, containing a
+       post-en.md and a post-es.md (one markdown file per language),
+       plus any images (or other assets) that post uses:
 
          stories/
            manifest.json
            my-trauma/
-             post.md
+             post-en.md
+             post-es.md
              example.png
            learning-to-draw/
-             post.md
+             post-en.md
+             post-es.md
 
        /stories/manifest.json lists which folders to load, e.g.:
        ["my-trauma", "learning-to-draw"]
 
-       Inside post.md, reference images/assets by filename only
-       (e.g. ![alt](example.png)) — they resolve relative to that
-       post's own folder automatically.
+       Switching the EN/ES button re-fetches each post's markdown in
+       the newly selected language. If a translation is missing for a
+       post, it falls back to whichever language file does exist.
+
+       Inside post-en.md / post-es.md, reference images/assets by
+       filename only (e.g. ![alt](example.png)) — they resolve
+       relative to that post's own folder automatically, and are
+       shared between both language versions.
 
        To add a new post: make a new folder in /stories, drop a
-       post.md in it plus whatever images it needs, and add the
-       folder name to manifest.json. No other code changes needed. */
+       post-en.md and post-es.md in it plus whatever images it needs,
+       and add the folder name to manifest.json. No other code
+       changes needed. */
 
     const STORIES_DIR = 'stories/';
     const MANIFEST_URL = STORIES_DIR + 'manifest.json';
+    let postFolders = [];       // cached folder list from manifest.json
+    let openPostFolder = null;  // folder currently shown in the reader modal, if any
 
     marked.setOptions({ gfm: true, breaks: false }); // raw HTML (for align="center" etc.) passes through by default
 
@@ -530,6 +542,7 @@
     }
 
     function openReader(title, markdown, folder) {
+      openPostFolder = folder;
       document.getElementById('reader-title').textContent = title;
       document.getElementById('reader-meta').textContent = currentLang === 'es' ? 'Publicación' : 'Post';
       const bodyEl = document.getElementById('reader-body');
@@ -541,6 +554,7 @@
     }
 
     function closeReader() {
+      openPostFolder = null;
       document.getElementById('reader-modal').classList.remove('show');
       document.body.style.overflow = '';
     }
@@ -577,51 +591,74 @@
       return row;
     }
 
+    // Tries post-<lang>.md first, falls back to the other language if that
+    // translation doesn't exist for this post.
+    async function fetchPostMarkdown(folder, lang) {
+      const order = lang === 'es' ? ['es', 'en'] : ['en', 'es'];
+      for (const l of order) {
+        try {
+          const res = await fetch(STORIES_DIR + folder + '/post-' + l + '.md', { cache: 'no-store' });
+          if (res.ok) return { markdown: await res.text(), lang: l };
+        } catch (e) { /* try next */ }
+      }
+      return null;
+    }
+
+    async function renderPostsList() {
+      const listEl = document.getElementById('posts-list');
+      listEl.innerHTML = `<p class="state-msg">${currentLang === 'es' ? 'Cargando publicaciones…' : 'Loading posts…'}</p>`;
+
+      if (postFolders.length === 0) {
+        listEl.innerHTML = `<p class="state-msg">${currentLang === 'es' ? 'Aún no hay publicaciones.' : 'No posts yet.'}</p>`;
+        return;
+      }
+
+      const loaded = await Promise.all(postFolders.map(async (folder) => {
+        const result = await fetchPostMarkdown(folder, currentLang);
+        if (!result) return null;
+        const meta = extractMeta(result.markdown, folder);
+        return { meta, markdown: result.markdown, folder };
+      }));
+
+      const valid = loaded.filter(Boolean);
+      listEl.innerHTML = '';
+
+      if (valid.length === 0) {
+        listEl.innerHTML = `<p class="state-msg">${currentLang === 'es' ? 'No se pudieron cargar las publicaciones.' : 'Could not load any posts.'}</p>`;
+        return;
+      }
+
+      valid.forEach(({ meta, markdown, folder }) => {
+        listEl.appendChild(renderPostRow(meta, markdown, folder));
+      });
+    }
+
     async function loadPosts() {
       const listEl = document.getElementById('posts-list');
-      const stateMsg = document.getElementById('state-msg');
-
       try {
         const manifestRes = await fetch(MANIFEST_URL, { cache: 'no-store' });
         if (!manifestRes.ok) throw new Error('manifest not found');
         const folders = await manifestRes.json();
-
-        if (!Array.isArray(folders) || folders.length === 0) {
-          stateMsg.textContent = currentLang === 'es' ? 'Aún no hay publicaciones.' : 'No posts yet.';
-          return;
-        }
-
-        const loaded = await Promise.all(folders.map(async (folder) => {
-          try {
-            const res = await fetch(STORIES_DIR + folder + '/post.md', { cache: 'no-store' });
-            if (!res.ok) return null;
-            const markdown = await res.text();
-            const meta = extractMeta(markdown, folder);
-            return { meta, markdown, folder };
-          } catch (e) {
-            return null;
-          }
-        }));
-
-        const valid = loaded.filter(Boolean);
-        stateMsg.remove();
-
-        if (valid.length === 0) {
-          const msg = document.createElement('p');
-          msg.className = 'state-msg';
-          msg.textContent = currentLang === 'es' ? 'No se pudieron cargar las publicaciones.' : 'Could not load any posts.';
-          listEl.appendChild(msg);
-          return;
-        }
-
-        valid.forEach(({ meta, markdown, folder }) => {
-          listEl.appendChild(renderPostRow(meta, markdown, folder));
-        });
-
+        postFolders = Array.isArray(folders) ? folders : [];
+        await renderPostsList();
       } catch (err) {
-        stateMsg.textContent = currentLang === 'es'
+        listEl.innerHTML = `<p class="state-msg">${currentLang === 'es'
           ? 'No se pudo cargar la lista de publicaciones (stories/manifest.json).'
-          : 'Could not load the post list (stories/manifest.json).';
+          : 'Could not load the post list (stories/manifest.json).'}</p>`;
+      }
+    }
+
+    // Called when the EN/ES button is toggled: reloads the list in the new
+    // language, and if a post is currently open in the reader, refreshes
+    // that too instead of closing it.
+    async function refreshPostsForLang() {
+      if (postFolders.length > 0) await renderPostsList();
+      if (openPostFolder) {
+        const result = await fetchPostMarkdown(openPostFolder, currentLang);
+        if (result) {
+          const meta = extractMeta(result.markdown, openPostFolder);
+          openReader(meta.title, result.markdown, openPostFolder);
+        }
       }
     }
 
