@@ -52,7 +52,6 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
 
     body {
@@ -69,475 +68,317 @@
     p { font-weight: 300; line-height: 1.6; }
 
     /* Controls */
-    .controls {
-      position: fixed;
-      top: 15px;
-      left: 0;
-      right: 15px;
-      display: flex;
-      gap: 10px;
-      z-index: 20;
-    }
+    .controls { position: fixed; top: 15px; left: 0; right: 15px; display: flex; gap: 10px; z-index: 20; align-items: center; }
 
     .control-btn {
-      background-color: var(--btn-bg);
-      color: var(--btn-text);
-      border: none;
-      padding: 8px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      transition: background-color 0.2s, color 0.2s;
-      -webkit-tap-highlight-color: transparent;
-      font-family: inherit;
+      background-color: var(--btn-bg); color: var(--btn-text); border: none; padding: 8px 12px;
+      border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500;
+      transition: background-color 0.2s, color 0.2s; -webkit-tap-highlight-color: transparent;
+      font-family: inherit; display: flex; align-items: center; gap: 6px;
     }
-
     .control-btn:hover { background-color: var(--prof-bg); }
 
-    .burger {
-      color: var(--btn-text);
-      padding: 8px 15px;
-      background-color: transparent;
-      border: none;
-      margin-right: auto;
-      cursor: pointer;
-      font-size: 20px;
-      display: flex;
-      align-items: center;
-      border-radius: 6px;
-      -webkit-tap-highlight-color: transparent;
-      transition: background-color 0.2s;
-      font-family: inherit;
+    .cart-count {
+      background: var(--price-green); color: #1c1c1c; font-size: 11px; font-weight: 700;
+      min-width: 18px; height: 18px; border-radius: 9px; display: inline-flex;
+      align-items: center; justify-content: center; padding: 0 5px; transition: transform 0.2s ease;
     }
+    .cart-count.pop { animation: countPop 0.3s ease; }
+    @keyframes countPop { 50% { transform: scale(1.4); } }
 
+    .burger {
+      color: var(--btn-text); padding: 8px 15px; background-color: transparent; border: none;
+      margin-right: auto; cursor: pointer; font-size: 20px; display: flex; align-items: center;
+      border-radius: 6px; -webkit-tap-highlight-color: transparent; transition: background-color 0.2s; font-family: inherit;
+    }
     .burger:hover { background-color: var(--btn-bg); }
 
     /* Dropdown */
     .dropdown {
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      top: 60px;
-      left: 15px;
-      background-color: var(--header-bg);
-      min-width: 180px;
-      border-radius: 8px;
-      box-shadow: 0px 8px 24px var(--dropdown-shadow);
-      border: 1px solid var(--btn-bg);
-      overflow: hidden;
-      z-index: 100;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-10px) scale(0.98);
-      pointer-events: none;
+      display: flex; flex-direction: column; position: fixed; top: 60px; left: 15px;
+      background-color: var(--header-bg); min-width: 180px; border-radius: 8px;
+      box-shadow: 0px 8px 24px var(--dropdown-shadow); border: 1px solid var(--btn-bg);
+      overflow: hidden; z-index: 100; opacity: 0; visibility: hidden;
+      transform: translateY(-10px) scale(0.98); pointer-events: none;
       transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s ease, border 0.3s ease;
     }
-
-    .dropdown.show {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0) scale(1);
-      pointer-events: auto;
-    }
-
+    .dropdown.show { opacity: 1; visibility: visible; transform: translateY(0) scale(1); pointer-events: auto; }
     .dropdown a {
-      color: var(--text-main);
-      padding: 12px 16px;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      transition: background-color 0.2s, color 0.2s;
-      -webkit-tap-highlight-color: transparent;
+      color: var(--text-main); padding: 12px 16px; text-decoration: none; font-size: 14px; font-weight: 500;
+      transition: background-color 0.2s, color 0.2s; -webkit-tap-highlight-color: transparent;
     }
-
     .dropdown a:hover { background-color: var(--prof-bg); }
-
-    .dropdown .separator {
-      height: 1px;
-      background-color: var(--btn-bg);
-      margin: 4px 0;
-    }
+    .dropdown .separator { height: 1px; background-color: var(--btn-bg); margin: 4px 0; }
 
     /* Commission Content */
-    .tab-container {
-      width: 100%;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px 20px 60px;
-      animation: slideUp 0.6s ease-out;
-    }
+    .tab-container { width: 100%; max-width: 900px; margin: 0 auto; padding: 20px 20px 60px; animation: slideUp 0.6s ease-out; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .tab-container h2 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-      color: var(--text-main);
-    }
-
-    .intro-text {
-      font-size: 1.05rem;
-      color: var(--text-muted);
-      margin-bottom: 2rem;
-    }
-
+    .tab-container h2 { font-size: 2rem; margin-bottom: 0.5rem; color: var(--text-main); }
+    .intro-text { font-size: 1.05rem; color: var(--text-muted); margin-bottom: 2rem; }
     .intro-text a { color: var(--colored-button); text-decoration: none; }
     .intro-text a:hover { text-decoration: underline; }
 
     /* TOS Section */
-    .tos-section {
-      background: var(--section-bg);
-      padding: 25px;
-      border-radius: 18px;
-      margin-bottom: 2rem;
-      border: 1px solid var(--card-border);
-    }
-
-    .tos-section h3 {
-      font-size: 1.1rem;
-      color: var(--blur-purple);
-      margin-bottom: 15px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .tos-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    .tos-item h4 {
-      font-size: 0.95rem;
-      color: var(--text-main);
-      margin-bottom: 8px;
-    }
-
-    .tos-item p, .tos-item li {
-      font-size: 0.85rem;
-      line-height: 1.5;
-      color: var(--text-muted);
-      list-style: none;
-    }
-
+    .tos-section { background: var(--section-bg); padding: 25px; border-radius: 18px; margin-bottom: 2rem; border: 1px solid var(--card-border); }
+    .tos-section h3 { font-size: 1.1rem; color: var(--blur-purple); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+    .tos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .tos-item h4 { font-size: 0.95rem; color: var(--text-main); margin-bottom: 8px; }
+    .tos-item p, .tos-item li { font-size: 0.85rem; line-height: 1.5; color: var(--text-muted); list-style: none; }
     .prohibited { color: var(--price-red) !important; }
     .highlight { color: var(--price-green) !important; font-weight: 600; }
 
     /* Section Tabs (Art / Software) */
-    .section-tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-
+    .section-tabs { display: flex; gap: 10px; margin-bottom: 1.5rem; flex-wrap: wrap; }
     .section-tab {
-      flex: 1;
-      min-width: 120px;
-      background: var(--btn-bg);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      padding: 12px;
-      border-radius: 14px;
-      font-family: inherit;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      letter-spacing: 0.5px;
-      -webkit-tap-highlight-color: transparent;
+      flex: 1; min-width: 120px; background: var(--btn-bg); border: 1px solid var(--card-border);
+      color: var(--text-muted); padding: 12px; border-radius: 14px; font-family: inherit;
+      font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;
+      letter-spacing: 0.5px; -webkit-tap-highlight-color: transparent;
     }
-
-    .section-tab:hover {
-      background: var(--prof-bg);
-      color: var(--text-main);
-    }
-
-    .section-tab.active {
-      background: var(--blur-purple);
-      border-color: var(--blur-purple);
-      color: #fff;
-    }
+    .section-tab:hover { background: var(--prof-bg); color: var(--text-main); }
+    .section-tab.active { background: var(--blur-purple); border-color: var(--blur-purple); color: #fff; }
 
     .category-panel { display: none; }
     .category-panel.active { display: block; animation: fadeIn 0.4s ease forwards; }
 
     /* Detail-level switch */
-    .level-switch {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-
+    .level-switch { display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
     .level-btn {
-      flex: 1;
-      min-width: 90px;
-      background: var(--btn-bg);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      padding: 10px;
-      border-radius: 12px;
-      font-family: inherit;
-      font-size: 0.8rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-align: center;
-      -webkit-tap-highlight-color: transparent;
+      flex: 1; min-width: 90px; background: var(--btn-bg); border: 1px solid var(--card-border);
+      color: var(--text-muted); padding: 10px; border-radius: 12px; font-family: inherit;
+      font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;
+      text-align: center; -webkit-tap-highlight-color: transparent;
     }
-
-    .level-btn:hover {
-      background: var(--prof-bg);
-      color: var(--text-main);
-    }
-
-    .level-btn.active {
-      background: var(--price-green);
-      border-color: var(--price-green);
-      color: #1c1c1c;
-    }
+    .level-btn:hover { background: var(--prof-bg); color: var(--text-main); }
+    .level-btn.active { background: var(--price-green); border-color: var(--price-green); color: #1c1c1c; }
 
     .level-group { display: none; }
     .level-group.active { display: flex; flex-direction: row; gap: 20px; width: 100%; flex-wrap: wrap; }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
     /* Cards */
-    .pay-embeds {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-top: 1rem;
-      width: 100%;
-    }
+    .pay-embeds { display: flex; flex-direction: row; flex-wrap: wrap; gap: 20px; margin-top: 1rem; width: 100%; }
 
     .modern-card {
-      flex: 1;
-      min-width: 220px;
-      position: relative;
-      background: var(--card-bg);
-      border-radius: 20px;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      border: 1px solid var(--card-border);
-      transition: all 0.3s ease;
-      overflow: hidden;
+      flex: 1; min-width: 220px; position: relative; background: var(--card-bg); border-radius: 20px;
+      padding: 24px; display: flex; flex-direction: column; align-items: center; text-align: center;
+      border: 1px solid var(--card-border); transition: all 0.3s ease; overflow: hidden;
     }
+    .modern-card:hover { transform: translateY(-6px); box-shadow: 0 12px 32px var(--dropdown-shadow); border-color: var(--prof-bg); }
 
-    .modern-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 32px var(--dropdown-shadow);
-      border-color: var(--prof-bg);
-    }
-
-    .card-body h3 {
-      font-size: 1.2rem;
-      margin-bottom: 12px;
-      color: var(--text-main);
-    }
-
-    .card-body p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 20px;
-      min-height: 60px;
-    }
-
-    .card-footer {
-      margin-top: auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      width: 100%;
-    }
-
-    .price-tag {
-      font-weight: 600;
-      color: var(--price-green);
-      font-size: 1.2rem;
-    }
-
-    .price-tag.unavailable-price {
-      color: var(--price-red);
-      font-size: 1.05rem;
-    }
+    .card-body h3 { font-size: 1.2rem; margin-bottom: 12px; color: var(--text-main); }
+    .card-body p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; min-height: 60px; }
+    .card-footer { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
+    .price-tag { font-weight: 600; color: var(--price-green); font-size: 1.2rem; }
+    .price-tag.unavailable-price { color: var(--price-red); font-size: 1.05rem; }
 
     .btn-pay {
-      background: var(--blur-purple);
-      color: white;
-      text-decoration: none;
-      padding: 14px;
-      border-radius: 12px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      width: 100%;
-      text-align: center;
-      transition: all 0.2s;
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
+      background: var(--blur-purple); color: white; text-decoration: none; padding: 14px; border-radius: 12px;
+      font-size: 0.9rem; font-weight: 600; width: 100%; text-align: center; transition: all 0.2s;
+      border: none; cursor: pointer; font-family: inherit;
     }
+    .btn-pay:hover { background: #4752c4; transform: scale(1.03); }
+    .btn-pay:disabled { background: var(--btn-bg); color: var(--text-muted); cursor: not-allowed; transform: none; }
 
-    .btn-pay:hover {
-      background: #4752c4;
-      transform: scale(1.03);
-    }
+    .btn-add { background: transparent; border: 2px solid var(--price-green); color: var(--price-green); }
+    .btn-add:hover { background: var(--price-green); color: #1c1c1c; }
+    .btn-add.added { background: var(--price-green); color: #1c1c1c; }
 
-    .btn-pay:disabled {
-      background: var(--btn-bg);
-      color: var(--text-muted);
-      cursor: not-allowed;
-      transform: none;
-    }
+    .btn-ghost { background: var(--btn-bg); color: var(--text-main); margin-top: 8px; }
+    .btn-ghost:hover { background: var(--prof-bg); }
 
-    .modern-card.is-locked > * {
-      filter: blur(3px);
-      opacity: 0.35;
-      pointer-events: none;
-    }
-
-    .unavailable-overlay {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0, 0, 0, 0.3);
-      z-index: 5;
-    }
-
+    .modern-card.is-locked > * { filter: blur(3px); opacity: 0.35; pointer-events: none; }
+    .unavailable-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.3); z-index: 5; }
     .unavailable-badge {
-      background: rgba(255, 71, 71, 0.15);
-      border: 1px solid var(--price-red);
-      color: var(--price-red);
-      font-weight: 600;
-      font-size: 0.9rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      padding: 10px 22px;
-      border-radius: 12px;
-      transform: rotate(-6deg);
+      background: rgba(255, 71, 71, 0.15); border: 1px solid var(--price-red); color: var(--price-red);
+      font-weight: 600; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase;
+      padding: 10px 22px; border-radius: 12px; transform: rotate(-6deg);
     }
 
-    .footer-note {
-      margin-top: 3rem;
-      font-size: 0.8rem;
-      opacity: 0.5;
-      text-align: center;
-      color: var(--text-muted);
-    }
-
+    .footer-note { margin-top: 3rem; font-size: 0.8rem; opacity: 0.5; text-align: center; color: var(--text-muted); }
     .footer-note a { color: inherit; }
+
+    /* ===== Cart Drawer ===== */
+    .cart-overlay {
+      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px); z-index: 150; opacity: 0; visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .cart-overlay.show { opacity: 1; visibility: visible; }
+
+    .cart-drawer {
+      position: fixed; top: 0; right: 0; height: 100dvh; width: min(400px, 100%);
+      background: var(--card-bg); border-left: 1px solid var(--card-border); z-index: 160;
+      display: flex; flex-direction: column; transform: translateX(105%);
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); box-shadow: -12px 0 40px var(--dropdown-shadow);
+    }
+    .cart-drawer.show { transform: translateX(0); }
+
+    .cart-header { display: flex; align-items: center; justify-content: space-between; padding: 20px; border-bottom: 1px solid var(--card-border); }
+    .cart-header h3 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; color: var(--blur-purple); }
+    .cart-close {
+      background: var(--btn-bg); color: var(--text-main); border: none; width: 34px; height: 34px;
+      border-radius: 10px; font-size: 18px; cursor: pointer; transition: background 0.2s; font-family: inherit;
+    }
+    .cart-close:hover { background: var(--prof-bg); }
+
+    .cart-items { flex: 1; overflow-y: auto; padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; }
+    .cart-empty { text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-top: 40px; }
+
+    .cart-item {
+      background: var(--section-bg); border: 1px solid var(--card-border); border-radius: 14px;
+      padding: 14px; display: flex; flex-direction: column; gap: 10px; animation: fadeIn 0.3s ease;
+    }
+    .cart-item-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+    .cart-item-name { font-size: 0.9rem; font-weight: 600; color: var(--text-main); }
+    .cart-item-price { font-size: 0.85rem; color: var(--price-green); font-weight: 600; white-space: nowrap; }
+    .cart-item-actions { display: flex; align-items: center; gap: 10px; }
+
+    .qty-btn {
+      background: var(--btn-bg); color: var(--text-main); border: none; width: 26px; height: 26px;
+      border-radius: 8px; font-size: 15px; cursor: pointer; transition: background 0.2s;
+      font-family: inherit; display: flex; align-items: center; justify-content: center;
+    }
+    .qty-btn:hover { background: var(--prof-bg); }
+    .cart-item-qty { font-size: 0.9rem; font-weight: 600; min-width: 18px; text-align: center; }
+
+    .qty-remove {
+      margin-left: auto; background: transparent; border: none; color: var(--price-red); font-size: 13px;
+      cursor: pointer; font-family: inherit; font-weight: 600; opacity: 0.8; transition: opacity 0.2s;
+    }
+    .qty-remove:hover { opacity: 1; }
+
+    .cart-footer { padding: 20px; border-top: 1px solid var(--card-border); display: flex; flex-direction: column; gap: 14px; }
+    .cart-total-row { display: flex; justify-content: space-between; align-items: center; font-size: 1rem; }
+    .cart-total-row span:first-child { color: var(--text-muted); }
+    .cart-total-row span:last-child { color: var(--price-green); font-weight: 700; font-size: 1.25rem; }
 
     /* ===== Disclaimer Modal ===== */
     .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.65);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 200;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.35s ease, visibility 0.35s ease;
-      padding: 20px;
+      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center;
+      z-index: 200; opacity: 0; visibility: hidden; transition: opacity 0.35s ease, visibility 0.35s ease; padding: 20px;
     }
-
-    .modal-overlay.show {
-      opacity: 1;
-      visibility: visible;
-    }
+    .modal-overlay.show { opacity: 1; visibility: visible; }
 
     .modal-box {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 32px;
-      max-width: 440px;
-      width: 100%;
-      box-shadow: 0 20px 60px var(--dropdown-shadow);
-      transform: translateY(20px) scale(0.96);
-      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 32px;
+      max-width: 440px; width: 100%; box-shadow: 0 20px 60px var(--dropdown-shadow);
+      transform: translateY(20px) scale(0.96); transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      max-height: 90dvh; overflow-y: auto;
     }
+    .modal-overlay.show .modal-box { transform: translateY(0) scale(1); }
 
-    .modal-overlay.show .modal-box {
-      transform: translateY(0) scale(1);
-    }
+    .modal-box h3 { font-size: 1.15rem; color: var(--blur-purple); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+    .modal-box p { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6; }
+    .modal-box ul { list-style: none; margin-bottom: 24px; padding: 0; }
+    .modal-box li { font-size: 0.9rem; color: var(--text-main); padding: 6px 0; padding-left: 20px; position: relative; line-height: 1.5; }
+    .modal-box li::before { content: "•"; position: absolute; left: 0; color: var(--blur-purple); font-weight: 700; }
+    .modal-box .warn { color: var(--price-red); font-weight: 500; }
+    .modal-box .btn-pay { display: block; text-align: center; width: 100%; margin-top: 8px; }
+    .modal-timer { text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: -12px; margin-bottom: 12px; opacity: 0.7; }
 
-    .modal-box h3 {
-      font-size: 1.15rem;
-      color: var(--blur-purple);
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+    /* ===== Checkout ===== */
+    .checkout-box { max-width: 480px; }
+    .checkout-total {
+      display: flex; justify-content: space-between; align-items: center; background: var(--section-bg);
+      border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 16px; margin-bottom: 18px; font-size: 0.95rem;
     }
+    .checkout-total span:last-child { color: var(--price-green); font-weight: 700; font-size: 1.1rem; }
 
-    .modal-box p {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      margin-bottom: 16px;
-      line-height: 1.6;
-    }
+    .form-label { display: block; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px; }
 
-    .modal-box ul {
-      list-style: none;
-      margin-bottom: 24px;
-      padding: 0;
+    .pay-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .pay-method {
+      display: flex; align-items: center; gap: 10px; background: var(--btn-bg); border: 2px solid var(--card-border);
+      padding: 12px 14px; border-radius: 12px; cursor: pointer; font-size: 0.88rem; font-weight: 600;
+      color: var(--text-main); transition: all 0.2s ease; user-select: none;
     }
+    .pay-method:hover { border-color: var(--prof-bg); }
+    .pay-method input { accent-color: var(--price-green); width: 15px; height: 15px; cursor: pointer; flex-shrink: 0; }
+    .pay-method:has(input:checked) { border-color: var(--price-green); background: rgba(87, 242, 135, 0.1); }
 
-    .modal-box li {
-      font-size: 0.9rem;
-      color: var(--text-main);
-      padding: 6px 0;
-      padding-left: 20px;
-      position: relative;
-      line-height: 1.5;
+    .contact-grid { display: grid; grid-template-columns: 135px 1fr; gap: 8px; margin-bottom: 6px; }
+    .contact-grid input {
+      background: var(--btn-bg); border: 2px solid var(--card-border); color: var(--text-main);
+      padding: 11px 12px; border-radius: 10px; font-family: inherit; font-size: 0.9rem; width: 100%;
+      transition: border-color 0.2s; outline: none;
     }
+    .contact-grid input:focus { border-color: var(--blur-purple); }
+    .contact-grid input.invalid { border-color: var(--price-red); }
 
-    .modal-box li::before {
-      content: "•";
-      position: absolute;
-      left: 0;
-      color: var(--blur-purple);
-      font-weight: 700;
-    }
+    .form-error { color: var(--price-red); font-size: 0.8rem; margin-bottom: 10px; min-height: 1.1em; font-weight: 500; }
+    .cooldown-note { text-align: center; font-size: 0.8rem; color: var(--price-red); margin-bottom: 10px; min-height: 1.1em; font-weight: 500; }
 
-    .modal-box .warn {
-      color: var(--price-red);
-      font-weight: 500;
+    /* ===== Custom select ===== */
+    .custom-select { position: relative; }
+    .cs-trigger {
+      width: 100%; display: flex; justify-content: space-between; align-items: center;
+      background: var(--btn-bg); border: 2px solid var(--card-border); color: var(--text-main);
+      padding: 11px 12px; border-radius: 10px; font-family: inherit; font-size: .9rem;
+      cursor: pointer; transition: border-color .2s;
     }
+    .cs-trigger:hover, .custom-select.open .cs-trigger { border-color: var(--blur-purple); }
+    .cs-arrow { font-size: .7rem; opacity: .7; transition: transform .25s; }
+    .custom-select.open .cs-arrow { transform: rotate(180deg); }
 
-    .modal-box .btn-pay {
-      display: block;
-      text-align: center;
-      width: 100%;
-      margin-top: 8px;
+    .modal-box .cs-menu {
+      position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 30;
+      list-style: none; margin: 0; padding: 4px;
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px;
+      box-shadow: 0 12px 32px var(--dropdown-shadow);
+      opacity: 0; visibility: hidden; transform: translateY(-6px) scale(.98);
+      transition: opacity .2s ease, visibility .2s ease, transform .25s cubic-bezier(0.22, 1, 0.36, 1);
     }
+    .custom-select.open .cs-menu { opacity: 1; visibility: visible; transform: none; }
+    .modal-box .cs-menu li { padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: .9rem; font-weight: 500; color: var(--text-main); }
+    .modal-box .cs-menu li::before { content: none; }
+    .modal-box .cs-menu li:hover { background: var(--prof-bg); }
+    .modal-box .cs-menu li.selected { color: var(--price-green); background: rgba(87,242,135,.1); }
 
-    .modal-timer {
-      text-align: center;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: -12px;
-      margin-bottom: 12px;
-      opacity: 0.7;
+    /* ===== Receipt (thermal printer) ===== */
+    .printer { width: min(330px, 100%); display: flex; flex-direction: column; }
+
+    .printer-slot {
+      height: 16px; border-radius: 10px; position: relative; z-index: 2;
+      background: linear-gradient(#3a3a3a, #141414);
+      box-shadow: 0 4px 14px rgba(0,0,0,.6), inset 0 1px 0 #ffffff25;
     }
+    .printer-slot::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: 3px; height: 4px; border-radius: 2px; background: #000; }
+
+    .paper-out {
+      margin: -3px 14px 16px; overflow-x: hidden; overflow-y: auto;
+      max-height: calc(100dvh - 170px); scrollbar-width: none;
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,.45));
+    }
+    .paper-out::-webkit-scrollbar { display: none; }
+
+    .receipt-paper {
+      background: #fbfbf7; color: #1d1d1d;
+      font-family: "Courier New", ui-monospace, monospace;
+      font-size: 13px; line-height: 1.45; text-transform: uppercase;
+      padding: 22px 18px 38px;
+      -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 12px 100%;
+              mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 12px 100%;
+    }
+    /* paper feeds out of the slot in mechanical steps */
+    .modal-overlay.show .receipt-paper { animation: printOut 2.8s steps(40, end) .25s backwards; }
+    @keyframes printOut { from { transform: translateY(-100%); } }
+
+    .rc-center { text-align: center; }
+    .rc-brand { font-size: 1.35rem; font-weight: 700; letter-spacing: 2px; }
+    .rc-sub { font-size: .72rem; opacity: .7; }
+    .rc-sep { height: 0; border-top: 2px dashed #1d1d1d55; margin: 12px 0; }
+    .rc-row { display: flex; align-items: baseline; gap: 6px; }
+    .rc-row .dots { flex: 1; min-width: 8px; border-bottom: 2px dotted #1d1d1d55; transform: translateY(-3px); }
+    .rc-row span:last-child { text-align: right; word-break: break-all; }
+    .rc-row.total { font-size: 1.15rem; font-weight: 700; }
+    .rc-stamp { text-align: center; font-weight: 700; letter-spacing: 2px; margin-bottom: 8px; }
+    .rc-foot { font-size: .72rem; text-align: center; opacity: .75; margin-top: 10px; }
+    .rc-barcode { display: block; width: 100%; height: 54px; margin: 14px 0 6px; }
+    .rc-id { text-align: center; font-weight: 700; letter-spacing: 3px; font-size: .9rem; }
 
     @media (max-width: 800px) {
       .pay-embeds, .level-group.active { flex-direction: column; }
@@ -545,6 +386,8 @@
       .tab-container { padding: 20px 16px 50px; }
       .section-tabs, .level-switch { flex-wrap: wrap; }
       .modal-box { padding: 24px; }
+      .pay-methods { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
     }
 
     ::-webkit-scrollbar { width: 6px; }
@@ -552,6 +395,7 @@
     ::-webkit-scrollbar-thumb { background: var(--btn-bg); border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--prof-bg); }
   </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -562,17 +406,100 @@
       <p data-en="I <strong>only</strong> accept these payment methods!" data-es="¡<strong>Solo</strong> acepto estos métodos de pago!">I <strong>only</strong> accept these payment methods!</p>
       <ul>
         <li data-en="Discord Nitro" data-es="Discord Nitro">Discord Nitro</li>
-        <li data-en="Giftcards" data-es="Tarjetas de regalo">Giftcards</li>
-        <li data-en="In-game currency (Robux, avoid using this too)" data-es="Moneda del juego (Robux, evita usar esto también)">In-game currency (Robux, avoid using this too)</li>
-        <li class="warn" data-en="Crypto (Avoid paying this way)" data-es="Cripto (Evita pagar de esta forma)">Crypto (Avoid paying this way)</li>
+        <li data-en="Nitro Basic" data-es="Nitro Basic">Nitro Basic</li>
+        <li data-en="Gift cards" data-es="Tarjetas de regalo">Gift cards</li>
+        <li data-en="Art trade" data-es="Intercambio de arte">Art trade</li>
       </ul>
       <div class="modal-timer" id="modal-timer">Please read — 5s</div>
       <button class="btn-pay" id="modal-dismiss" data-en="Got it" data-es="Entendido" disabled>Got it</button>
     </div>
   </div>
 
+  <!-- Cart Drawer -->
+  <div class="cart-overlay" id="cart-overlay"></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-label="Shopping cart">
+    <div class="cart-header">
+      <h3 data-en="Your Cart" data-es="Tu Carrito">Your Cart</h3>
+      <button class="cart-close" id="cart-close" aria-label="Close cart">×</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span data-en="Total" data-es="Total">Total</span>
+        <span id="cart-total">$0.00</span>
+      </div>
+      <button class="btn-pay" id="checkout-btn" data-en="Checkout" data-es="Pagar">Checkout</button>
+    </div>
+  </aside>
+
+  <!-- Checkout Modal -->
+  <div class="modal-overlay" id="checkout-modal">
+    <div class="modal-box checkout-box">
+      <h3 data-en="Checkout" data-es="Pagar">Checkout</h3>
+      <div class="checkout-total">
+        <span data-en="Order total" data-es="Total del pedido">Order total</span>
+        <span id="checkout-total">$0.00</span>
+      </div>
+
+      <span class="form-label" data-en="Payment method" data-es="Método de pago">Payment method</span>
+      <div class="pay-methods" id="pay-methods">
+        <label class="pay-method">
+          <input type="radio" name="paymethod" value="Discord Nitro" checked>
+          <span>Discord Nitro</span>
+        </label>
+        <label class="pay-method">
+          <input type="radio" name="paymethod" value="Nitro Basic">
+          <span>Nitro Basic</span>
+        </label>
+        <label class="pay-method">
+          <input type="radio" name="paymethod" value="Gift Card">
+          <span data-en="Gift Card" data-es="Tarjeta de regalo">Gift Card</span>
+        </label>
+        <label class="pay-method">
+          <input type="radio" name="paymethod" value="Art Trade">
+          <span data-en="Art Trade" data-es="Intercambio de arte">Art Trade</span>
+        </label>
+      </div>
+
+      <span class="form-label" data-en="Your contact (required)" data-es="Tu contacto (requerido)">Your contact (required)</span>
+      <div class="contact-grid">
+        <div class="custom-select" id="contact-select">
+          <input type="hidden" id="contact-type" value="Discord">
+          <button type="button" class="cs-trigger" id="contact-trigger" aria-haspopup="listbox" aria-expanded="false">
+            <span id="contact-label">Discord</span><span class="cs-arrow">▾</span>
+          </button>
+          <ul class="cs-menu" role="listbox">
+            <li role="option" class="selected" data-value="Discord" data-en="Discord" data-es="Discord">Discord</li>
+            <li role="option" data-value="X (Twitter)" data-en="X (Twitter)" data-es="X (Twitter)">X (Twitter)</li>
+            <li role="option" data-value="Email" data-en="Email" data-es="Email">Email</li>
+            <li role="option" data-value="Other" data-en="Other" data-es="Otro">Other</li>
+          </ul>
+        </div>
+        <input type="text" id="contact-handle" data-en-ph="@username or email" data-es-ph="@usuario o email" placeholder="@username or email" autocomplete="off">
+      </div>
+      <div class="form-error" id="contact-error"></div>
+      <div class="cooldown-note" id="cooldown-note"></div>
+
+      <button class="btn-pay" id="place-order" data-en="Place Order" data-es="Realizar pedido">Place Order</button>
+      <button class="btn-pay btn-ghost" id="checkout-cancel" data-en="Back" data-es="Atrás">Back</button>
+    </div>
+  </div>
+
+  <!-- Receipt Modal -->
+  <div class="modal-overlay" id="receipt-modal">
+    <div class="printer">
+      <div class="printer-slot"></div>
+      <div class="paper-out"><div class="receipt-paper" id="receipt-paper"></div></div>
+      <button class="btn-pay" id="receipt-close" data-en="Done" data-es="Listo">Done</button>
+    </div>
+  </div>
+
   <div class="controls">
     <button id="burger" class="burger" onclick="toggleDropdown()">≡</button>
+    <button id="cart-toggle" class="control-btn">
+      <span data-en="Cart" data-es="Carrito">Cart</span>
+      <span class="cart-count" id="cart-count">0</span>
+    </button>
     <button id="theme-toggle" class="control-btn" data-en="Theme" data-es="Tema">Theme</button>
     <button id="lang-toggle" class="control-btn">EN</button>
   </div>
@@ -643,7 +570,7 @@
             <p data-en="Quick rough sketch of your character's head/shoulders." data-es="Boceto rápido de la cabeza/hombros de tu personaje.">Quick rough sketch of your character's head/shoulders.</p>
             <div class="card-footer">
               <span class="price-tag">2 USD</span>
-              <a href="https://moonpay.hel.io/pay/6a307fb6fc5661118e8b5700" target="_blank" class="btn-pay" data-en="Purchase via Hel.io" data-es="Comprar via Hel.io">Purchase via Hel.io</a>
+              <button class="btn-pay btn-add" data-name="Sketch Headshot" data-price="2" data-en="Add to Cart" data-es="Añadir al Carrito">Add to Cart</button>
             </div>
           </div>
         </div>
@@ -653,7 +580,7 @@
             <p data-en="Rough sketch from the hips up." data-es="Boceto rápido desde las caderas para arriba.">Rough sketch from the hips up.</p>
             <div class="card-footer">
               <span class="price-tag">5 USD</span>
-              <a href="https://moonpay.hel.io/x/kattoicon" target="_blank" class="btn-pay" data-en="Purchase via Hel.io" data-es="Comprar via Hel.io">Purchase via Hel.io</a>
+              <button class="btn-pay btn-add" data-name="Sketch Hips & Up" data-price="5" data-en="Add to Cart" data-es="Añadir al Carrito">Add to Cart</button>
             </div>
           </div>
         </div>
@@ -663,7 +590,7 @@
             <p data-en="Rough full body sketch." data-es="Boceto rápido de cuerpo completo.">Rough full body sketch.</p>
             <div class="card-footer">
               <span class="price-tag">8 USD</span>
-              <a href="https://moonpay.hel.io/pay/6a30803bc6ada42e3f75c1b7" target="_blank" class="btn-pay" data-en="Purchase via Hel.io" data-es="Comprar via Hel.io">Purchase via Hel.io</a>
+              <button class="btn-pay btn-add" data-name="Sketch Full Body" data-price="8" data-en="Add to Cart" data-es="Añadir al Carrito">Add to Cart</button>
             </div>
           </div>
         </div>
@@ -677,7 +604,7 @@
             <p data-en="Clean inked headshot, no color." data-es="Retrato limpio entintado, sin color.">Clean inked headshot, no color.</p>
             <div class="card-footer">
               <span class="price-tag">5 USD</span>
-              <a href="https://moonpay.hel.io/x/kattoicon" target="_blank" class="btn-pay" data-en="Purchase via Hel.io" data-es="Comprar via Hel.io">Purchase via Hel.io</a>
+              <button class="btn-pay btn-add" data-name="Line Art Headshot" data-price="5" data-en="Add to Cart" data-es="Añadir al Carrito">Add to Cart</button>
             </div>
           </div>
         </div>
@@ -687,7 +614,7 @@
             <p data-en="Clean inked hips-and-up piece, no color." data-es="Pieza limpia entintada de caderas para arriba, sin color.">Clean inked hips-and-up piece, no color.</p>
             <div class="card-footer">
               <span class="price-tag">8 USD</span>
-              <a href="https://moonpay.hel.io/pay/6a30803bc6ada42e3f75c1b7" target="_blank" class="btn-pay" data-en="Purchase via Hel.io" data-es="Comprar via Hel.io">Purchase via Hel.io</a>
+              <button class="btn-pay btn-add" data-name="Line Art Hips & Up" data-price="8" data-en="Add to Cart" data-es="Añadir al Carrito">Add to Cart</button>
             </div>
           </div>
         </div>
@@ -697,7 +624,7 @@
             <p data-en="Clean inked full body piece, no color." data-es="Pieza limpia entintada de cuerpo completo, sin color.">Clean inked full body piece, no color.</p>
             <div class="card-footer">
               <span class="price-tag">12 USD</span>
-              <a href="https://moonpay.hel.io/pay/6a3080a003b432803d92a772" target="_blank" class="btn-pay" data-en="Purchase via Hel.io" data-es="Comprar via Hel.io">Purchase via Hel.io</a>
+              <button class="btn-pay btn-add" data-name="Line Art Full Body" data-price="12" data-en="Add to Cart" data-es="Añadir al Carrito">Add to Cart</button>
             </div>
           </div>
         </div>
@@ -711,7 +638,7 @@
             <p data-en="Fully colored headshot with flat or simple shading." data-es="Retrato completamente coloreado con sombreado plano o simple.">Fully colored headshot with flat or simple shading.</p>
             <div class="card-footer">
               <span class="price-tag">8 USD</span>
-              <a href="https://moonpay.hel.io/pay/6a30803bc6ada42e3f75c1b7" target="_blank" class="btn-pay" data-en="Purchase via Hel.io" data-es="Comprar via Hel.io">Purchase via Hel.io</a>
+              <button class="btn-pay btn-add" data-name="Colored Headshot" data-price="8" data-en="Add to Cart" data-es="Añadir al Carrito">Add to Cart</button>
             </div>
           </div>
         </div>
@@ -721,7 +648,7 @@
             <p data-en="Fully colored hips-and-up piece with flat or simple shading." data-es="Pieza coloreada de caderas para arriba con sombreado plano o simple.">Fully colored hips-and-up piece with flat or simple shading.</p>
             <div class="card-footer">
               <span class="price-tag">12 USD</span>
-              <a href="https://moonpay.hel.io/pay/6a3080a003b432803d92a772" target="_blank" class="btn-pay" data-en="Purchase via Hel.io" data-es="Comprar via Hel.io">Purchase via Hel.io</a>
+              <button class="btn-pay btn-add" data-name="Colored Hips & Up" data-price="12" data-en="Add to Cart" data-es="Añadir al Carrito">Add to Cart</button>
             </div>
           </div>
         </div>
@@ -731,7 +658,7 @@
             <p data-en="Fully colored full body piece with flat or simple shading." data-es="Pieza coloreada de cuerpo completo con sombreado plano o simple.">Fully colored full body piece with flat or simple shading.</p>
             <div class="card-footer">
               <span class="price-tag">15 USD</span>
-              <a href="https://moonpay.hel.io/pay/6a3083ae582f6261ef120211" target="_blank" class="btn-pay" data-en="Purchase via Hel.io" data-es="Comprar via Hel.io">Purchase via Hel.io</a>
+              <button class="btn-pay btn-add" data-name="Colored Full Body" data-price="15" data-en="Add to Cart" data-es="Añadir al Carrito">Add to Cart</button>
             </div>
           </div>
         </div>
@@ -745,7 +672,7 @@
             <p data-en="Fully rendered headshot with detailed shading and lighting." data-es="Retrato completamente renderizado con sombreado e iluminación detallados.">Fully rendered headshot with detailed shading and lighting.</p>
             <div class="card-footer">
               <span class="price-tag unavailable-price" data-en="Not Available" data-es="No Disponible">Not Available</span>
-              <a href="#" class="btn-pay" data-en="Purchase via Hel.io" data-es="Comprar via Hel.io">Purchase via Hel.io</a>
+              <button class="btn-pay" disabled data-en="Unavailable" data-es="No Disponible">Unavailable</button>
             </div>
           </div>
           <div class="unavailable-overlay"><span class="unavailable-badge" data-en="Unavailable" data-es="No Disponible">Unavailable</span></div>
@@ -766,7 +693,7 @@
             <p data-en="Fully rendered full body piece. Minimum price shown, varies with complexity." data-es="Pieza renderizada de cuerpo completo. Precio mínimo mostrado, varía según complejidad.">Fully rendered full body piece. Minimum price shown, varies with complexity.</p>
             <div class="card-footer">
               <span class="price-tag">30 USD min.</span>
-              <a href="https://moonpay.hel.io/pay/6a308430b22f6e201b79663b" target="_blank" class="btn-pay" data-en="Purchase via Hel.io" data-es="Comprar via Hel.io">Purchase via Hel.io</a>
+              <button class="btn-pay btn-add" data-name="Render Full Body" data-price="30" data-en="Add to Cart" data-es="Añadir al Carrito">Add to Cart</button>
             </div>
           </div>
         </div>
@@ -779,13 +706,13 @@
           <div class="tos-item">
             <h4 data-en="Backgrounds" data-es="Fondos">Backgrounds</h4>
             <ul>
-              <li>• <span data-en="Simple: " data-es="Simple: ">Simple: </span><span class="highlight">+5 USD</span></li>
-              <li>• <span data-en="Detailed (a bit): " data-es="Detallado (un poco): ">Detailed (a bit): </span><span class="highlight">+8 USD</span></li>
+              <li>• <span data-en="Simple: " data-es="Simple: ">Simple: </span><span class="highlight">+5 USD</span> <button class="btn-pay btn-add btn-add-sm" style="width:auto;padding:6px 14px;font-size:.75rem;" data-name="Simple Background" data-price="5" data-en="Add" data-es="Añadir">Add</button></li>
+              <li>• <span data-en="Detailed (a bit): " data-es="Detallado (un poco): ">Detailed (a bit): </span><span class="highlight">+8 USD</span> <button class="btn-pay btn-add btn-add-sm" style="width:auto;padding:6px 14px;font-size:.75rem;" data-name="Detailed Background" data-price="8" data-en="Add" data-es="Añadir">Add</button></li>
             </ul>
           </div>
           <div class="tos-item">
             <h4 data-en="Extra Characters" data-es="Personajes Extra">Extra Characters</h4>
-            <p><span class="highlight">+5 USD</span> <span data-en="per additional character." data-es="por personaje adicional.">per additional character.</span></p>
+            <p><span class="highlight">+5 USD</span> <span data-en="per additional character." data-es="por personaje adicional.">per additional character.</span> <button class="btn-pay btn-add btn-add-sm" style="width:auto;padding:6px 14px;font-size:.75rem;" data-name="Extra Character" data-price="5" data-en="Add" data-es="Añadir">Add</button></p>
           </div>
         </div>
       </div>
@@ -804,6 +731,11 @@
   </div>
 
   <script>
+    /* ── Config ── */
+    const WORKER_URL = 'https://receipts.laminaxlabs.workers.dev/';
+    const COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes between purchases
+    const COOLDOWN_KEY = 'katto_last_purchase';
+
     /* ── Disclaimer Modal ── */
     const modal = document.getElementById('disclaimer-modal');
     const modalDismiss = document.getElementById('modal-dismiss');
@@ -862,10 +794,7 @@
     /* ── Language & Theme ── */
     let currentLang = 'en';
 
-    const langBtn = document.getElementById('lang-toggle');
-    langBtn.addEventListener('click', () => {
-      currentLang = currentLang === 'en' ? 'es' : 'en';
-      langBtn.textContent = currentLang.toUpperCase();
+    function applyTranslations() {
       document.querySelectorAll('[data-en]').forEach(el => {
         const newText = el.getAttribute(`data-${currentLang}`);
         if (newText) {
@@ -874,11 +803,11 @@
           } else if (el.children.length === 0) {
             el.textContent = newText;
           } else {
-            const hasComplexChildren = Array.from(el.children).some(c => 
+            const hasComplexChildren = Array.from(el.children).some(c =>
               !c.classList.contains('highlight') && !c.classList.contains('prohibited') && !c.classList.contains('warn')
             );
             if (!hasComplexChildren) {
-              const onlySpecialSpans = Array.from(el.children).every(c => 
+              const onlySpecialSpans = Array.from(el.children).every(c =>
                 c.tagName === 'SPAN' && (c.classList.contains('highlight') || c.classList.contains('prohibited') || c.classList.contains('warn'))
                 || c.tagName === 'STRONG'
               );
@@ -894,7 +823,19 @@
           }
         }
       });
-      // Update timer text if modal is open
+      // placeholder translations
+      document.querySelectorAll('[data-en-ph]').forEach(el => {
+        el.placeholder = el.getAttribute(`data-${currentLang}-ph`) || el.getAttribute('data-en-ph');
+      });
+    }
+
+    const langBtn = document.getElementById('lang-toggle');
+    langBtn.addEventListener('click', () => {
+      currentLang = currentLang === 'en' ? 'es' : 'en';
+      langBtn.textContent = currentLang.toUpperCase();
+      applyTranslations();
+      renderCart();
+      // Update timer text if disclaimer modal is open
       if (modal.classList.contains('show') && modalDismiss.disabled) {
         const remainingMatch = modalTimer.textContent.match(/\d+/);
         if (remainingMatch) {
@@ -926,14 +867,13 @@
       }
     };
 
-    /* ── Commission Logic ── */
+    /* ── Software Cards ── */
     const products = [
       {
         name: 'Mod Commission',
-        price: '10 USD',
-        url: 'https://moonpay.hel.io/x/kattomods',
+        price: 10,
+        priceLabel: '10 USD',
         desc: 'Custom logic or your **OC inside Changed Extras**. Includes modeling, texturing, and implementation.',
-        image: 'mod.png',
         unavailable: false
       }
     ];
@@ -945,8 +885,11 @@
         card.className = 'modern-card' + (prod.unavailable ? ' is-locked' : '');
         const cleanDesc = prod.desc.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
         const priceTagClass = prod.unavailable ? 'price-tag unavailable-price' : 'price-tag';
-        const priceLabel = prod.unavailable ? 'Not Available' : prod.price;
+        const priceLabel = prod.unavailable ? 'Not Available' : prod.priceLabel;
         const overlay = prod.unavailable ? '<div class="unavailable-overlay"><span class="unavailable-badge">Unavailable</span></div>' : '';
+        const action = prod.unavailable
+          ? `<button class="btn-pay" disabled>Unavailable</button>`
+          : `<button class="btn-pay btn-add" data-name="${prod.name}" data-price="${prod.price}">Add to Cart</button>`;
 
         card.innerHTML = `
           <div class="card-body">
@@ -954,7 +897,7 @@
             <p>${cleanDesc}</p>
             <div class="card-footer">
               <span class="${priceTagClass}">${priceLabel}</span>
-              <a href="${prod.url}" target="_blank" class="btn-pay">Purchase via Hel.io</a>
+              ${action}
             </div>
           </div>
           ${overlay}
@@ -990,6 +933,339 @@
         });
       });
     });
+
+    /* ═══════════ CART SYSTEM ═══════════ */
+    let cart = [];
+
+    const cartDrawer = document.getElementById('cart-drawer');
+    const cartOverlay = document.getElementById('cart-overlay');
+    const cartItemsEl = document.getElementById('cart-items');
+    const cartTotalEl = document.getElementById('cart-total');
+    const cartCountEl = document.getElementById('cart-count');
+
+    function openCart() {
+      cartDrawer.classList.add('show');
+      cartOverlay.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCart() {
+      cartDrawer.classList.remove('show');
+      cartOverlay.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('cart-toggle').addEventListener('click', openCart);
+    document.getElementById('cart-close').addEventListener('click', closeCart);
+    cartOverlay.addEventListener('click', closeCart);
+
+    function cartTotal() {
+      return cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+    }
+
+    function cartCount() {
+      return cart.reduce((sum, i) => sum + i.qty, 0);
+    }
+
+    function addToCart(name, price) {
+      const existing = cart.find(i => i.name === name);
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ name, price, qty: 1 });
+      }
+      renderCart();
+      cartCountEl.classList.remove('pop');
+      void cartCountEl.offsetWidth; // restart animation
+      cartCountEl.classList.add('pop');
+    }
+
+    function renderCart() {
+      cartItemsEl.innerHTML = '';
+      if (cart.length === 0) {
+        const empty = document.createElement('p');
+        empty.className = 'cart-empty';
+        empty.textContent = currentLang === 'es' ? 'Tu carrito está vacío.' : 'Your cart is empty.';
+        cartItemsEl.appendChild(empty);
+      } else {
+        cart.forEach((item, idx) => {
+          const row = document.createElement('div');
+          row.className = 'cart-item';
+          row.innerHTML = `
+            <div class="cart-item-top">
+              <span class="cart-item-name">${item.name}</span>
+              <span class="cart-item-price">$${(item.price * item.qty).toFixed(2)}</span>
+            </div>
+            <div class="cart-item-actions">
+              <button class="qty-btn" data-idx="${idx}" data-delta="-1" aria-label="Decrease">−</button>
+              <span class="cart-item-qty">${item.qty}</span>
+              <button class="qty-btn" data-idx="${idx}" data-delta="1" aria-label="Increase">+</button>
+              <button class="qty-remove" data-idx="${idx}">✕ remove</button>
+            </div>
+          `;
+          cartItemsEl.appendChild(row);
+        });
+      }
+      cartTotalEl.textContent = '$' + cartTotal().toFixed(2);
+      cartCountEl.textContent = cartCount();
+    }
+
+    // Delegated events for cart item buttons
+    cartItemsEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      const idx = parseInt(btn.dataset.idx);
+      if (btn.classList.contains('qty-remove')) {
+        cart.splice(idx, 1);
+      } else if (btn.dataset.delta) {
+        cart[idx].qty += parseInt(btn.dataset.delta);
+        if (cart[idx].qty <= 0) cart.splice(idx, 1);
+      }
+      renderCart();
+    });
+
+    // "Add to Cart" buttons (static + dynamic)
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn-add');
+      if (!btn) return;
+      e.preventDefault();
+      addToCart(btn.dataset.name, parseFloat(btn.dataset.price));
+      const original = btn.getAttribute(`data-${currentLang}`) || btn.textContent;
+      btn.classList.add('added');
+      btn.textContent = currentLang === 'es' ? '✓ Añadido' : '✓ Added';
+      setTimeout(() => {
+        btn.classList.remove('added');
+        btn.textContent = original;
+      }, 1200);
+    });
+
+    /* ═══════════ CHECKOUT ═══════════ */
+    const checkoutModal = document.getElementById('checkout-modal');
+    const checkoutTotalEl = document.getElementById('checkout-total');
+    const placeOrderBtn = document.getElementById('place-order');
+    const contactTypeEl = document.getElementById('contact-type');
+    const contactHandleEl = document.getElementById('contact-handle');
+    const contactErrorEl = document.getElementById('contact-error');
+    const cooldownNoteEl = document.getElementById('cooldown-note');
+    let cooldownInterval = null;
+
+    function getCooldownRemaining() {
+      const last = parseInt(localStorage.getItem(COOLDOWN_KEY) || '0');
+      return Math.max(0, COOLDOWN_MS - (Date.now() - last));
+    }
+
+    function updateCooldownUI() {
+      const remaining = getCooldownRemaining();
+      if (remaining > 0) {
+        const mins = Math.floor(remaining / 60000);
+        const secs = Math.floor((remaining % 60000) / 1000);
+        const timeStr = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+        cooldownNoteEl.textContent = currentLang === 'es'
+          ? `Espera ${timeStr} antes de otra compra`
+          : `Please wait ${timeStr} before placing another order`;
+        placeOrderBtn.disabled = true;
+      } else {
+        cooldownNoteEl.textContent = '';
+        placeOrderBtn.disabled = false;
+      }
+    }
+
+    document.getElementById('checkout-btn').addEventListener('click', () => {
+      if (cart.length === 0) return;
+      closeCart();
+      checkoutTotalEl.textContent = '$' + cartTotal().toFixed(2);
+      contactErrorEl.textContent = '';
+      contactHandleEl.classList.remove('invalid');
+      checkoutModal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+      updateCooldownUI();
+      clearInterval(cooldownInterval);
+      cooldownInterval = setInterval(updateCooldownUI, 1000);
+    });
+
+    function closeCheckout() {
+      checkoutModal.classList.remove('show');
+      document.body.style.overflow = '';
+      clearInterval(cooldownInterval);
+      setContactOpen(false);
+    }
+
+    document.getElementById('checkout-cancel').addEventListener('click', closeCheckout);
+    checkoutModal.addEventListener('click', (e) => {
+      if (e.target === checkoutModal) closeCheckout();
+    });
+
+    function generatePurchaseId() {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let id = 'KTO-';
+      for (let i = 0; i < 8; i++) id += chars[Math.floor(Math.random() * chars.length)];
+      return id;
+    }
+
+    /* ═══════════ RECEIPT ═══════════ */
+    const receiptModal = document.getElementById('receipt-modal');
+
+    function esc(s) {
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    function barcodeSVG(text) {
+      let x = 6, bars = '';
+      const add = (w, dark) => { if (dark) bars += `<rect x="${x}" y="0" width="${w}" height="54"/>`; x += w; };
+      add(2, true); add(1, false); add(2, true); add(1, false);
+      for (const ch of text) {
+        const c = ch.charCodeAt(0);
+        for (let b = 0; b < 6; b++) add(1 + ((c >> b) & 3) % 3, b % 2 === 0);
+      }
+      add(2, true); add(1, false); add(2, true);
+      return `<svg class="rc-barcode" viewBox="0 0 ${x + 6} 54" preserveAspectRatio="none" fill="#1d1d1d">${bars}</svg>`;
+    }
+
+    function showReceipt(order) {
+      const es = currentLang === 'es';
+      const t = (en, sp) => es ? sp : en;
+      const d = new Date(order.timestamp);
+      const count = order.items.reduce((s, i) => s + i.qty, 0);
+      const line = (l, r, cls = '') => `<div class="rc-row ${cls}"><span>${l}</span><span class="dots"></span><span>${r}</span></div>`;
+      const items = order.items.map(i => line(`${esc(i.name)} x${i.qty}`, '$' + (i.price * i.qty).toFixed(2))).join('');
+
+      document.getElementById('receipt-paper').innerHTML = `
+        <div class="rc-center">
+          <div class="rc-brand">KATTO.ONLINE</div>
+          <div class="rc-sub">${t('Art & software commissions', 'Comisiones de arte y software')}</div>
+          <div class="rc-sub">kattosaurus.github.io/Blog</div>
+        </div>
+        <div class="rc-sep"></div>
+        ${line(t('Date', 'Fecha'), d.toLocaleDateString())}
+        ${line(t('Time', 'Hora'), d.toLocaleTimeString())}
+        <div class="rc-sep"></div>
+        ${items}
+        <div class="rc-sep"></div>
+        ${line(t('Items', 'Artículos'), count)}
+        ${line('Total', '$' + order.totalUsd.toFixed(2) + ' USD', 'total')}
+        <div class="rc-sep"></div>
+        ${line(t('Payment', 'Pago'), esc(order.paymentMethod))}
+        ${line(t('Contact', 'Contacto'), esc(order.contact))}
+        <div class="rc-sep"></div>
+        <div class="rc-stamp">*** ${t('Order placed', 'Pedido realizado')} ***</div>
+        <div class="rc-foot">${t('Save your Purchase ID — Katto will contact you to arrange payment delivery.', 'Guarda tu ID de compra — Katto te contactará para coordinar la entrega del pago.')}</div>
+        ${barcodeSVG(order.purchaseId)}
+        <div class="rc-id">${order.purchaseId}</div>
+        <div class="rc-foot">${t('Thank you! Come again :3', '¡Gracias! Vuelve pronto :3')}</div>
+      `;
+      document.querySelector('.paper-out').scrollTop = 0;
+      receiptModal.classList.add('show');
+    }
+
+    document.getElementById('receipt-close').addEventListener('click', () => {
+      receiptModal.classList.remove('show');
+      document.body.style.overflow = '';
+    });
+
+    /* ═══════════ PLACE ORDER ═══════════ */
+    placeOrderBtn.addEventListener('click', async () => {
+      // Validate contact
+      const handle = contactHandleEl.value.trim();
+      if (!handle) {
+        contactErrorEl.textContent = currentLang === 'es'
+          ? 'Debes proporcionar un método de contacto'
+          : 'You must provide a contact method';
+        contactHandleEl.classList.add('invalid');
+        contactHandleEl.focus();
+        return;
+      }
+      contactErrorEl.textContent = '';
+      contactHandleEl.classList.remove('invalid');
+
+      // Cooldown check (double-check at submit time)
+      if (getCooldownRemaining() > 0) {
+        updateCooldownUI();
+        return;
+      }
+
+      const paymentMethod = document.querySelector('input[name="paymethod"]:checked').value;
+      const order = {
+        purchaseId: generatePurchaseId(),
+        paymentMethod,
+        items: cart.map(i => ({ name: i.name, qty: i.qty, price: i.price })),
+        contact: `${contactTypeEl.value}: ${handle}`,
+        totalUsd: cartTotal(),
+        timestamp: Date.now()
+      };
+
+      placeOrderBtn.disabled = true;
+      placeOrderBtn.textContent = currentLang === 'es' ? 'Enviando…' : 'Sending…';
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(order)
+        });
+        if (!res.ok) throw new Error('Worker returned ' + res.status);
+
+        // Success: start cooldown, clear cart, show receipt
+        localStorage.setItem(COOLDOWN_KEY, Date.now().toString());
+        cart = [];
+        renderCart();
+        closeCheckout();
+        contactHandleEl.value = '';
+        showReceipt(order);
+      } catch (err) {
+        contactErrorEl.textContent = currentLang === 'es'
+          ? 'Error al enviar el pedido. Intenta de nuevo.'
+          : 'Failed to send your order. Please try again.';
+      } finally {
+        placeOrderBtn.disabled = false;
+        placeOrderBtn.textContent = currentLang === 'es' ? 'Realizar pedido' : 'Place Order';
+      }
+    });
+
+    /* ── Custom contact select ── */
+    const contactSelect = document.getElementById('contact-select');
+    const contactTrigger = document.getElementById('contact-trigger');
+    const contactLabel = document.getElementById('contact-label');
+    const contactMenu = contactSelect.querySelector('.cs-menu');
+
+    function syncContactLabel() {
+      contactLabel.textContent = contactMenu.querySelector('li.selected').textContent;
+    }
+    function setContactOpen(open) {
+      contactSelect.classList.toggle('open', open);
+      contactTrigger.setAttribute('aria-expanded', open);
+    }
+    function selectContact(li) {
+      contactMenu.querySelectorAll('li').forEach(x => x.classList.remove('selected'));
+      li.classList.add('selected');
+      contactTypeEl.value = li.dataset.value;
+      syncContactLabel();
+    }
+
+    contactTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setContactOpen(!contactSelect.classList.contains('open'));
+    });
+    contactMenu.addEventListener('click', (e) => {
+      const li = e.target.closest('li');
+      if (!li) return;
+      selectContact(li);
+      setContactOpen(false);
+      contactHandleEl.focus();
+    });
+    contactTrigger.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+      e.preventDefault();
+      const items = [...contactMenu.children];
+      let i = items.findIndex(x => x.classList.contains('selected'));
+      i = Math.max(0, Math.min(items.length - 1, i + (e.key === 'ArrowDown' ? 1 : -1)));
+      selectContact(items[i]);
+    });
+    document.addEventListener('click', (e) => { if (!contactSelect.contains(e.target)) setContactOpen(false); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setContactOpen(false); });
+    langBtn.addEventListener('click', syncContactLabel); // keeps the label translated
+
+    // Initial render
+    renderCart();
   </script>
 </body>
 </html>
