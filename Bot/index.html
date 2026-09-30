@@ -1,6 +1,150 @@
-<html>
-  <body>
-    <h1>TERMS OF SERVICE</h1>
-    <h1>PRIVACY POLICY</h1>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Terms of Service &amp; Privacy Policy</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    color-scheme: light;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    --bg-color: #f0f0f0;
+    --header-bg: #e0e0e0;
+    --text-main: #121212;
+    --text-muted: #1212129a;
+    --prof-bg: #0000001a;
+    --star-color: #4a5568;
+    --star-opacity-min: 0.3;
+    --star-filter: drop-shadow(0 0 2px rgba(74, 85, 104, 0.5));
+  }
+  html { scroll-behavior: smooth; overflow-x: hidden; width: 100%; font-size: 16px; scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body {
+    min-height: 100dvh;
+    width: 100%;
+    overflow-x: hidden;
+    background-color: var(--bg-color);
+    font-family: system-ui, -apple-system, sans-serif;
+    color: var(--text-main);
+    -webkit-text-size-adjust: 100%;
+  }
+  h1 { margin: 0; }
+  p { font-weight: 300; font-size: 1rem; line-height: 1.6; }
+
+  /* header with twinkling stars */
+  .header {
+    background-color: var(--header-bg);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 56px 20px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .profs {
+    color: var(--text-main);
+    background-color: var(--prof-bg);
+    padding: 10px 14px;
+    font-size: 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+  .star {
+    position: absolute;
+    background-color: var(--star-color);
+    border-radius: 50%;
+    pointer-events: none;
+    will-change: transform, opacity;
+    transform: translate3d(0,0,0);
+    filter: var(--star-filter);
+    animation: brightTwinkleMove var(--duration) infinite ease-in-out;
+  }
+  @keyframes brightTwinkleMove {
+    0%, 100% { opacity: var(--star-opacity-min); transform: translate3d(0,0,0) scale(0.8); }
+    50% { opacity: 1; transform: translate3d(var(--move-x), var(--move-y), 0) scale(1.2); }
+  }
+
+  /* content */
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .box {
+    background-color: var(--header-bg);
+    padding: 28px 24px;
+    border-radius: 24px;
+  }
+  h2 { font-size: 1.25rem; margin-bottom: 0.75rem; font-weight: 600; }
+  h3 {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin: 1rem 0 0.5rem;
+  }
+  .box p + p { margin-top: 0.75rem; }
+
+  @media (min-width: 768px) {
+    html { font-size: 17px; }
+    h2 { font-size: 1.5rem; }
+    .profs { font-size: 2rem; }
+    .box { padding: 32px 30px; }
+  }
+  @media (min-width: 1200px) { html { font-size: 18px; } }
+  @media (max-width: 480px) {
+    .header { padding: 48px 16px 32px; }
+    main { padding: 28px 16px 40px; }
+    .box { padding: 22px 18px; border-radius: 20px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .star { animation: none; opacity: .6; } }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1 class="profs">Terms &amp; Privacy</h1>
+  </div>
+
+  <main>
+    <section class="box">
+      <h2>TERMS OF SERVICE</h2>
+      <p>By using this bot, you agree that the service is provided "as is" and the developer is not liable for any damages or downtime.</p>
+    </section>
+
+    <section class="box">
+      <h2>PRIVACY POLICY</h2>
+      <h3>Data Collected:</h3>
+      <p>1. The bot collects your UserID, Username, and whether you answered the optional survey.</p>
+      <p>2. The bot temporarily collects the command used, GuildID, and the Username and UserID of both the command user and the target user. This temporary data is automatically deleted after 6 hours.</p>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var header = document.querySelector('.header');
+      var frag = document.createDocumentFragment();
+      for (var i = 0; i < 45; i++) {
+        var s = document.createElement('div');
+        s.className = 'star';
+        var size = Math.random() * 1.5 + 1;
+        s.style.width = size + 'px';
+        s.style.height = size + 'px';
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        s.style.setProperty('--move-x', (Math.random() * 16 - 8) + 'px');
+        s.style.setProperty('--move-y', (Math.random() * 16 - 8) + 'px');
+        s.style.setProperty('--duration', (Math.random() * 3 + 4) + 's');
+        s.style.animationDelay = (Math.random() * -4) + 's';
+        frag.appendChild(s);
+      }
+      header.appendChild(frag);
+    })();
+  </script>
+</body>
 </html>
