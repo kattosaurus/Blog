@@ -67,7 +67,6 @@
     h1, h2, h3, h4 { margin: 0; }
     p { font-weight: 300; line-height: 1.6; }
 
-    /* Controls */
     .controls { position: fixed; top: 15px; left: 0; right: 15px; display: flex; gap: 10px; z-index: 20; align-items: center; }
 
     .control-btn {
@@ -93,7 +92,6 @@
     }
     .burger:hover { background-color: var(--btn-bg); }
 
-    /* Dropdown */
     .dropdown {
       display: flex; flex-direction: column; position: fixed; top: 60px; left: 15px;
       background-color: var(--header-bg); min-width: 180px; border-radius: 8px;
@@ -110,7 +108,6 @@
     .dropdown a:hover { background-color: var(--prof-bg); }
     .dropdown .separator { height: 1px; background-color: var(--btn-bg); margin: 4px 0; }
 
-    /* Commission Content */
     .tab-container { width: 100%; max-width: 900px; margin: 0 auto; padding: 20px 20px 60px; animation: slideUp 0.6s ease-out; }
     @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -119,7 +116,6 @@
     .intro-text a { color: var(--colored-button); text-decoration: none; }
     .intro-text a:hover { text-decoration: underline; }
 
-    /* TOS Section */
     .tos-section { background: var(--section-bg); padding: 25px; border-radius: 18px; margin-bottom: 2rem; border: 1px solid var(--card-border); }
     .tos-section h3 { font-size: 1.1rem; color: var(--blur-purple); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
     .tos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -128,7 +124,6 @@
     .prohibited { color: var(--price-red) !important; }
     .highlight { color: var(--price-green) !important; font-weight: 600; }
 
-    /* Section Tabs (Art / Software) */
     .section-tabs { display: flex; gap: 10px; margin-bottom: 1.5rem; flex-wrap: wrap; }
     .section-tab {
       flex: 1; min-width: 120px; background: var(--btn-bg); border: 1px solid var(--card-border);
@@ -142,7 +137,6 @@
     .category-panel { display: none; }
     .category-panel.active { display: block; animation: fadeIn 0.4s ease forwards; }
 
-    /* Detail-level switch */
     .level-switch { display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
     .level-btn {
       flex: 1; min-width: 90px; background: var(--btn-bg); border: 1px solid var(--card-border);
@@ -158,7 +152,6 @@
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Cards */
     .pay-embeds { display: flex; flex-direction: row; flex-wrap: wrap; gap: 20px; margin-top: 1rem; width: 100%; }
 
     .modern-card {
@@ -200,7 +193,6 @@
     .footer-note { margin-top: 3rem; font-size: 0.8rem; opacity: 0.5; text-align: center; color: var(--text-muted); }
     .footer-note a { color: inherit; }
 
-    /* ===== Cart Drawer ===== */
     .cart-overlay {
       position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px); z-index: 150; opacity: 0; visibility: hidden;
@@ -255,7 +247,6 @@
     .cart-total-row span:first-child { color: var(--text-muted); }
     .cart-total-row span:last-child { color: var(--price-green); font-weight: 700; font-size: 1.25rem; }
 
-    /* ===== Disclaimer Modal ===== */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center;
@@ -338,7 +329,6 @@
     .modal-box .cs-menu li:hover { background: var(--prof-bg); }
     .modal-box .cs-menu li.selected { color: var(--price-green); background: rgba(87,242,135,.1); }
 
-    /* ===== Receipt (thermal printer) ===== */
     .printer { width: min(330px, 100%); display: flex; flex-direction: column; }
 
     .printer-slot {
@@ -363,7 +353,6 @@
       -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 12px 100%;
               mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 12px 100%;
     }
-    /* paper feeds out of the slot in mechanical steps */
     .modal-overlay.show .receipt-paper { animation: printOut 2.8s steps(40, end) .25s backwards; }
     @keyframes printOut { from { transform: translateY(-100%); } }
 
@@ -399,7 +388,6 @@
 </head>
 <body>
 
-  <!-- Disclaimer Modal -->
   <div class="modal-overlay" id="disclaimer-modal">
     <div class="modal-box">
       <h3 data-en="Before you check my pricing:" data-es="Antes de ver mis precios:">Before you check my pricing:</h3>
@@ -415,7 +403,6 @@
     </div>
   </div>
 
-  <!-- Cart Drawer -->
   <div class="cart-overlay" id="cart-overlay"></div>
   <aside class="cart-drawer" id="cart-drawer" aria-label="Shopping cart">
     <div class="cart-header">
@@ -432,7 +419,6 @@
     </div>
   </aside>
 
-  <!-- Checkout Modal -->
   <div class="modal-overlay" id="checkout-modal">
     <div class="modal-box checkout-box">
       <h3 data-en="Checkout" data-es="Pagar">Checkout</h3>
@@ -485,7 +471,6 @@
     </div>
   </div>
 
-  <!-- Receipt Modal -->
   <div class="modal-overlay" id="receipt-modal">
     <div class="printer">
       <div class="printer-slot"></div>
@@ -525,10 +510,10 @@
         <div class="tos-item">
           <h4 data-en="Content Policy" data-es="Política de Contenido">Content Policy</h4>
           <ul>
-            <li class="prohibited">• No Explicit NSFW / Fetish</li>
-            <li class="prohibited">• Zero tolerance: Zoophilia, Pedophilia, Heavy Gore</li>
-            <li>• <span class="highlight">Accepted:</span> Romantic themes, suggestive poses</li>
-            <li>• <span class="highlight">Accepted:</span> Stylized "soft" gore (scratches, missing limbs)</li>
+            <li class="prohibited" data-en="• No Explicit NSFW / Fetish" data-es="• No NSFW Explícito / Fetish">• No Explicit NSFW / Fetish</li>
+            <li class="prohibited" data-en="• Zero tolerance: Zoophilia, Pedophilia, Heavy Gore" data-es="• Tolerancia cero: Zoofilia, Pedofilia, Gore Pesado">• Zero tolerance: Zoophilia, Pedophilia, Heavy Gore</li>
+            <li data-en="• Accepted: Romantic themes, suggestive poses" data-es="• Aceptado: Temas románticos, poses sugestivas">• <span class="highlight">Accepted:</span> Romantic themes, suggestive poses</li>
+            <li data-en="• Accepted: Stylized 'soft' gore (scratches, missing limbs)" data-es="• Aceptado: Gore 'suave' estilizado (rasguños, extremidades faltantes)">• <span class="highlight">Accepted:</span> Stylized "soft" gore (scratches, missing limbs)</li>
           </ul>
         </div>
         <div class="tos-item">
@@ -537,7 +522,7 @@
         </div>
         <div class="tos-item">
           <h4 data-en="Rights & Usage" data-es="Derechos y Uso">Rights & Usage</h4>
-          <p data-en="Personal use only. I retain full copyright and the right to showcase work. <strong>No AI training or NFT usage permitted.</strong>" data-es="Solo uso personal. Retengo los derechos de autor completos y el derecho a exhibir el trabajo. <strong>No se permite entrenamiento de IA ni uso de NFT.</strong>">Personal use only. I retain full copyright and the right to showcase work. <strong>No AI training or NFT usage permitted.</strong></p>
+          <p data-en="Personal use only. I retain full copyright and the right to showcase work. No AI training or NFT usage permitted." data-es="Solo uso personal. Retengo los derechos de autor completos y el derecho a exhibir el trabajo. No se permite entrenamiento de IA ni uso de NFT.">Personal use only. I retain full copyright and the right to showcase work. <strong>No AI training or NFT usage permitted.</strong></p>
         </div>
         <div class="tos-item">
           <h4 data-en="Legacy Support" data-es="Soporte Legacy">Legacy Support</h4>
@@ -546,13 +531,11 @@
       </div>
     </div>
 
-    <!-- Category Tabs -->
     <div class="section-tabs">
       <button class="section-tab active" data-target="panel-art" data-en="Art" data-es="Arte">Art</button>
       <button class="section-tab" data-target="panel-software" data-en="Software" data-es="Software">Software</button>
     </div>
 
-    <!-- ================= ART PANEL ================= -->
     <div class="category-panel active" id="panel-art">
 
       <div class="level-switch" data-group="art">
@@ -562,7 +545,6 @@
         <button class="level-btn" data-level="render" data-en="Render" data-es="Render">Render</button>
       </div>
 
-      <!-- Sketch -->
       <div class="level-group active" data-group="art" data-level="sketch">
         <div class="modern-card">
           <div class="card-body">
@@ -596,7 +578,6 @@
         </div>
       </div>
 
-      <!-- Line Art -->
       <div class="level-group" data-group="art" data-level="lineart">
         <div class="modern-card">
           <div class="card-body">
@@ -630,7 +611,6 @@
         </div>
       </div>
 
-      <!-- Colored -->
       <div class="level-group" data-group="art" data-level="colored">
         <div class="modern-card">
           <div class="card-body">
@@ -664,7 +644,6 @@
         </div>
       </div>
 
-      <!-- Render -->
       <div class="level-group" data-group="art" data-level="render">
         <div class="modern-card is-locked">
           <div class="card-body">
@@ -699,7 +678,6 @@
         </div>
       </div>
 
-      <!-- Add-ons -->
       <div class="tos-section" style="margin-top: 1rem;">
         <h3 data-en="Add-ons" data-es="Extras">Add-ons</h3>
         <div class="tos-grid">
@@ -719,7 +697,6 @@
 
     </div>
 
-    <!-- ================= SOFTWARE PANEL ================= -->
     <div class="category-panel" id="panel-software">
       <div class="pay-embeds" id="pay-embeds"></div>
     </div>
@@ -731,12 +708,10 @@
   </div>
 
   <script>
-    /* ── Config ── */
     const WORKER_URL = 'https://receipts.laminaxlabs.workers.dev/';
-    const COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes between purchases
+    const COOLDOWN_MS = 5 * 60 * 1000;
     const COOLDOWN_KEY = 'katto_last_purchase';
 
-    /* ── Disclaimer Modal ── */
     const modal = document.getElementById('disclaimer-modal');
     const modalDismiss = document.getElementById('modal-dismiss');
     const modalTimer = document.getElementById('modal-timer');
@@ -791,7 +766,6 @@
       });
     }
 
-    /* ── Language & Theme ── */
     let currentLang = 'en';
 
     function applyTranslations() {
@@ -823,7 +797,7 @@
           }
         }
       });
-      // placeholder translations
+      
       document.querySelectorAll('[data-en-ph]').forEach(el => {
         el.placeholder = el.getAttribute(`data-${currentLang}-ph`) || el.getAttribute('data-en-ph');
       });
@@ -835,7 +809,6 @@
       langBtn.textContent = currentLang.toUpperCase();
       applyTranslations();
       renderCart();
-      // Update timer text if disclaimer modal is open
       if (modal.classList.contains('show') && modalDismiss.disabled) {
         const remainingMatch = modalTimer.textContent.match(/\d+/);
         if (remainingMatch) {
@@ -851,7 +824,6 @@
       document.documentElement.setAttribute('data-theme', newTheme);
     });
 
-    /* ── Dropdown ── */
     function toggleDropdown() {
       document.getElementById("dropmeow").classList.toggle("show");
     }
@@ -867,7 +839,6 @@
       }
     };
 
-    /* ── Software Cards ── */
     const products = [
       {
         name: 'Mod Commission',
@@ -908,7 +879,6 @@
 
     document.addEventListener('DOMContentLoaded', renderCards);
 
-    // Section tab switching (Art / Software)
     document.querySelectorAll('.section-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.section-tab').forEach(t => t.classList.remove('active'));
@@ -918,7 +888,6 @@
       });
     });
 
-    // Detail-level switching
     document.querySelectorAll('.level-switch').forEach(switcher => {
       const group = switcher.dataset.group;
       const buttons = switcher.querySelectorAll('.level-btn');
@@ -934,7 +903,6 @@
       });
     });
 
-    /* ═══════════ CART SYSTEM ═══════════ */
     let cart = [];
 
     const cartDrawer = document.getElementById('cart-drawer');
@@ -976,7 +944,7 @@
       }
       renderCart();
       cartCountEl.classList.remove('pop');
-      void cartCountEl.offsetWidth; // restart animation
+      void cartCountEl.offsetWidth;
       cartCountEl.classList.add('pop');
     }
 
@@ -1010,7 +978,6 @@
       cartCountEl.textContent = cartCount();
     }
 
-    // Delegated events for cart item buttons
     cartItemsEl.addEventListener('click', (e) => {
       const btn = e.target.closest('button');
       if (!btn) return;
@@ -1024,7 +991,6 @@
       renderCart();
     });
 
-    // "Add to Cart" buttons (static + dynamic)
     document.addEventListener('click', (e) => {
       const btn = e.target.closest('.btn-add');
       if (!btn) return;
@@ -1039,7 +1005,6 @@
       }, 1200);
     });
 
-    /* ═══════════ CHECKOUT ═══════════ */
     const checkoutModal = document.getElementById('checkout-modal');
     const checkoutTotalEl = document.getElementById('checkout-total');
     const placeOrderBtn = document.getElementById('place-order');
@@ -1102,7 +1067,6 @@
       return id;
     }
 
-    /* ═══════════ RECEIPT ═══════════ */
     const receiptModal = document.getElementById('receipt-modal');
 
     function esc(s) {
@@ -1162,9 +1126,7 @@
       document.body.style.overflow = '';
     });
 
-    /* ═══════════ PLACE ORDER ═══════════ */
     placeOrderBtn.addEventListener('click', async () => {
-      // Validate contact
       const handle = contactHandleEl.value.trim();
       if (!handle) {
         contactErrorEl.textContent = currentLang === 'es'
@@ -1177,7 +1139,6 @@
       contactErrorEl.textContent = '';
       contactHandleEl.classList.remove('invalid');
 
-      // Cooldown check (double-check at submit time)
       if (getCooldownRemaining() > 0) {
         updateCooldownUI();
         return;
@@ -1204,7 +1165,6 @@
         });
         if (!res.ok) throw new Error('Worker returned ' + res.status);
 
-        // Success: start cooldown, clear cart, show receipt
         localStorage.setItem(COOLDOWN_KEY, Date.now().toString());
         cart = [];
         renderCart();
@@ -1221,7 +1181,6 @@
       }
     });
 
-    /* ── Custom contact select ── */
     const contactSelect = document.getElementById('contact-select');
     const contactTrigger = document.getElementById('contact-trigger');
     const contactLabel = document.getElementById('contact-label');
@@ -1262,9 +1221,8 @@
     });
     document.addEventListener('click', (e) => { if (!contactSelect.contains(e.target)) setContactOpen(false); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setContactOpen(false); });
-    langBtn.addEventListener('click', syncContactLabel); // keeps the label translated
+    langBtn.addEventListener('click', syncContactLabel); 
 
-    // Initial render
     renderCart();
   </script>
 </body>
