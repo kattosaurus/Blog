@@ -1,0 +1,211 @@
+{
+ "groups": {
+  "known": "Known community server",
+  "fluxer": "Fluxer server (not Discord)",
+  "unk": "Discord unknown",
+  "dead": "Server dead",
+  "old": "Old / inactive"
+ },
+ "mods": [
+  {
+   "name": "Changed",
+   "cf": "changed-minecraft-mod",
+   "mr": null,
+   "group": "known",
+   "desc": "The base mod. Latex creatures, labs, emotes and the transfur system, where you become a creature and gain its perks and drawbacks. Forge 1.20.1 and 1.18.2.",
+   "server": "https://discord.gg/TDyUFp4QkB"
+  },
+  {
+   "name": "Changed-V",
+   "cf": "changed-vanilla",
+   "mr": null,
+   "group": "known",
+   "desc": "Official addon that adds an anthropomorphic version of vanilla mobs. Creeper and Spider forms are out; Guardian and Ghast are planned.",
+   "server": "https://discord.gg/TDyUFp4QkB"
+  },
+  {
+   "name": "Changed Addon Plus",
+   "cf": "changed-addon-plus",
+   "mr": null,
+   "group": "known",
+   "desc": "The biggest addon. Survival untransfur items, grab mechanics, new transfurs, Painite and Iridium ores, new structures, and bosses like Experiment 009 and 010.",
+   "server": "https://discord.gg/PAu5a95hZG"
+  },
+  {
+   "name": "Changed Additions",
+   "cf": "changed-additions",
+   "mr": null,
+   "group": "known",
+   "desc": "Extra content for Changed that keeps a vanilla look and feel.",
+   "server": "https://discord.gg/PAu5a95hZG"
+  },
+  {
+   "name": "Changed: Synergy",
+   "cf": "changed-synergy",
+   "mr": null,
+   "group": "known",
+   "desc": "Makes latex creatures social, with names, personalities, factions and reputation. Befriend them, bond with them, build an outpost, or negotiate your way out of a transfur.",
+   "server": "https://discord.gg/sZxnnByke2"
+  },
+  {
+   "name": "Changed Extra",
+   "cf": "changed-extra",
+   "mr": null,
+   "group": "unk",
+   "desc": "Adds a tech system based on \"Latex Power\" and expands Latex Space into a dimension with regional weather hazards. Updated Oct 9.",
+   "server": null
+  },
+  {
+   "name": "Changed Extras",
+   "cf": "changedextras",
+   "mr": null,
+   "group": "known",
+   "desc": "Early access. Adds things that don't fit in Changed or the main addon, like characters and species from other verses (the Conekat, plus a cafeteria room in the facilities). Includes an optional smarter latex AI, off by default.",
+   "server": "https://discord.gg/e8GxE4e4Bb"
+  },
+  {
+   "name": "Changed Siren Course",
+   "cf": "changed-siren-course",
+   "mr": null,
+   "group": "known",
+   "desc": "A water curse that turns you into a shark mermaid or merman on contact with water. Adds a wetness meter, a new structure, items and original music.",
+   "server": "https://discord.com/invite/eJuXr7UcDB"
+  },
+  {
+   "name": "Changed: True Transfur",
+   "cf": "changed-true-transfur",
+   "mr": null,
+   "group": "known",
+   "desc": "A new addon described as a full transformation system with an \"INSTINCT\" mode.",
+   "server": "https://discord.com/invite/eJuXr7UcDB"
+  },
+  {
+   "name": "Additional Transfurs",
+   "cf": "additional-transfurs",
+   "mr": null,
+   "group": "fluxer",
+   "desc": "A few simple transfurs (Latex Fox, Red Tail Catfish, Rooftop Cat, Plant Dragon), built as one piece of a modular addon set. Early beta.",
+   "server": "https://fluxer.gg/9Z3wcsYP"
+  },
+  {
+   "name": "Changed Untransfur",
+   "cf": "changed-untransfur",
+   "mr": null,
+   "group": "fluxer",
+   "desc": "A simple untransfur mod, kept separate so you only add it if you want it.",
+   "server": "https://fluxer.gg/9Z3wcsYP"
+  },
+  {
+   "name": "(Un)Safe Transfur",
+   "cf": "un-safe-transfur",
+   "mr": null,
+   "group": "fluxer",
+   "desc": "A mod about getting transfurred in less-than-safe ways.",
+   "server": "https://fluxer.gg/9Z3wcsYP"
+  },
+  {
+   "name": "Latex's Delight",
+   "cf": "latexs-delight",
+   "mr": null,
+   "group": "unk",
+   "desc": "A Farmer's Delight extension that adapts Changed items and creatures. No official server; the owner and a dev are in the Changed Additions+ server.",
+   "server": null
+  },
+  {
+   "name": "Changed: Survive Protocol",
+   "cf": "changed-survive-protocol",
+   "mr": null,
+   "group": "unk",
+   "desc": "A survival rework: coverage, then infection, then transfur. Adds lab cures, a lucidity system, stabilization items and spreading Latex Hearts.",
+   "server": null
+  },
+  {
+   "name": "FurMutage Early Testing",
+   "cf": "furmutage-mod-early-testing-a-changed-addon",
+   "mr": null,
+   "group": "unk",
+   "desc": "Early access. Makes Dark and White latex more complex, with ruined structures and a wasteland dimension (creative-only for now). Warns of disturbing imagery.",
+   "server": null
+  },
+  {
+   "name": "Create: Changed",
+   "cf": "create-changed",
+   "mr": null,
+   "group": "unk",
+   "desc": "Early alpha that lets Changed, Addon Plus and Additions items be made with Create machinery.",
+   "server": null
+  },
+  {
+   "name": "Changed Pooltoys TFs",
+   "cf": "changed-pooltoys-tfs",
+   "mr": null,
+   "group": "unk",
+   "desc": "Work in progress that adds a pooltoy variant of transfurs, with inflation, pumps and a translator item.",
+   "server": null
+  },
+  {
+   "name": "Latex Caves",
+   "cf": "latex-caves",
+   "mr": null,
+   "group": "unk",
+   "desc": "A datapack-turned-mod that adds the Latex Caves dimension, entered through a Time Machine structure.",
+   "server": null
+  },
+  {
+   "name": "Changed AI Boss",
+   "cf": "changed-ai-boss",
+   "mr": null,
+   "group": "unk",
+   "desc": "Beta. Connects Experiment 009, Experiment 010 and Void Fox to an LLM for live battle dialogue. Client-side, bring your own API key.",
+   "server": null
+  },
+  {
+   "name": "changedarmy",
+   "cf": "changedarmy",
+   "mr": null,
+   "group": "unk",
+   "desc": "Brand new. Adds latex creature squads that hunt players, and hostile outposts with loot.",
+   "server": null
+  },
+  {
+   "name": "GoopcatTech",
+   "cf": "goopcattech",
+   "mr": null,
+   "group": "unk",
+   "desc": "A small tech mod from the Latex Caves developer, described as the \"strangest but cutest\" tech mod around.",
+   "server": null
+  },
+  {
+   "name": "Peos Custom Transfurs",
+   "cf": "peos-custom-transfurs",
+   "mr": null,
+   "group": "dead",
+   "desc": "Custom transfurs (teal dragon, mice, Mylo panda, Forsetti, Drone Wolf) and a shrink-and-grow ability. Needs Pehkui. Last update Jun 2026.",
+   "server": null
+  },
+  {
+   "name": "Changed: Xtras",
+   "cf": "changed-xtras",
+   "mr": null,
+   "group": "old",
+   "desc": "Weapons (TSC and police batons, steel gear), ores and mutated latex bottles. Made with MCreator, last updated Jul 2024. No versions available.",
+   "server": null
+  },
+  {
+   "name": "Changed: Doomsday",
+   "cf": "changed-doomsday",
+   "mr": null,
+   "group": "old",
+   "desc": "Difficulty gamerules, configs and datapacks, like permanently hostile latexes and armed minibosses. 1.18.2 only, last updated Sep 2025.",
+   "server": null
+  },
+  {
+   "name": "Changed: More Music Discs",
+   "cf": "changed-more-music-discs",
+   "mr": null,
+   "group": "old",
+   "desc": "Adds survival-friendly music discs. Same author as Doomsday, last updated Jul 2025.",
+   "server": null
+  }
+ ]
+}
