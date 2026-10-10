@@ -206,17 +206,23 @@ function compute(){
     const d=DL[m.cf]||{};
     const lv=m.mr?LIVE[m.mr.toLowerCase()]:null;
     const cf=d.cf??0, mr=lv?lv.dl:(d.mr??0);
-    // Image priority: mods.json "img" > downloads.json "img" > Modrinth icon > initials tile
-    return {...m,cfN:cf,mrN:mr,total:cf+mr,img:m.img||d.img||(lv&&lv.icon)||'',accent:lv&&lv.color};
+    // Tried in order: mods.json "img" > downloads.json "img" > Modrinth icon > initials tile
+    const imgs=[...new Set([m.img,d.img,lv&&lv.icon].filter(Boolean))];
+    return {...m,cfN:cf,mrN:mr,total:cf+mr,imgs,accent:lv&&lv.color};
   });
   const byDl=[...MODS].sort((a,b)=>b.total-a.total);
   RANK={};byDl.forEach((m,i)=>RANK[m.cf]=i+1);
   MAXD=byDl[0]?byDl[0].total:0;
 }
 
+function nextImg(el){
+  let rest=[];try{rest=JSON.parse(el.dataset.next||'[]');}catch(e){}
+  if(rest.length){el.dataset.next=JSON.stringify(rest.slice(1));el.src=rest[0];}else el.remove();
+}
+
 function iconHTML(m,lg){
   const style=`--h:${hue(m.name)}${m.accent?`;--c:${m.accent}`:''}`;
-  const img=m.img?`<img src="${esc(m.img)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">`:'';
+  const img=m.imgs.length?`<img src="${esc(m.imgs[0])}" data-next="${esc(JSON.stringify(m.imgs.slice(1)))}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="nextImg(this)">`:'';
   return `<span class="ico${lg?' lg':''}" style="${style}"><b>${esc(initials(m.name))}</b>${img}</span>`;
 }
 
