@@ -28,6 +28,7 @@ h2{font-size:1.25rem;margin-bottom:.75rem;font-weight:600}
 .rank a{color:var(--text-main);font-weight:500;text-decoration:none;flex:1;min-width:140px}
 .rank a:hover{text-decoration:underline}
 .rank .d{font-weight:600}
+.src{font-size:.75rem;opacity:.45}
 .tag{font-size:.75rem;background:var(--btn-bg);padding:3px 10px;border-radius:20px;opacity:.85}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
 .servicebox{background:var(--header-bg);padding:24px 20px;border-radius:24px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
@@ -37,6 +38,7 @@ h2{font-size:1.25rem;margin-bottom:.75rem;font-weight:600}
 .btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:auto;padding-top:6px}
 .more{background:var(--colored-button);padding:10px 20px;color:#fff;text-decoration:none;border-radius:30px;min-height:44px;display:flex;align-items:center;justify-content:center;font-size:.9375rem;font-weight:500}
 .more.alt{background:var(--btn-bg)}
+.loading,.err{text-align:center;padding:40px 20px;opacity:.6}
 @media(min-width:768px){html{font-size:17px}h2{font-size:1.5rem}.your{font-size:1.5rem}.profs{font-size:2rem}}
 @media(min-width:1200px){html{font-size:18px}h2{font-size:1.75rem}}
 @media(max-width:480px){.header{padding:60px 16px 32px}section{padding:16px}.servicebox{padding:20px 16px;border-radius:20px}}
@@ -52,59 +54,81 @@ h2{font-size:1.25rem;margin-bottom:.75rem;font-weight:600}
 <section>
   <h2>About this list</h2>
   <p class="warn">MOST OF THESE REQUIRE YOU TO BE 16+!</p>
-  <p>Addons for Changed: Minecraft Mod, with what each one does and where its community hangs out. Download counts are from CurseForge only.</p>
+  <p>Addons for Changed: Minecraft Mod, with what each one does and where its community hangs out. Download counts combine CurseForge and Modrinth.</p>
 </section>
 
 <section>
   <h2>Ranked by downloads</h2>
-  <ol class="rank" id="rank"></ol>
+  <ol class="rank" id="rank"><li class="loading">Loading…</li></ol>
 </section>
 
 <div id="groups"></div>
 
-<p class="note">Download counts from CurseForge, as of Oct 9, 2026. Modrinth downloads are not included.</p>
+<p class="note" id="note"></p>
 
 <script>
-const CF='https://www.curseforge.com/minecraft/mc-mods/', D='https://discord.gg/';
-const G={known:['Known community server','Known server'],fluxer:['Fluxer server (not Discord)','Fluxer'],unk:['Discord unknown','Discord unknown'],dead:['Server dead','Server dead'],old:['Old / inactive','Old / inactive']};
-// [name, downloads text, downloads number, group, description, curseforge slug, server link]
-const mods=[
-['Changed','445.9K',445900,'known','The base mod. Latex creatures, labs, emotes and the transfur system, where you become a creature and gain its perks and drawbacks. Forge 1.20.1 and 1.18.2.','changed-minecraft-mod',D+'TDyUFp4QkB'],
-['Changed-V','12.2K',12200,'known','Official addon that adds an anthropomorphic version of vanilla mobs. Creeper and Spider forms are out; Guardian and Ghast are planned.','changed-vanilla',D+'TDyUFp4QkB'],
-['Changed Addon Plus','329.6K',329600,'known','The biggest addon. Survival untransfur items, grab mechanics, new transfurs, Painite and Iridium ores, new structures, and bosses like Experiment 009 and 010.','changed-addon-plus',D+'PAu5a95hZG'],
-['Changed Additions','35.8K',35800,'known','Extra content for Changed that keeps a vanilla look and feel.','changed-additions',D+'PAu5a95hZG'],
-['Changed: Synergy','8.6K',8600,'known','Makes latex creatures social, with names, personalities, factions and reputation. Befriend them, bond with them, build an outpost, or negotiate your way out of a transfur.','changed-synergy',D+'sZxnnByke2'],
-['Changed Siren Course','1.8K',1800,'known','A water curse that turns you into a shark mermaid or merman on contact with water. Adds a wetness meter, a new structure, items and original music.','changed-siren-course','https://discord.com/invite/eJuXr7UcDB'],
-['Changed: True Transfur','955',955,'known','A new addon described as a full transformation system with an "INSTINCT" mode.','changed-true-transfur','https://discord.com/invite/eJuXr7UcDB'],
-['Additional Transfurs','10.4K',10400,'fluxer','A few simple transfurs (Latex Fox, Red Tail Catfish, Rooftop Cat, Plant Dragon), built as one piece of a modular addon set. Early beta.','additional-transfurs','https://fluxer.gg/9Z3wcsYP'],
-['Changed Untransfur','5.3K',5300,'fluxer','A simple untransfur mod, kept separate so you only add it if you want it.','changed-untransfur','https://fluxer.gg/9Z3wcsYP'],
-['(Un)Safe Transfur','430',430,'fluxer','A mod about getting transfurred in less-than-safe ways.','un-safe-transfur','https://fluxer.gg/9Z3wcsYP'],
-["Latex's Delight",'13.4K',13400,'unk',"A Farmer's Delight extension that adapts Changed items and creatures. No official server; the owner and a dev are in the Changed Additions+ server.",'latexs-delight'],
-['Changed: Survive Protocol','12.8K',12800,'unk','A survival rework: coverage, then infection, then transfur. Adds lab cures, a lucidity system, stabilization items and spreading Latex Hearts.','changed-survive-protocol'],
-['FurMutage Early Testing','11.9K',11900,'unk','Early access. Makes Dark and White latex more complex, with ruined structures and a wasteland dimension (creative-only for now). Warns of disturbing imagery.','furmutage-mod-early-testing-a-changed-addon'],
-['Create: Changed','4.3K',4300,'unk','Early alpha that lets Changed, Addon Plus and Additions items be made with Create machinery.','create-changed'],
-['Changed Extra','2.8K',2800,'unk','Adds a tech system based on "Latex Power" and expands Latex Space into a dimension with regional weather hazards. Updated Oct 9.','changed-extra'],
-['Changed Pooltoys TFs','1.5K',1500,'unk','Work in progress that adds a pooltoy variant of transfurs, with inflation, pumps and a translator item.','changed-pooltoys-tfs'],
-['Latex Caves','1.3K',1300,'unk','A datapack-turned-mod that adds the Latex Caves dimension, entered through a Time Machine structure.','latex-caves'],
-['Changed AI Boss','444',444,'unk','Beta. Connects Experiment 009, Experiment 010 and Void Fox to an LLM for live battle dialogue. Client-side, bring your own API key.','changed-ai-boss'],
-['changedarmy','425',425,'unk','Brand new. Adds latex creature squads that hunt players, and hostile outposts with loot.','changedarmy'],
-['GoopcatTech','139',139,'unk','A small tech mod from the Latex Caves developer, described as the "strangest but cutest" tech mod around.','goopcattech'],
-['Peos Custom Transfurs','2.4K',2400,'dead','Custom transfurs (teal dragon, mice, Mylo panda, Forsetti, Drone Wolf) and a shrink-and-grow ability. Needs Pehkui. Last update Jun 2026.','peos-custom-transfurs'],
-['Changed: Xtras','32.4K',32400,'old','Weapons (TSC and police batons, steel gear), ores and mutated latex bottles. Made with MCreator, last updated Jul 2024. No versions available.','changed-xtras'],
-['Changed: Doomsday','16.7K',16700,'old','Difficulty gamerules, configs and datapacks, like permanently hostile latexes and armed minibosses. 1.18.2 only, last updated Sep 2025.','changed-doomsday'],
-['Changed: More Music Discs','9.3K',9300,'old','Adds survival-friendly music discs. Same author as Doomsday, last updated Jul 2025.','changed-more-music-discs']
-];
+const CF='https://www.curseforge.com/minecraft/mc-mods/', MR='https://modrinth.com/mod/';
+const $=id=>document.getElementById(id);
 
-document.getElementById('rank').innerHTML=[...mods].sort((a,b)=>b[2]-a[2]).map((m,i)=>
- `<li><span class="n">${i+1}</span><a href="${CF+m[5]}">${m[0]}</a><span class="d">${m[1]}</span><span class="tag">${G[m[3]][1]}</span></li>`).join('');
+const fmt=n=>n<1000?String(n):n<1e6?(n/1000).toFixed(n<1e4?1:1).replace(/\.0$/,'')+'K':(n/1e6).toFixed(2).replace(/\.?0+$/,'')+'M';
 
-document.getElementById('groups').innerHTML=Object.keys(G).map(k=>{
- const cards=mods.filter(m=>m[3]===k).sort((a,b)=>b[2]-a[2]).map(m=>{
-  const srv=m[6]?`<a href="${m[6]}" class="more alt">${m[6].includes('fluxer')?'Join Fluxer':'Join Discord'}</a>`:'';
-  return `<div class="servicebox"><h3>${m[0]}</h3><span class="dl">${m[1]} downloads</span><p>${m[4]}</p><div class="btns"><a href="${CF+m[5]}" class="more">CurseForge</a>${srv}</div></div>`;
- }).join('');
- return `<section><h2>${G[k][0]}</h2><div class="grid">${cards}</div></section>`;
-}).join('');
+async function getJSON(url){const r=await fetch(url,{cache:'no-cache'});if(!r.ok)throw new Error(url+' '+r.status);return r.json();}
+
+// Live Modrinth counts straight from the browser (their API allows CORS).
+async function liveModrinth(slugs){
+  const out={};
+  if(!slugs.length)return out;
+  for(let i=0;i<slugs.length;i+=100){
+    const ids=encodeURIComponent(JSON.stringify(slugs.slice(i,i+100)));
+    const list=await getJSON('https://api.modrinth.com/v2/projects?ids='+ids);
+    list.forEach(p=>{out[p.slug.toLowerCase()]=p.downloads;});
+  }
+  return out;
+}
+
+function render(data,dl,updated){
+  const mods=data.mods.map(m=>{
+    const d=dl[m.cf]||{};
+    const cf=d.cf??0, mr=d.mr??0;
+    return {...m,cfN:cf,mrN:mr,total:cf+mr};
+  });
+  const G=data.groups;
+
+  $('rank').innerHTML=[...mods].sort((a,b)=>b.total-a.total).map((m,i)=>{
+    const src=m.mr?`<span class="src">CF ${fmt(m.cfN)} · MR ${fmt(m.mrN)}</span>`:'';
+    return `<li><span class="n">${i+1}</span><a href="${CF+m.cf}">${m.name}</a>${src}<span class="d">${fmt(m.total)}</span><span class="tag">${G[m.group]}</span></li>`;
+  }).join('');
+
+  $('groups').innerHTML=Object.keys(G).map(k=>{
+    const cards=mods.filter(m=>m.group===k).sort((a,b)=>b.total-a.total).map(m=>{
+      const srv=m.server?`<a href="${m.server}" class="more alt">${m.server.includes('fluxer')?'Join Fluxer':'Join Discord'}</a>`:'';
+      const mr=m.mr?`<a href="${MR+m.mr}" class="more alt">Modrinth</a>`:'';
+      return `<div class="servicebox"><h3>${m.name}</h3><span class="dl">${fmt(m.total)} downloads</span><p>${m.desc}</p><div class="btns"><a href="${CF+m.cf}" class="more">CurseForge</a>${mr}${srv}</div></div>`;
+    }).join('');
+    return cards?`<section><h2>${G[k]}</h2><div class="grid">${cards}</div></section>`:'';
+  }).join('');
+
+  $('note').textContent=`Download counts are CurseForge + Modrinth. CurseForge numbers last refreshed ${updated}; Modrinth numbers are fetched live.`;
+}
+
+(async()=>{
+  try{
+    const [data,cached]=await Promise.all([getJSON('mods.json'),getJSON('downloads.json')]);
+    const dl=cached.mods||{};
+    render(data,dl,cached.updated);           // show cached numbers immediately
+    const slugs=data.mods.filter(m=>m.mr).map(m=>m.mr);
+    try{
+      const live=await liveModrinth(slugs);   // then upgrade Modrinth to live values
+      data.mods.forEach(m=>{
+        if(m.mr&&live[m.mr.toLowerCase()]!=null)dl[m.cf]={...(dl[m.cf]||{}),mr:live[m.mr.toLowerCase()]};
+      });
+      render(data,dl,cached.updated);
+    }catch(e){console.warn('Live Modrinth fetch failed, using cached values',e);}
+  }catch(e){
+    $('rank').innerHTML='<li class="err">Could not load the list. Serve this page over http(s) (not file://) with mods.json and downloads.json next to it.</li>';
+    console.error(e);
+  }
+})();
 
 (function(){
  const header=document.querySelector('.header'),f=document.createDocumentFragment();
