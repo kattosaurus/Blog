@@ -1,0 +1,105 @@
+{
+ "updated": "2026-10-09",
+ "mods": {
+  "changed-minecraft-mod": {
+   "cf": 445900,
+   "mr": null
+  },
+  "changed-vanilla": {
+   "cf": 12200,
+   "mr": null
+  },
+  "changed-addon-plus": {
+   "cf": 329600,
+   "mr": null
+  },
+  "changed-additions": {
+   "cf": 35800,
+   "mr": null
+  },
+  "changed-synergy": {
+   "cf": 8600,
+   "mr": null
+  },
+  "changed-extra": {
+   "cf": 2800,
+   "mr": null
+  },
+  "changed-siren-course": {
+   "cf": 1800,
+   "mr": null
+  },
+  "changed-true-transfur": {
+   "cf": 955,
+   "mr": null
+  },
+  "additional-transfurs": {
+   "cf": 10400,
+   "mr": null
+  },
+  "changed-untransfur": {
+   "cf": 5300,
+   "mr": null
+  },
+  "un-safe-transfur": {
+   "cf": 430,
+   "mr": null
+  },
+  "latexs-delight": {
+   "cf": 13400,
+   "mr": null
+  },
+  "changed-survive-protocol": {
+   "cf": 12800,
+   "mr": null
+  },
+  "furmutage-mod-early-testing-a-changed-addon": {
+   "cf": 11900,
+   "mr": null
+  },
+  "create-changed": {
+   "cf": 4300,
+   "mr": null
+  },
+  "changed-pooltoys-tfs": {
+   "cf": 1500,
+   "mr": null
+  },
+  "latex-caves": {
+   "cf": 1300,
+   "mr": null
+  },
+  "changed-ai-boss": {
+   "cf": 444,
+   "mr": null
+  },
+  "changedarmy": {
+   "cf": 425,
+   "mr": null
+  },
+  "goopcattech": {
+   "cf": 139,
+   "mr": null
+  },
+  "peos-custom-transfurs": {
+   "cf": 2400,
+   "mr": null
+  },
+  "changed-xtras": {
+   "cf": 32400,
+   "mr": null
+  },
+  "changed-doomsday": {
+   "cf": 16700,
+   "mr": null
+  },
+  "changed-more-music-discs": {
+   "cf": 9300,
+   "mr": null
+  },
+  "changedextras": {
+   "cf": 10700,
+   "mr": null
+  }
+ }
+}
