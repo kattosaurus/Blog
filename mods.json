@@ -10,7 +10,7 @@
   {
    "name": "Changed",
    "cf": "changed-minecraft-mod",
-   "mr": null,
+   "mr": "changed-minecraft-mod",
    "group": "known",
    "desc": "The base mod. Latex creatures, labs, emotes and the transfur system, where you become a creature and gain its perks and drawbacks. Forge 1.20.1 and 1.18.2.",
    "server": "https://discord.gg/TDyUFp4QkB"
@@ -18,7 +18,7 @@
   {
    "name": "Changed-V",
    "cf": "changed-vanilla",
-   "mr": null,
+   "mr": "changed-vanilla",
    "group": "known",
    "desc": "Official addon that adds an anthropomorphic version of vanilla mobs. Creeper and Spider forms are out; Guardian and Ghast are planned.",
    "server": "https://discord.gg/TDyUFp4QkB"
@@ -26,7 +26,7 @@
   {
    "name": "Changed Addon Plus",
    "cf": "changed-addon-plus",
-   "mr": null,
+   "mr": "changed-addon-plus",
    "group": "known",
    "desc": "The biggest addon. Survival untransfur items, grab mechanics, new transfurs, Painite and Iridium ores, new structures, and bosses like Experiment 009 and 010.",
    "server": "https://discord.gg/PAu5a95hZG"
@@ -34,7 +34,7 @@
   {
    "name": "Changed Additions",
    "cf": "changed-additions",
-   "mr": null,
+   "mr": "changed-additions",
    "group": "known",
    "desc": "Extra content for Changed that keeps a vanilla look and feel.",
    "server": "https://discord.gg/PAu5a95hZG"
@@ -42,7 +42,7 @@
   {
    "name": "Changed: Synergy",
    "cf": "changed-synergy",
-   "mr": null,
+   "mr": "changed-synergy",
    "group": "known",
    "desc": "Makes latex creatures social, with names, personalities, factions and reputation. Befriend them, bond with them, build an outpost, or negotiate your way out of a transfur.",
    "server": "https://discord.gg/sZxnnByke2"
@@ -58,7 +58,7 @@
   {
    "name": "Changed Extras",
    "cf": "changedextras",
-   "mr": null,
+   "mr": "changedextras",
    "group": "known",
    "desc": "Early access. Adds things that don't fit in Changed or the main addon, like characters and species from other verses (the Conekat, plus a cafeteria room in the facilities). Includes an optional smarter latex AI, off by default.",
    "server": "https://discord.gg/e8GxE4e4Bb"
@@ -82,7 +82,7 @@
   {
    "name": "Additional Transfurs",
    "cf": "additional-transfurs",
-   "mr": null,
+   "mr": "additional-transfurs",
    "group": "fluxer",
    "desc": "A few simple transfurs (Latex Fox, Red Tail Catfish, Rooftop Cat, Plant Dragon), built as one piece of a modular addon set. Early beta.",
    "server": "https://fluxer.gg/9Z3wcsYP"
@@ -98,7 +98,7 @@
   {
    "name": "(Un)Safe Transfur",
    "cf": "un-safe-transfur",
-   "mr": null,
+   "mr": "safe-transfur",
    "group": "fluxer",
    "desc": "A mod about getting transfurred in less-than-safe ways.",
    "server": "https://fluxer.gg/9Z3wcsYP"
@@ -114,7 +114,7 @@
   {
    "name": "Changed: Survive Protocol",
    "cf": "changed-survive-protocol",
-   "mr": null,
+   "mr": "changed-survive-protocol",
    "group": "unk",
    "desc": "A survival rework: coverage, then infection, then transfur. Adds lab cures, a lucidity system, stabilization items and spreading Latex Hearts.",
    "server": null
@@ -130,7 +130,7 @@
   {
    "name": "Create: Changed",
    "cf": "create-changed",
-   "mr": null,
+   "mr": "create-changed",
    "group": "unk",
    "desc": "Early alpha that lets Changed, Addon Plus and Additions items be made with Create machinery.",
    "server": null
@@ -178,7 +178,7 @@
   {
    "name": "Peos Custom Transfurs",
    "cf": "peos-custom-transfurs",
-   "mr": null,
+   "mr": "peos-custom-transfurs",
    "group": "dead",
    "desc": "Custom transfurs (teal dragon, mice, Mylo panda, Forsetti, Drone Wolf) and a shrink-and-grow ability. Needs Pehkui. Last update Jun 2026.",
    "server": null
@@ -186,7 +186,7 @@
   {
    "name": "Changed: Xtras",
    "cf": "changed-xtras",
-   "mr": null,
+   "mr": "changed-xtras",
    "group": "old",
    "desc": "Weapons (TSC and police batons, steel gear), ores and mutated latex bottles. Made with MCreator, last updated Jul 2024. No versions available.",
    "server": null
