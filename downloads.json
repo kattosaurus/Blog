@@ -2,47 +2,47 @@
  "updated": "2026-10-10",
  "mods": {
   "changed-minecraft-mod": {
-   "cf": 445900,
-   "mr": 200292
+   "cf": 446069,
+   "mr": 200438
   },
   "changed-vanilla": {
-   "cf": 12200,
-   "mr": 4075
+   "cf": 12256,
+   "mr": 4085
   },
   "changed-addon-plus": {
-   "cf": 329600,
-   "mr": 160503
+   "cf": 341768,
+   "mr": 160629
   },
   "changed-additions": {
-   "cf": 35800,
-   "mr": 21307
+   "cf": 38349,
+   "mr": 21323
   },
   "changed-synergy": {
-   "cf": 8600,
-   "mr": 3107
+   "cf": 8727,
+   "mr": 3139
   },
   "changed-extra": {
-   "cf": 2800,
+   "cf": 2831,
    "mr": null
   },
   "changedextras": {
-   "cf": 10700,
-   "mr": 9841
+   "cf": 13965,
+   "mr": 9913
   },
   "changed-siren-course": {
-   "cf": 1800,
+   "cf": 1863,
    "mr": null
   },
   "changed-true-transfur": {
-   "cf": 955,
+   "cf": 977,
    "mr": null
   },
   "additional-transfurs": {
-   "cf": 10400,
-   "mr": 5682
+   "cf": 10453,
+   "mr": 5708
   },
   "changed-untransfur": {
-   "cf": 5300,
+   "cf": 5347,
    "mr": null
   },
   "un-safe-transfur": {
@@ -50,35 +50,35 @@
    "mr": 192
   },
   "latexs-delight": {
-   "cf": 13400,
+   "cf": 15980,
    "mr": null
   },
   "changed-survive-protocol": {
-   "cf": 12800,
-   "mr": 3980
+   "cf": 12835,
+   "mr": 3988
   },
   "furmutage-mod-early-testing-a-changed-addon": {
-   "cf": 11900,
+   "cf": 11935,
    "mr": null
   },
   "create-changed": {
    "cf": 4300,
-   "mr": 13227
+   "mr": 13257
   },
   "changed-pooltoys-tfs": {
-   "cf": 1500,
+   "cf": 1561,
    "mr": null
   },
   "latex-caves": {
-   "cf": 1300,
+   "cf": 1391,
    "mr": null
   },
   "changed-ai-boss": {
-   "cf": 444,
+   "cf": 447,
    "mr": null
   },
   "changedarmy": {
-   "cf": 425,
+   "cf": 439,
    "mr": null
   },
   "goopcattech": {
@@ -86,19 +86,19 @@
    "mr": null
   },
   "peos-custom-transfurs": {
-   "cf": 2400,
-   "mr": 950
+   "cf": 2427,
+   "mr": 954
   },
   "changed-xtras": {
    "cf": 32400,
-   "mr": 14042
+   "mr": 14048
   },
   "changed-doomsday": {
-   "cf": 16700,
+   "cf": 16753,
    "mr": null
   },
   "changed-more-music-discs": {
-   "cf": 9300,
+   "cf": 9323,
    "mr": null
   }
  }
