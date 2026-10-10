@@ -3,45 +3,130 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
 <meta property="og:title" content="Changed Addon Mods">
 <meta property="og:description" content="A ranked list of Changed: Minecraft Mod addons, with descriptions and community servers.">
 <title>Changed Addon Mods</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Hanken+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg-color:#121212;--header-bg:#000;--text-main:#fff;--text-muted:#ffffff9a;--prof-bg:#ffffff36;--star-color:#fff;--star-opacity-min:.4;--star-filter:drop-shadow(0 0 2px rgba(255,255,255,.9));--btn-bg:#ffffff20;--colored-button:#434ed4}
+:root{
+  --bg:#121212;--ink:#000;--text:#fff;--muted:#ffffff9a;--line:#ffffff1f;--soft:#ffffff12;--btn-bg:#ffffff20;
+  --accent:#434ed4;--accent-hi:#9aa2ff;--r:20px;
+  --header-bg:#000;--text-muted:#ffffff9a;--prof-bg:#ffffff36;--star-color:#fff;--star-opacity-min:.4;--star-filter:drop-shadow(0 0 2px rgba(255,255,255,.9));
+  --display:'Bricolage Grotesque',system-ui,-apple-system,sans-serif;
+  --body:'Hanken Grotesk',system-ui,-apple-system,sans-serif;
+}
 html{scroll-behavior:smooth;overflow-x:hidden;width:100%;font-size:16px}
-body{min-height:100dvh;width:100%;overflow-x:hidden;background:var(--bg-color);font-family:system-ui,-apple-system,sans-serif;color:var(--text-main);-webkit-text-size-adjust:100%}
-h1{margin:0}
+body{min-height:100dvh;width:100%;overflow-x:hidden;background:var(--bg);font-family:var(--body);color:var(--text);-webkit-text-size-adjust:100%}
 p{font-weight:300;font-size:1rem;line-height:1.6}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent-hi);outline-offset:2px}
+
+/* Header (original) */
+h1{margin:0}
 .header{background:var(--header-bg);width:100%;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:80px 20px 40px;position:relative;overflow:hidden}
 .your{font-weight:300;color:var(--text-muted);font-size:1.25rem;z-index:1}
 .profs{display:inline-block;background:var(--prof-bg);padding:10px 14px;font-size:1.5rem;z-index:1}
 .star{position:absolute;background:var(--star-color);border-radius:50%;pointer-events:none;will-change:transform,opacity;transform:translate3d(0,0,0);filter:var(--star-filter);animation:tw var(--duration) infinite ease-in-out}
 @keyframes tw{0%,100%{opacity:var(--star-opacity-min);transform:translate3d(0,0,0) scale(.8)}50%{opacity:1;transform:translate3d(var(--move-x),var(--move-y),0) scale(1.2)}}
-section{max-width:960px;margin:0 auto;padding:20px}
-h2{font-size:1.25rem;margin-bottom:.75rem;font-weight:600}
+.summary{color:var(--muted);margin-top:10px}
+.summary b{color:var(--text);font-weight:600;font-variant-numeric:tabular-nums}
+
+/* Intro */
+section.about{max-width:960px;margin:0 auto;padding:36px 20px 24px}
+.age{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.badge{flex:none;display:grid;place-items:center;width:52px;height:52px;border-radius:50%;border:2px solid var(--accent-hi);font-family:var(--display);font-weight:800;color:var(--accent-hi)}
 .warn{font-weight:600}
-.note{font-size:.8rem;opacity:.5;text-align:center;padding:30px 20px}
+
+/* Toolbar */
+.toolbar{position:sticky;top:0;z-index:20;background:rgba(18,18,18,.86);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.toolbar-in{max-width:960px;margin:0 auto;padding:12px 20px}
+.tools{display:flex;flex-wrap:wrap;gap:8px}
+.search{flex:1 1 220px;position:relative;display:flex;align-items:center}
+.search svg{position:absolute;left:14px;opacity:.55;pointer-events:none}
+.search input{width:100%;height:44px;padding:0 44px 0 42px;background:var(--soft);border:1px solid var(--line);border-radius:14px;-webkit-appearance:none;appearance:none}
+.search input::placeholder{color:var(--muted)}
+.search kbd{position:absolute;right:12px;font:600 .75rem var(--body);opacity:.55;border:1px solid var(--line);border-radius:6px;padding:2px 7px}
+select{height:44px;padding:0 12px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+select option{background:#1b1b1b}
+.seg{display:inline-flex;gap:2px;padding:3px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.seg button{height:36px;padding:0 14px;border:0;border-radius:11px;background:none;color:var(--muted)}
+.seg button[aria-pressed=true]{background:var(--accent);color:#fff}
+.ghost{height:44px;padding:0 16px;border:1px solid var(--line);border-radius:14px;background:none}
+.ghost:hover,select:hover{background:var(--soft)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-top:10px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 14px;border-radius:20px;border:1px solid var(--line);background:none;white-space:nowrap}
+.chip i{width:9px;height:9px;border-radius:50%;background:hsl(var(--g) 75% 66%)}
+.chip span{opacity:.55;font-size:.8125rem;font-variant-numeric:tabular-nums}
+.chip:hover{background:var(--soft)}
+.chip[aria-pressed=true]{background:var(--accent);border-color:var(--accent)}
+
+/* Results */
+#out{max-width:960px;margin:0 auto;padding:20px 20px 8px;min-height:50vh}
+.count{font-size:.875rem;color:var(--muted);margin-bottom:10px}
 .rank{list-style:none;display:flex;flex-direction:column;gap:6px}
-.rank li{background:var(--header-bg);border-radius:14px;padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.rank .n{opacity:.5;min-width:1.8em;font-weight:600}
-.rank a{color:var(--text-main);font-weight:500;text-decoration:none;flex:1;min-width:140px}
-.rank a:hover{text-decoration:underline}
-.rank .d{font-weight:600}
-.src{font-size:.75rem;opacity:.45}
-.tag{font-size:.75rem;background:var(--btn-bg);padding:3px 10px;border-radius:20px;opacity:.85}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-.servicebox{background:var(--header-bg);padding:24px 20px;border-radius:24px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
-.servicebox h3{font-size:1.15rem}
-.servicebox p{font-size:.9375rem;line-height:1.5}
-.dl{font-size:.8rem;opacity:.5}
-.btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:auto;padding-top:6px}
-.more{background:var(--colored-button);padding:10px 20px;color:#fff;text-decoration:none;border-radius:30px;min-height:44px;display:flex;align-items:center;justify-content:center;font-size:.9375rem;font-weight:500}
+.row{background:var(--ink);border-radius:16px;border:1px solid transparent;transition:border-color .2s}
+.row.open{border-color:var(--line)}
+.row-head{width:100%;display:grid;grid-template-columns:2.2em auto 1fr auto auto 18px;align-items:center;gap:12px;padding:10px 14px;min-height:68px;background:none;border:0;border-radius:15px;text-align:left}
+.row-head:hover{background:var(--soft)}
+.n{opacity:.5;font-weight:600;font-variant-numeric:tabular-nums}
+.who{min-width:0;display:flex;flex-direction:column;gap:7px}
+.nm{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.meter{display:block;height:4px;border-radius:2px;background:var(--soft);overflow:hidden}
+.meter i{display:block;height:100%;width:var(--w);border-radius:2px;background:hsl(var(--g) 75% 66%);transform-origin:left}
+.gl{display:inline-flex;align-items:center;gap:7px;font-size:.8125rem;color:var(--muted)}
+.gl i,.dot{width:9px;height:9px;border-radius:50%;background:hsl(var(--g) 75% 66%);display:inline-block}
+.d{font-weight:600;font-variant-numeric:tabular-nums}
+.chev{opacity:.5;transition:transform .25s}
+.row.open .chev{transform:rotate(180deg)}
+.panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
+.row.open .panel{grid-template-rows:1fr}
+.panel-in{min-height:0;overflow:hidden;visibility:hidden;transition:visibility 0s .3s}
+.row.open .panel-in{visibility:visible;transition-delay:0s}
+.inner{padding:2px 18px 18px;display:flex;flex-direction:column;gap:12px;max-width:68ch}
+.split{display:flex;gap:16px;font-size:.875rem;color:var(--muted)}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
+.more{background:var(--accent);padding:10px 20px;color:#fff;text-decoration:none;border-radius:30px;min-height:44px;display:flex;align-items:center;justify-content:center;font-size:.9375rem;font-weight:500}
+.more:hover{filter:brightness(1.15)}
 .more.alt{background:var(--btn-bg)}
-.loading,.err{text-align:center;padding:40px 20px;opacity:.6}
-@media(min-width:768px){html{font-size:17px}h2{font-size:1.5rem}.your{font-size:1.5rem}.profs{font-size:2rem}}
-@media(min-width:1200px){html{font-size:18px}h2{font-size:1.75rem}}
-@media(max-width:480px){.header{padding:60px 16px 32px}section{padding:16px}.servicebox{padding:20px 16px;border-radius:20px}}
+.row.flash,.card.flash{animation:flash 1.4s ease-out}
+@keyframes flash{from{box-shadow:0 0 0 2px var(--accent-hi)}to{box-shadow:0 0 0 2px transparent}}
+
+/* Icons */
+.ico{--s:48px;position:relative;overflow:hidden;flex:none;width:var(--s);height:var(--s);border-radius:28%;display:grid;place-items:center;background:var(--c,hsl(var(--h) 45% 30%))}
+.ico b{font-family:var(--display);font-weight:800;font-size:calc(var(--s)*.38)}
+.ico img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ico.lg{--s:60px}
+
+/* Group view */
+.grp{padding:12px 0 22px}
+.grp h2{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:1.5rem;font-weight:500;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px}
+.card{background:var(--ink);padding:22px 20px;border-radius:var(--r);display:flex;flex-direction:column;gap:12px}
+.card-top{display:flex;align-items:center;gap:14px}
+.card h3{font-family:var(--display);font-size:1.2rem;font-weight:500}
+.dl{font-size:.8125rem;color:var(--muted)}
+.card p{font-size:.9375rem;line-height:1.5}
+
+.empty,.loading,.err{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty .ghost{margin-top:14px;color:var(--text)}
+.note{font-size:.8rem;opacity:.5;text-align:center;padding:30px 20px 48px}
+
+/* Entrance, first load only */
+.enter .meter i{animation:grow .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*35ms)}
+@keyframes grow{from{transform:scaleX(0)}}
+
+@media(max-width:640px){.gl{display:none}.row-head{grid-template-columns:2em auto 1fr auto 18px;gap:10px;padding:10px}.row-head .gl+.d{grid-column:auto}}
+@media(max-width:480px){.header{padding:60px 16px 32px}.seg{flex:1}.seg button{flex:1}.card{padding:20px 16px}}
+@media(hover:none){.search kbd{display:none}}
+@media(min-width:768px){html{font-size:17px}.your{font-size:1.5rem}.profs{font-size:2rem}}
+@media(min-width:1200px){html{font-size:18px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -51,85 +136,249 @@ h2{font-size:1.25rem;margin-bottom:.75rem;font-weight:600}
   <h1 class="profs">Changed Addons</h1>
 </div>
 
-<section>
-  <h2>About this list</h2>
-  <p class="warn">MOST OF THESE REQUIRE YOU TO BE 16+!</p>
+<section class="about">
+  <div class="age"><span class="badge">16+</span><p class="warn">MOST OF THESE REQUIRE YOU TO BE 16+!</p></div>
   <p>Addons for Changed: Minecraft Mod, with what each one does and where its community hangs out. Download counts combine CurseForge and Modrinth.</p>
+  <p class="summary" id="summary"></p>
 </section>
 
-<section>
-  <h2>Ranked by downloads</h2>
-  <ol class="rank" id="rank"><li class="loading">Loading…</li></ol>
-</section>
+<div class="toolbar">
+  <div class="toolbar-in">
+    <div class="tools">
+      <label class="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Search addons" aria-label="Search addons" autocomplete="off">
+        <kbd>/</kbd>
+      </label>
+      <select id="sort" aria-label="Sort addons">
+        <option value="downloads">Most downloads</option>
+        <option value="name">Name A to Z</option>
+      </select>
+      <div class="seg" role="group" aria-label="View">
+        <button type="button" data-view="rank" aria-pressed="true">Ranking</button>
+        <button type="button" data-view="groups" aria-pressed="false">By group</button>
+      </div>
+      <button type="button" class="ghost" id="rnd">Random addon</button>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Filter by group"></div>
+  </div>
+</div>
 
-<div id="groups"></div>
+<div id="out" aria-live="polite"><p class="loading">Loading…</p></div>
 
 <p class="note" id="note"></p>
 
 <script>
 const CF='https://www.curseforge.com/minecraft/mc-mods/', MR='https://modrinth.com/mod/';
 const $=id=>document.getElementById(id);
+const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-const fmt=n=>n<1000?String(n):n<1e6?(n/1000).toFixed(n<1e4?1:1).replace(/\.0$/,'')+'K':(n/1e6).toFixed(2).replace(/\.?0+$/,'')+'M';
+const fmt=n=>n<1000?String(n):n<1e6?Number((n/1000).toFixed(1))+'K':Number((n/1e6).toFixed(2))+'M';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const plain=s=>String(s||'').replace(/<[^>]*>/g,' ');
+const hue=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return h%360;};
+const initials=n=>{const w=n.replace(/[^A-Za-z0-9 ]/g,' ').trim().split(/\s+/);return((w[0]||'?')[0]+(w[1]?w[1][0]:'')).toUpperCase();};
 
 async function getJSON(url){const r=await fetch(url,{cache:'no-cache'});if(!r.ok)throw new Error(url+' '+r.status);return r.json();}
 
-// Live Modrinth counts straight from the browser (their API allows CORS).
+// Live Modrinth data (count, icon, brand colour) straight from the browser (their API allows CORS).
 async function liveModrinth(slugs){
   const out={};
-  if(!slugs.length)return out;
   for(let i=0;i<slugs.length;i+=100){
     const ids=encodeURIComponent(JSON.stringify(slugs.slice(i,i+100)));
     const list=await getJSON('https://api.modrinth.com/v2/projects?ids='+ids);
-    list.forEach(p=>{out[p.slug.toLowerCase()]=p.downloads;});
+    list.forEach(p=>{
+      const v={dl:p.downloads,icon:p.icon_url||'',color:p.color!=null?'#'+p.color.toString(16).padStart(6,'0'):null};
+      out[p.slug.toLowerCase()]=v;out[p.id.toLowerCase()]=v;
+    });
   }
   return out;
 }
 
-function render(data,dl,updated){
-  const mods=data.mods.map(m=>{
-    const d=dl[m.cf]||{};
-    const cf=d.cf??0, mr=d.mr??0;
-    return {...m,cfN:cf,mrN:mr,total:cf+mr};
+/* ---------- State ---------- */
+const S={q:'',group:'all',sort:'downloads',view:'rank',open:new Set()};
+let DATA,DL={},LIVE={},UPDATED='',MODS=[],RANK={},MAXD=0,GKEYS=[],shownTotal=0;
+
+const gHue=k=>(GKEYS.indexOf(k)*57+215)%360;
+
+function compute(){
+  MODS=DATA.mods.map(m=>{
+    const d=DL[m.cf]||{};
+    const lv=m.mr?LIVE[m.mr.toLowerCase()]:null;
+    const cf=d.cf??0, mr=lv?lv.dl:(d.mr??0);
+    // Image priority: mods.json "img" > downloads.json "img" > Modrinth icon > initials tile
+    return {...m,cfN:cf,mrN:mr,total:cf+mr,img:m.img||d.img||(lv&&lv.icon)||'',accent:lv&&lv.color};
   });
-  const G=data.groups;
-
-  $('rank').innerHTML=[...mods].sort((a,b)=>b.total-a.total).map((m,i)=>{
-    const src=m.mr?`<span class="src">CF ${fmt(m.cfN)} · MR ${fmt(m.mrN)}</span>`:'';
-    return `<li><span class="n">${i+1}</span><a href="${CF+m.cf}">${m.name}</a>${src}<span class="d">${fmt(m.total)}</span><span class="tag">${G[m.group]}</span></li>`;
-  }).join('');
-
-  $('groups').innerHTML=Object.keys(G).map(k=>{
-    const cards=mods.filter(m=>m.group===k).sort((a,b)=>b.total-a.total).map(m=>{
-      const srv=m.server?`<a href="${m.server}" class="more alt">${m.server.includes('fluxer')?'Join Fluxer':'Join Discord'}</a>`:'';
-      const mr=m.mr?`<a href="${MR+m.mr}" class="more alt">Modrinth</a>`:'';
-      return `<div class="servicebox"><h3>${m.name}</h3><span class="dl">${fmt(m.total)} downloads</span><p>${m.desc}</p><div class="btns"><a href="${CF+m.cf}" class="more">CurseForge</a>${mr}${srv}</div></div>`;
-    }).join('');
-    return cards?`<section><h2>${G[k]}</h2><div class="grid">${cards}</div></section>`:'';
-  }).join('');
-
-  $('note').textContent=`Download counts are CurseForge + Modrinth. CurseForge numbers last refreshed ${updated}; Modrinth numbers are fetched live.`;
+  const byDl=[...MODS].sort((a,b)=>b.total-a.total);
+  RANK={};byDl.forEach((m,i)=>RANK[m.cf]=i+1);
+  MAXD=byDl[0]?byDl[0].total:0;
 }
 
+function iconHTML(m,lg){
+  const style=`--h:${hue(m.name)}${m.accent?`;--c:${m.accent}`:''}`;
+  const img=m.img?`<img src="${esc(m.img)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">`:'';
+  return `<span class="ico${lg?' lg':''}" style="${style}"><b>${esc(initials(m.name))}</b>${img}</span>`;
+}
+
+const btns=m=>{
+  const srv=m.server?`<a href="${esc(m.server)}" class="more alt">${m.server.includes('fluxer')?'Join Fluxer':'Join Discord'}</a>`:'';
+  const mr=m.mr?`<a href="${MR+esc(m.mr)}" class="more alt">Modrinth</a>`:'';
+  return `<div class="btns"><a href="${CF+esc(m.cf)}" class="more">CurseForge</a>${mr}${srv}</div>`;
+};
+
+function rowHTML(m,i){
+  const id='m-'+m.cf, open=S.open.has(m.cf);
+  const pct=MAXD?Math.max(1.5,m.total/MAXD*100):0;
+  const split=m.mr?`<p class="split"><span>CurseForge ${fmt(m.cfN)}</span><span>Modrinth ${fmt(m.mrN)}</span></p>`:'';
+  return `<li class="row${open?' open':''}" id="${esc(id)}" data-id="${esc(m.cf)}" style="--g:${gHue(m.group)}">
+    <button type="button" class="row-head" aria-expanded="${open}" aria-controls="${esc(id)}-p">
+      <span class="n">${RANK[m.cf]}</span>${iconHTML(m)}
+      <span class="who"><span class="nm">${m.name}</span><span class="meter"><i style="--w:${pct}%;--i:${i}"></i></span></span>
+      <span class="gl"><i></i>${DATA.groups[m.group]||''}</span>
+      <span class="d" title="${m.total.toLocaleString()} downloads">${fmt(m.total)}</span>
+      <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="panel" id="${esc(id)}-p" role="region" aria-label="${esc(m.name)} details"><div class="panel-in"><div class="inner">
+      <p>${m.desc}</p>${split}${btns(m)}
+    </div></div></div>
+  </li>`;
+}
+
+function cardHTML(m){
+  return `<article class="card" id="m-${esc(m.cf)}" data-id="${esc(m.cf)}">
+    <div class="card-top">${iconHTML(m,true)}<div><h3>${m.name}</h3><span class="dl">${fmt(m.total)} downloads</span></div></div>
+    <p>${m.desc}</p>${btns(m)}
+  </article>`;
+}
+
+function filtered(ignoreGroup){
+  const q=S.q.trim().toLowerCase();
+  return MODS.filter(m=>(ignoreGroup||S.group==='all'||m.group===S.group)&&
+    (!q||(m.name+' '+plain(m.desc)+' '+(DATA.groups[m.group]||'')).toLowerCase().includes(q)));
+}
+
+function render(){
+  const list=filtered().sort(S.sort==='name'?(a,b)=>a.name.localeCompare(b.name):(a,b)=>b.total-a.total);
+
+  // chip counts (respect search, ignore the group filter)
+  const base=filtered(true), counts={all:base.length};
+  base.forEach(m=>counts[m.group]=(counts[m.group]||0)+1);
+  document.querySelectorAll('.chip').forEach(c=>c.querySelector('[data-c]').textContent=counts[c.dataset.g]||0);
+
+  const active=S.q.trim()||S.group!=='all';
+  let html=active&&list.length?`<p class="count">Showing ${list.length} of ${MODS.length} addons</p>`:'';
+
+  if(!list.length){
+    html=`<div class="empty"><p>No addons match${S.q.trim()?` “${esc(S.q.trim())}”`:' this filter'}.</p><button type="button" class="ghost" id="clear">Clear search and filter</button></div>`;
+  }else if(S.view==='rank'){
+    html+=`<ol class="rank">${list.map(rowHTML).join('')}</ol>`;
+  }else{
+    html+=GKEYS.map(k=>{
+      const items=list.filter(m=>m.group===k);
+      return items.length?`<section class="grp" style="--g:${gHue(k)}"><h2><i class="dot"></i>${DATA.groups[k]}</h2><div class="grid">${items.map(cardHTML).join('')}</div></section>`:'';
+    }).join('');
+  }
+  $('out').innerHTML=html;
+}
+
+function setSummary(animate){
+  const total=MODS.reduce((s,m)=>s+m.total,0);
+  const paint=n=>{$('summary').innerHTML=`<b>${MODS.length}</b> addons, <b>${fmt(Math.round(n))}</b> downloads combined.`;};
+  if(!animate||REDUCED){paint(total);shownTotal=total;return;}
+  const from=shownTotal,t0=performance.now(),dur=1100;
+  (function step(t){
+    const k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,3);
+    paint(from+(total-from)*e);
+    if(k<1)requestAnimationFrame(step);else shownTotal=total;
+  })(t0);
+}
+
+/* ---------- Controls ---------- */
+function buildChips(){
+  $('chips').innerHTML=[['all','All'],...GKEYS.map(k=>[k,DATA.groups[k]])].map(([k,l])=>
+    `<button type="button" class="chip" data-g="${esc(k)}" aria-pressed="${k===S.group}"${k==='all'?'':` style="--g:${gHue(k)}"`}>${k==='all'?'':'<i></i>'}${l}<span data-c></span></button>`).join('');
+}
+
+function syncControls(){
+  $('q').value=S.q;$('sort').value=S.sort;
+  document.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.g===S.group));
+  document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.view===S.view));
+}
+
+function toggle(el,force){
+  const open=force??!el.classList.contains('open');
+  el.classList.toggle('open',open);
+  const h=el.querySelector('.row-head');if(h)h.setAttribute('aria-expanded',open);
+  const id=el.dataset.id;
+  open?S.open.add(id):S.open.delete(id);
+  if(open){try{history.replaceState(null,'','#m-'+id);}catch(e){}}
+}
+
+function initUI(){
+  GKEYS=Object.keys(DATA.groups);
+  buildChips();
+
+  $('q').addEventListener('input',e=>{S.q=e.target.value;render();});
+  $('q').addEventListener('keydown',e=>{if(e.key==='Escape'){S.q='';e.target.value='';render();e.target.blur();}});
+  $('sort').addEventListener('change',e=>{S.sort=e.target.value;render();});
+  $('chips').addEventListener('click',e=>{
+    const c=e.target.closest('.chip');if(!c)return;
+    S.group=c.dataset.g;syncControls();render();
+  });
+  document.querySelector('.seg').addEventListener('click',e=>{
+    const b=e.target.closest('button');if(!b)return;
+    S.view=b.dataset.view;syncControls();render();
+  });
+  $('out').addEventListener('click',e=>{
+    if(e.target.closest('#clear')){S.q='';S.group='all';syncControls();render();return;}
+    const h=e.target.closest('.row-head');
+    if(h)toggle(h.parentElement);
+  });
+  $('rnd').addEventListener('click',()=>{
+    const m=MODS[Math.floor(Math.random()*MODS.length)];if(!m)return;
+    S.view='rank';S.q='';S.group='all';S.open.add(m.cf);
+    syncControls();render();
+    const el=$('m-'+m.cf);if(!el)return;
+    toggle(el,true);
+    el.scrollIntoView({block:'center',behavior:REDUCED?'auto':'smooth'});
+    el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),1500);
+  });
+  document.addEventListener('keydown',e=>{
+    if(e.key==='/'&&!/^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName)){e.preventDefault();$('q').focus();}
+  });
+}
+
+/* ---------- Boot ---------- */
 (async()=>{
   try{
     const [data,cached]=await Promise.all([getJSON('mods.json'),getJSON('downloads.json')]);
-    const dl=cached.mods||{};
-    render(data,dl,cached.updated);           // show cached numbers immediately
-    const slugs=data.mods.filter(m=>m.mr).map(m=>m.mr);
+    DATA=data;DL=cached.mods||{};UPDATED=cached.updated;
+    initUI();compute();
+
+    // Deep link: #m-<curseforge-slug> opens that addon
+    const hash=location.hash.slice(1);
+    if(hash.startsWith('m-'))S.open.add(hash.slice(2));
+
+    $('out').classList.add('enter');
+    render();setSummary(true);
+    setTimeout(()=>$('out').classList.remove('enter'),1800);
+    $('note').textContent=`Download counts are CurseForge + Modrinth. CurseForge numbers last refreshed ${UPDATED}; Modrinth numbers are fetched live.`;
+    if(hash.startsWith('m-')){const el=$(hash);if(el)setTimeout(()=>el.scrollIntoView({block:'center'}),150);}
+
     try{
-      const live=await liveModrinth(slugs);   // then upgrade Modrinth to live values
-      data.mods.forEach(m=>{
-        if(m.mr&&live[m.mr.toLowerCase()]!=null)dl[m.cf]={...(dl[m.cf]||{}),mr:live[m.mr.toLowerCase()]};
-      });
-      render(data,dl,cached.updated);
+      const slugs=data.mods.filter(m=>m.mr).map(m=>m.mr);
+      if(slugs.length){
+        LIVE=await liveModrinth(slugs);   // live counts + icons + brand colours
+        compute();render();setSummary(true);
+      }
     }catch(e){console.warn('Live Modrinth fetch failed, using cached values',e);}
   }catch(e){
-    $('rank').innerHTML='<li class="err">Could not load the list. Serve this page over http(s) (not file://) with mods.json and downloads.json next to it.</li>';
+    $('out').innerHTML='<p class="err">Could not load the list. Serve this page over http(s) (not file://) with mods.json and downloads.json next to it.</p>';
     console.error(e);
   }
 })();
 
+/* ---------- Header stars (original) ---------- */
 (function(){
  const header=document.querySelector('.header'),f=document.createDocumentFragment();
  for(let i=0;i<45;i++){
