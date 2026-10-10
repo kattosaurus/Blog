@@ -1,29 +1,33 @@
 {
- "updated": "2026-10-09",
+ "updated": "2026-10-10",
  "mods": {
   "changed-minecraft-mod": {
    "cf": 445900,
-   "mr": null
+   "mr": 200292
   },
   "changed-vanilla": {
    "cf": 12200,
-   "mr": null
+   "mr": 4075
   },
   "changed-addon-plus": {
    "cf": 329600,
-   "mr": null
+   "mr": 160503
   },
   "changed-additions": {
    "cf": 35800,
-   "mr": null
+   "mr": 21307
   },
   "changed-synergy": {
    "cf": 8600,
-   "mr": null
+   "mr": 3107
   },
   "changed-extra": {
    "cf": 2800,
    "mr": null
+  },
+  "changedextras": {
+   "cf": 10700,
+   "mr": 9841
   },
   "changed-siren-course": {
    "cf": 1800,
@@ -35,7 +39,7 @@
   },
   "additional-transfurs": {
    "cf": 10400,
-   "mr": null
+   "mr": 5682
   },
   "changed-untransfur": {
    "cf": 5300,
@@ -43,7 +47,7 @@
   },
   "un-safe-transfur": {
    "cf": 430,
-   "mr": null
+   "mr": 192
   },
   "latexs-delight": {
    "cf": 13400,
@@ -51,7 +55,7 @@
   },
   "changed-survive-protocol": {
    "cf": 12800,
-   "mr": null
+   "mr": 3980
   },
   "furmutage-mod-early-testing-a-changed-addon": {
    "cf": 11900,
@@ -59,7 +63,7 @@
   },
   "create-changed": {
    "cf": 4300,
-   "mr": null
+   "mr": 13227
   },
   "changed-pooltoys-tfs": {
    "cf": 1500,
@@ -83,11 +87,11 @@
   },
   "peos-custom-transfurs": {
    "cf": 2400,
-   "mr": null
+   "mr": 950
   },
   "changed-xtras": {
    "cf": 32400,
-   "mr": null
+   "mr": 14042
   },
   "changed-doomsday": {
    "cf": 16700,
@@ -95,10 +99,6 @@
   },
   "changed-more-music-discs": {
    "cf": 9300,
-   "mr": null
-  },
-  "changedextras": {
-   "cf": 10700,
    "mr": null
   }
  }
