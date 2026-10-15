@@ -2,54 +2,54 @@
   "updated": "2026-10-15",
   "mods": {
     "changed-minecraft-mod": {
-      "cf": 448371,
+      "cf": 448461,
       "img": "https://media.forgecdn.net/avatars/thumbnails/935/8/256/256/638411523058980029.png",
-      "mr": 202524
+      "mr": 202614
     },
     "changed-vanilla": {
-      "cf": 12672,
+      "cf": 12690,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1833/902/256/256/639156816589843767.png",
-      "mr": 4337
+      "mr": 4353
     },
     "changed-addon-plus": {
-      "cf": 343443,
+      "cf": 343510,
       "img": "https://media.forgecdn.net/avatars/thumbnails/949/783/256/256/638438127646487503.png",
-      "mr": 162305
+      "mr": 162375
     },
     "changed-additions": {
-      "cf": 38653,
+      "cf": 38668,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1265/141/256/256/638823511331003742.png",
-      "mr": 21679
+      "mr": 21693
     },
     "changed-synergy": {
-      "cf": 9983,
+      "cf": 10048,
       "img": "https://media.forgecdn.net/avatars/thumbnails/2009/679/256/256/639234018310180453.png",
-      "mr": 3864
+      "mr": 3936
     },
     "changed-extra": {
-      "cf": 3029,
+      "cf": 3032,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1813/75/256/256/639146284460605322.png"
     },
     "changedextras": {
-      "cf": 15159,
+      "cf": 15200,
       "img": "https://media.forgecdn.net/avatars/thumbnails/2058/37/256/256/639254521693528551.png",
-      "mr": 10774
+      "mr": 10818
     },
     "changed-siren-course": {
-      "cf": 1995,
+      "cf": 2000,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1985/328/256/256/639223873174584090.png"
     },
     "changed-true-transfur": {
-      "cf": 1568,
+      "cf": 1619,
       "img": "https://media.forgecdn.net/avatars/thumbnails/2071/452/256/256/639260160034807000.png"
     },
     "additional-transfurs": {
-      "cf": 10691,
+      "cf": 10698,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1730/813/256/256/639101518266857814.png",
-      "mr": 6252
+      "mr": 6286
     },
     "changed-untransfur": {
-      "cf": 5462,
+      "cf": 5464,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1693/266/256/256/639074686950947898.png"
     },
     "un-safe-transfur": {
@@ -58,37 +58,37 @@
       "mr": 200
     },
     "latexs-delight": {
-      "cf": 16320,
+      "cf": 16338,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1410/494/256/256/638914040211725170.png"
     },
     "changed-survive-protocol": {
-      "cf": 13148,
+      "cf": 13163,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1844/174/256/256/639160966578487274.png",
-      "mr": 4224
+      "mr": 4240
     },
     "furmutage-mod-early-testing-a-changed-addon": {
-      "cf": 12209,
+      "cf": 12221,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1879/232/256/256/639176889525834592.png"
     },
     "create-changed": {
       "cf": 4300,
       "img": "https://cdn.modrinth.com/data/Z0fF8GYW/07c08692d54c7232c77343e484422e7a8ddc6809_96.webp",
-      "mr": 13817
+      "mr": 13849
     },
     "changed-pooltoys-tfs": {
-      "cf": 1911,
+      "cf": 1933,
       "img": "https://media.forgecdn.net/avatars/thumbnails/2033/231/256/256/639243976748720647.png"
     },
     "latex-caves": {
-      "cf": 1427,
+      "cf": 1428,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1836/88/256/256/639157808765913093.webp"
     },
     "changed-ai-boss": {
-      "cf": 491,
+      "cf": 493,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1981/198/256/256/639222103918230311.png"
     },
     "changedarmy": {
-      "cf": 574,
+      "cf": 581,
       "img": "https://media.forgecdn.net/avatars/thumbnails/2082/777/256/256/639264107926254526.jpg"
     },
     "goopcattech": {
@@ -96,9 +96,9 @@
       "img": "https://media.forgecdn.net/avatars/thumbnails/1823/264/256/256/639151680784716727.png"
     },
     "peos-custom-transfurs": {
-      "cf": 2505,
+      "cf": 2507,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1846/279/256/256/639161944936730864.png",
-      "mr": 1012
+      "mr": 1016
     },
     "changed-xtras": {
       "cf": 32400,
