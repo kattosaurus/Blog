@@ -1,116 +1,116 @@
 {
-  "updated": "2026-10-30",
+  "updated": "2026-10-31",
   "mods": {
     "changed-minecraft-mod": {
-      "cf": 454995,
+      "cf": 455440,
       "img": "https://media.forgecdn.net/avatars/thumbnails/935/8/256/256/638411523058980029.png",
-      "mr": 208532
+      "mr": 208822
     },
     "changed-vanilla": {
-      "cf": 13831,
+      "cf": 13882,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1833/902/256/256/639156816589843767.png",
-      "mr": 5026
+      "mr": 5057
     },
     "changed-addon-plus": {
-      "cf": 348350,
+      "cf": 348765,
       "img": "https://media.forgecdn.net/avatars/thumbnails/949/783/256/256/638438127646487503.png",
-      "mr": 167066
+      "mr": 167291
     },
     "changed-additions": {
-      "cf": 39479,
+      "cf": 39537,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1265/141/256/256/638823511331003742.png",
-      "mr": 22768
+      "mr": 22810
     },
     "changed-synergy": {
-      "cf": 14145,
+      "cf": 14402,
       "img": "https://media.forgecdn.net/avatars/thumbnails/2154/593/256/256/639287531996844048.png",
-      "mr": 6688
+      "mr": 6811
     },
     "changed-extra": {
-      "cf": 3612,
+      "cf": 3649,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1813/75/256/256/639146284460605322.png"
     },
     "changedextras": {
-      "cf": 17187,
+      "cf": 17320,
       "img": "https://media.forgecdn.net/avatars/thumbnails/2058/37/256/256/639254521693528551.png",
-      "mr": 12474
+      "mr": 12575
     },
     "changed-siren-course": {
-      "cf": 2340,
+      "cf": 2361,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1985/328/256/256/639223873174584090.png"
     },
     "changed-true-transfur": {
-      "cf": 3923,
+      "cf": 4024,
       "img": "https://media.forgecdn.net/avatars/thumbnails/2071/452/256/256/639260160034807000.png"
     },
     "additional-transfurs": {
-      "cf": 11308,
+      "cf": 11331,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1730/813/256/256/639101518266857814.png",
-      "mr": 7909
+      "mr": 7980
     },
     "changed-untransfur": {
-      "cf": 6009,
+      "cf": 6049,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1693/266/256/256/639074686950947898.png"
     },
     "un-safe-transfur": {
-      "cf": 463,
+      "cf": 464,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1798/955/256/256/639139216822396903.png",
-      "mr": 245
+      "mr": 246
     },
     "latexs-delight": {
-      "cf": 17308,
+      "cf": 17350,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1410/494/256/256/638914040211725170.png"
     },
     "changed-survive-protocol": {
-      "cf": 14137,
+      "cf": 14219,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1844/174/256/256/639160966578487274.png",
-      "mr": 4838
+      "mr": 4868
     },
     "furmutage-mod-early-testing-a-changed-addon": {
-      "cf": 12878,
+      "cf": 12925,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1879/232/256/256/639176889525834592.png"
     },
     "create-changed": {
       "cf": 4300,
       "img": "https://cdn.modrinth.com/data/Z0fF8GYW/07c08692d54c7232c77343e484422e7a8ddc6809_96.webp",
-      "mr": 15535
+      "mr": 15602
     },
     "changed-pooltoys-tfs": {
-      "cf": 3752,
+      "cf": 3852,
       "img": "https://media.forgecdn.net/avatars/thumbnails/2151/797/256/256/639286521022189157.png"
     },
     "latex-caves": {
-      "cf": 1586,
+      "cf": 1594,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1836/88/256/256/639157808765913093.webp"
     },
     "changed-ai-boss": {
-      "cf": 566,
+      "cf": 571,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1981/198/256/256/639222103918230311.png"
     },
     "changedarmy": {
-      "cf": 1065,
+      "cf": 1099,
       "img": "https://media.forgecdn.net/avatars/thumbnails/2082/777/256/256/639264107926254526.jpg"
     },
     "goopcattech": {
-      "cf": 151,
+      "cf": 152,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1823/264/256/256/639151680784716727.png"
     },
     "peos-custom-transfurs": {
-      "cf": 2714,
+      "cf": 2727,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1846/279/256/256/639161944936730864.png",
-      "mr": 1213
+      "mr": 1220
     },
     "changed-xtras": {
       "cf": 32400,
       "img": "https://cdn.modrinth.com/data/wpaeMfU5/6356566bb17e5014baa1f050b21c5f5f8e8a3a04_96.webp",
-      "mr": 14192
+      "mr": 14196
     },
     "changed-doomsday": {
-      "cf": 16859,
+      "cf": 16867,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1390/153/256/256/638901242914808632.png"
     },
     "changed-more-music-discs": {
-      "cf": 9376,
+      "cf": 9380,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1356/293/256/256/638881101653381471.png"
     }
   }
