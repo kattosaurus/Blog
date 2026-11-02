@@ -32,7 +32,7 @@ I don't like theres a twitch streamer with the same name that I have on my socia
 ### B. Web Development
 - **Description:** Custom website design and development matching styles like the portfolio or other custom layouts. 
 - **Pricing/Terms:** Prices vary; hosting is not included.
-- **Contact:** `whatever@katto.online` or Discord `@exp009`.
+- **Contact:** `contact@kattosaur.us` or Discord `@exp009`.
 
 ### C. Mod Development (Minecraft)
 - **Description:** Custom Minecraft mod creation (specializing in Forge) or character integration into the custom Minecraft mod *Changed Extras*.
@@ -51,5 +51,5 @@ I don't like theres a twitch streamer with the same name that I have on my socia
 
 ## 4. Contact & Socials
 
-- **Email:** `whatever@katto.online`
+- **Email:** `contact@kattosaur.us`
 - **Discord:** `@exp009`
