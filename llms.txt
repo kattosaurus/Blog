@@ -10,7 +10,7 @@
 
 ## Services
 - **Commissions:** Affordable furry artwork (feral and human art also available; strictly **NO NSFW**).
-- **Web Development:** Custom web design and development (hosting not included). Contact: `whatever@katto.online` or Discord `@exp009`.
+- **Web Development:** Custom web design and development (hosting not included). Contact: `silly@kattosaur.us` or `contact@kattosaur.us` or Discord `@exp009`.
 - **Mod Development (Minecraft):** Custom Minecraft mods (specializing in Forge) and character additions to the mod *Changed Extras*.
 
 ## Site Structure & Navigation
@@ -21,5 +21,5 @@
 - **Characters:** `characters.html` — Original characters and fursona details.
 
 ## Contact & Links
-- **Email:** `whatever@katto.online`
+- **Email:** `silly@kattosaur.us` / `contact@kattosaur.us`
 - **Discord:** `@exp009`
