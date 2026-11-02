@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta property="og:image" content="https://katto.online/Online.png">
+  <meta property="og:image" content="https://kattosaur.us/Online.png">
   <meta property="og:title" content="Katto">
   <meta property="og:description" content="Art, web development, and Minecraft mods by Katto.">
   <title>Characters | Katto dot online</title>
@@ -361,7 +361,7 @@
     const grid = document.getElementById('char-grid');
 
     function extractDocLink(desc) {
-      const match = desc.match(/https:\/\/docs\.google\.com\/[^\s]+/);
+      const match = desc.match(/https:\/\/docs\.google\.com\/[^"]+/);
       return match ? match[0] : null;
     }
 
