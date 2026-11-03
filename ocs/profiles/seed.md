@@ -15,5 +15,6 @@ Basic information
 Seed is a Tabby cat, with spots on his back, a patterned tail and scars on his neck.
 He's good with herbs, just like a medicine cat.
 
-Shy, but smart. Not a good speaker or hunter, he's a good storyteller.
+Shy and indecisive, smart. Not a good public speaker or hunter, but a good storyteller.
 
+Wearing a deathberry on his right ear.
