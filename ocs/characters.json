@@ -28,4 +28,11 @@
      "description": "Dr. Murray Arthur Barr, known as Dr. B, and later as Katto, was a head scientist at the Biological Studies Facility. He is now a white-grey latex katto.",
      "color": "#EEEEEE",
      "image": "portfolio/Origin.png"
+   },
+     {
+     "name": "Experiment 012",
+     "description": "Experiment 012, also known as An Artist, is an experiment born in the Biological Studies Facility.",
+     "color": "#EEEEEE",
+     "image": "ocs/artist.png"
+   }
 ]
