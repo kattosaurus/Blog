@@ -41,7 +41,6 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-
     body {
       min-height: 100vh;
       background-color: var(--bg-color);
@@ -50,10 +49,8 @@
       color: var(--text-main);
       padding-top: 60px;
     }
-
     h1, h2, h3, h4 { margin: 0; }
     p { font-weight: 300; line-height: 1.6; }
-
     .controls {
       position: fixed;
       top: 15px;
@@ -63,7 +60,6 @@
       gap: 10px;
       z-index: 20;
     }
-
     .control-btn {
       background-color: var(--btn-bg);
       color: var(--btn-text);
@@ -78,7 +74,6 @@
       font-family: inherit;
     }
     .control-btn:hover { background-color: var(--prof-bg); }
-
     .burger {
       color: var(--btn-text);
       padding: 8px 15px;
@@ -95,7 +90,6 @@
       font-family: inherit;
     }
     .burger:hover { background-color: var(--btn-bg); }
-
     .dropdown {
       display: flex;
       flex-direction: column;
@@ -136,7 +130,6 @@
       background-color: var(--btn-bg);
       margin: 4px 0;
     }
-
     .tab-container {
       width: 100%;
       max-width: 1000px;
@@ -158,7 +151,6 @@
       color: var(--text-muted);
       margin-bottom: 2rem;
     }
-
     .char-group { margin-top: 2.5rem; }
     .char-group:first-child { margin-top: 0; }
     .group-title {
@@ -242,7 +234,6 @@
     }
     .loading-state { color: var(--text-muted); font-weight: 300; font-size: 1.1rem; }
     .error-state { color: #ff4747; }
-
     @media (max-width: 600px) {
       .char-grid { grid-template-columns: 1fr; }
       .tab-container { padding: 16px 16px 50px; }
@@ -318,77 +309,97 @@
       return desc.replace(/https:\/\/[^\s]+/g, '').replace(/::\s*/g, ' • ').trim();
     }
 
+    function renderCharacter(char, grid) {
+      const card = document.createElement('article');
+      card.className = 'char-card';
+
+      const accent = document.createElement('div');
+      accent.className = 'char-accent';
+      accent.style.backgroundColor = char.color || '#999';
+      card.appendChild(accent);
+
+      const imageWrap = document.createElement('div');
+      imageWrap.className = 'char-img-wrap';
+      const image = document.createElement('img');
+      image.src = char.image;
+      image.alt = char.name;
+      image.loading = 'lazy';
+      image.onerror = () => { image.style.display = 'none'; };
+      imageWrap.appendChild(image);
+      card.appendChild(imageWrap);
+
+      const info = document.createElement('div');
+      info.className = 'char-info';
+      const name = document.createElement('div');
+      name.className = 'char-name';
+      name.textContent = char.name;
+      const description = document.createElement('div');
+      description.className = 'char-desc';
+      description.textContent = cleanDescription(char.description || '');
+      info.append(name, description);
+
+      const docLink = extractDocLink(char.description || '');
+      if (docLink) {
+        const link = document.createElement('a');
+        link.href = docLink;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.className = 'char-link';
+        link.textContent = 'More info →';
+        info.appendChild(link);
+      }
+      card.appendChild(info);
+      grid.appendChild(card);
+    }
+
+    function renderGroup(groupName, characters) {
+      if (!characters.length) return;
+      const section = document.createElement('section');
+      section.className = 'char-group';
+
+      const heading = document.createElement('h3');
+      heading.className = 'group-title';
+      heading.textContent = groupName;
+      section.appendChild(heading);
+
+      const grid = document.createElement('div');
+      grid.className = 'char-grid';
+      characters.forEach(char => renderCharacter(char, grid));
+      section.appendChild(grid);
+      groupsContainer.appendChild(section);
+    }
+
     async function loadCharacters() {
       try {
-        const res = await fetch('ocs/characters.json', { cache: 'no-cache' });
-        if (!res.ok) throw new Error(`Could not load characters: ${res.status}`);
-        const characters = await res.json();
-        const groups = new Map();
+        const [charactersRes, manifestRes] = await Promise.all([
+          fetch('ocs/characters.json', { cache: 'no-cache' }),
+          fetch('ocs/manifest.json', { cache: 'no-cache' })
+        ]);
+        if (!charactersRes.ok) throw new Error(`Could not load characters: ${charactersRes.status}`);
+        if (!manifestRes.ok) throw new Error(`Could not load OC manifest: ${manifestRes.status}`);
+        const [characters, manifest] = await Promise.all([charactersRes.json(), manifestRes.json()]);
+        if (!Array.isArray(characters) || !Array.isArray(manifest.groups)) {
+          throw new Error('Invalid character list or OC manifest format');
+        }
 
-        characters.forEach(char => {
-          // Characters without an explicit group remain together in the existing OC collection.
-          const groupName = char.group || 'Warrior Cats OCs';
-          if (!groups.has(groupName)) groups.set(groupName, []);
-          groups.get(groupName).push(char);
-        });
-
+        const charactersByName = new Map(characters.map(char => [char.name, char]));
+        const assignedNames = new Set();
         groupsContainer.replaceChildren();
-        groups.forEach((members, groupName) => {
-          const section = document.createElement('section');
-          section.className = 'char-group';
 
-          const heading = document.createElement('h3');
-          heading.className = 'group-title';
-          heading.textContent = groupName;
-          section.appendChild(heading);
-
-          const grid = document.createElement('div');
-          grid.className = 'char-grid';
-          members.forEach(char => {
-            const card = document.createElement('article');
-            card.className = 'char-card';
-
-            const accent = document.createElement('div');
-            accent.className = 'char-accent';
-            accent.style.backgroundColor = char.color || '#999';
-            card.appendChild(accent);
-
-            const imageWrap = document.createElement('div');
-            imageWrap.className = 'char-img-wrap';
-            const image = document.createElement('img');
-            image.src = char.image;
-            image.alt = char.name;
-            image.loading = 'lazy';
-            image.onerror = () => { image.style.display = 'none'; };
-            imageWrap.appendChild(image);
-            card.appendChild(imageWrap);
-
-            const info = document.createElement('div');
-            info.className = 'char-info';
-            const name = document.createElement('div');
-            name.className = 'char-name';
-            name.textContent = char.name;
-            const description = document.createElement('div');
-            description.className = 'char-desc';
-            description.textContent = cleanDescription(char.description || '');
-            info.append(name, description);
-
-            const docLink = extractDocLink(char.description || '');
-            if (docLink) {
-              const link = document.createElement('a');
-              link.href = docLink;
-              link.target = '_blank';
-              link.rel = 'noopener noreferrer';
-              link.className = 'char-link';
-              link.textContent = 'More info →';
-              info.appendChild(link);
-            }
-            card.appendChild(info);
-            grid.appendChild(card);
-          });
-          section.appendChild(grid);
-          groupsContainer.appendChild(section);
+        manifest.groups.forEach(group => {
+          if (typeof group.name !== 'string' || !Array.isArray(group.characters)) return;
+          const members = group.characters
+            .filter(name => typeof name === 'string' && !assignedNames.has(name))
+            .map(name => {
+              assignedNames.add(name);
+              return charactersByName.get(name);
+            })
+            .filter(Boolean);
+          renderGroup(group.name, members);
         });
+
+        const ungrouped = characters.filter(char => !assignedNames.has(char.name));
+        renderGroup(manifest.ungroupedGroup || 'Other OCs', ungrouped);
       } catch (err) {
         console.error(err);
         groupsContainer.innerHTML = '<p class="error-state" data-en="Could not load characters." data-es="No se pudieron cargar los personajes.">Could not load characters.</p>';
