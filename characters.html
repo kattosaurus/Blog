@@ -40,11 +40,9 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
 
     body {
-      margin: 0;
       min-height: 100vh;
       background-color: var(--bg-color);
       transition: background-color 0.3s ease;
@@ -56,7 +54,6 @@
     h1, h2, h3, h4 { margin: 0; }
     p { font-weight: 300; line-height: 1.6; }
 
-    /* Controls */
     .controls {
       position: fixed;
       top: 15px;
@@ -80,7 +77,6 @@
       -webkit-tap-highlight-color: transparent;
       font-family: inherit;
     }
-
     .control-btn:hover { background-color: var(--prof-bg); }
 
     .burger {
@@ -98,10 +94,8 @@
       transition: background-color 0.2s;
       font-family: inherit;
     }
-
     .burger:hover { background-color: var(--btn-bg); }
 
-    /* Dropdown */
     .dropdown {
       display: flex;
       flex-direction: column;
@@ -111,7 +105,7 @@
       background-color: var(--header-bg);
       min-width: 180px;
       border-radius: 8px;
-      box-shadow: 0px 8px 24px var(--dropdown-shadow);
+      box-shadow: 0 8px 24px var(--dropdown-shadow);
       border: 1px solid var(--btn-bg);
       overflow: hidden;
       z-index: 100;
@@ -121,14 +115,12 @@
       pointer-events: none;
       transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s ease, border 0.3s ease;
     }
-
     .dropdown.show {
       opacity: 1;
       visibility: visible;
       transform: translateY(0) scale(1);
       pointer-events: auto;
     }
-
     .dropdown a {
       color: var(--text-main);
       padding: 12px 16px;
@@ -138,16 +130,13 @@
       transition: background-color 0.2s, color 0.2s;
       -webkit-tap-highlight-color: transparent;
     }
-
     .dropdown a:hover { background-color: var(--prof-bg); }
-
     .dropdown .separator {
       height: 1px;
       background-color: var(--btn-bg);
       margin: 4px 0;
     }
 
-    /* Content */
     .tab-container {
       width: 100%;
       max-width: 1000px;
@@ -155,31 +144,35 @@
       padding: 20px 20px 60px;
       animation: slideUp 0.6s ease-out;
     }
-
     @keyframes slideUp {
       from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     .tab-container h2 {
       font-size: 2rem;
       margin-bottom: 0.5rem;
       color: var(--text-main);
     }
-
     .intro-text {
       font-size: 1.05rem;
       color: var(--text-muted);
       margin-bottom: 2rem;
     }
 
-    /* Character Grid */
+    .char-group { margin-top: 2.5rem; }
+    .char-group:first-child { margin-top: 0; }
+    .group-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      padding-bottom: 0.65rem;
+      border-bottom: 1px solid var(--card-border);
+    }
     .char-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 20px;
     }
-
     .char-card {
       background: var(--card-bg);
       border-radius: 20px;
@@ -190,19 +183,12 @@
       flex-direction: column;
       position: relative;
     }
-
     .char-card:hover {
       transform: translateY(-6px);
       box-shadow: 0 12px 32px var(--dropdown-shadow);
       border-color: var(--prof-bg);
     }
-
-    .char-accent {
-      height: 5px;
-      width: 100%;
-      flex-shrink: 0;
-    }
-
+    .char-accent { height: 5px; width: 100%; flex-shrink: 0; }
     .char-img-wrap {
       width: 100%;
       aspect-ratio: 1;
@@ -212,7 +198,6 @@
       justify-content: center;
       background: var(--section-bg);
     }
-
     .char-img-wrap img {
       width: 100%;
       height: 100%;
@@ -220,24 +205,14 @@
       display: block;
       transition: transform 0.4s ease;
     }
-
-    .char-card:hover .char-img-wrap img {
-      transform: scale(1.05);
-    }
-
+    .char-card:hover .char-img-wrap img { transform: scale(1.05); }
     .char-info {
       padding: 18px 20px 22px;
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
-
-    .char-name {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
+    .char-name { font-size: 1.25rem; font-weight: 600; color: var(--text-main); }
     .char-desc {
       font-size: 0.88rem;
       color: var(--text-muted);
@@ -247,7 +222,6 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-
     .char-link {
       margin-top: auto;
       padding-top: 10px;
@@ -261,31 +235,18 @@
       transition: opacity 0.2s;
       align-self: flex-start;
     }
-
     .char-link:hover { opacity: 0.7; }
-
-    .char-link.hidden { display: none; }
-
-    /* Loading & Error */
-    .loading-state {
+    .loading-state, .error-state {
       text-align: center;
       padding: 80px 20px;
-      color: var(--text-muted);
-      font-weight: 300;
-      font-size: 1.1rem;
     }
-
-    .error-state {
-      text-align: center;
-      padding: 80px 20px;
-      color: #ff4747;
-    }
+    .loading-state { color: var(--text-muted); font-weight: 300; font-size: 1.1rem; }
+    .error-state { color: #ff4747; }
 
     @media (max-width: 600px) {
       .char-grid { grid-template-columns: 1fr; }
       .tab-container { padding: 16px 16px 50px; }
     }
-
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--btn-bg); border-radius: 10px; }
@@ -293,7 +254,6 @@
   </style>
 </head>
 <body>
-
   <div class="controls">
     <button id="burger" class="burger" onclick="toggleDropdown()">≡</button>
     <button id="theme-toggle" class="control-btn" data-en="Theme" data-es="Tema">Theme</button>
@@ -311,17 +271,16 @@
     <a href="stories.html" data-en="Stories" data-es="Historias">Stories</a>
   </div>
 
-  <div class="tab-container">
+  <main class="tab-container">
     <h2 data-en="My Characters" data-es="Mis Personajes">My Characters</h2>
     <p class="intro-text" data-en="A collection of my original characters (OCs). Click any card to learn more about them." data-es="Una colección de mis personajes originales (OCs). Haz clic en cualquier tarjeta para saber más sobre ellos.">A collection of my original characters (OCs). Click any card to learn more about them.</p>
 
-    <div class="char-grid" id="char-grid">
+    <div id="char-groups">
       <p class="loading-state" data-en="Loading characters..." data-es="Cargando personajes...">Loading characters...</p>
     </div>
-  </div>
+  </main>
 
   <script>
-    /* ── Language & Theme ── */
     let currentLang = 'en';
 
     const langBtn = document.getElementById('lang-toggle');
@@ -334,34 +293,24 @@
       });
     });
 
-    const themeBtn = document.getElementById('theme-toggle');
-    themeBtn.addEventListener('click', () => {
+    document.getElementById('theme-toggle').addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme');
-      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-      document.documentElement.setAttribute('data-theme', newTheme);
+      document.documentElement.setAttribute('data-theme', currentTheme === 'light' ? 'dark' : 'light');
     });
 
-    /* ── Dropdown ── */
     function toggleDropdown() {
-      document.getElementById("dropmeow").classList.toggle("show");
+      document.getElementById('dropmeow').classList.toggle('show');
     }
     window.onclick = function(event) {
       if (!event.target.matches('.burger')) {
-        var dropdowns = document.getElementsByClassName("dropdown");
-        for (var i = 0; i < dropdowns.length; i++) {
-          var openDropdown = dropdowns[i];
-          if (openDropdown.classList.contains('show')) {
-            openDropdown.classList.remove('show');
-          }
-        }
+        document.querySelectorAll('.dropdown.show').forEach(dropdown => dropdown.classList.remove('show'));
       }
     };
 
-    /* ── Character Loader ── */
-    const grid = document.getElementById('char-grid');
+    const groupsContainer = document.getElementById('char-groups');
 
     function extractDocLink(desc) {
-      const match = desc.match(/https:\/\/docs\.google\.com\/[^"]+/);
+      const match = desc.match(/https:\/\/docs\.google\.com\/[^\"]+/);
       return match ? match[0] : null;
     }
 
@@ -372,35 +321,77 @@
     async function loadCharacters() {
       try {
         const res = await fetch('ocs/characters.json', { cache: 'no-cache' });
+        if (!res.ok) throw new Error(`Could not load characters: ${res.status}`);
         const characters = await res.json();
-
-        grid.innerHTML = '';
+        const groups = new Map();
 
         characters.forEach(char => {
-          const card = document.createElement('div');
-          card.className = 'char-card';
+          // Characters without an explicit group remain together in the existing OC collection.
+          const groupName = char.group || 'Warrior Cats OCs';
+          if (!groups.has(groupName)) groups.set(groupName, []);
+          groups.get(groupName).push(char);
+        });
 
-          const docLink = extractDocLink(char.description);
-          const cleanDesc = cleanDescription(char.description);
-          const color = char.color || '#999';
+        groupsContainer.replaceChildren();
+        groups.forEach((members, groupName) => {
+          const section = document.createElement('section');
+          section.className = 'char-group';
 
-          card.innerHTML = `
-            <div class="char-accent" style="background-color: ${color};"></div>
-            <div class="char-img-wrap">
-              <img src="${char.image}" alt="${char.name}" loading="lazy" onerror="this.style.display='none'">
-            </div>
-            <div class="char-info">
-              <div class="char-name">${char.name}</div>
-              <div class="char-desc">${cleanDesc}</div>
-              ${docLink ? `<a href="${docLink}" target="_blank" class="char-link">More info →</a>` : ''}
-            </div>
-          `;
+          const heading = document.createElement('h3');
+          heading.className = 'group-title';
+          heading.textContent = groupName;
+          section.appendChild(heading);
 
-          grid.appendChild(card);
+          const grid = document.createElement('div');
+          grid.className = 'char-grid';
+          members.forEach(char => {
+            const card = document.createElement('article');
+            card.className = 'char-card';
+
+            const accent = document.createElement('div');
+            accent.className = 'char-accent';
+            accent.style.backgroundColor = char.color || '#999';
+            card.appendChild(accent);
+
+            const imageWrap = document.createElement('div');
+            imageWrap.className = 'char-img-wrap';
+            const image = document.createElement('img');
+            image.src = char.image;
+            image.alt = char.name;
+            image.loading = 'lazy';
+            image.onerror = () => { image.style.display = 'none'; };
+            imageWrap.appendChild(image);
+            card.appendChild(imageWrap);
+
+            const info = document.createElement('div');
+            info.className = 'char-info';
+            const name = document.createElement('div');
+            name.className = 'char-name';
+            name.textContent = char.name;
+            const description = document.createElement('div');
+            description.className = 'char-desc';
+            description.textContent = cleanDescription(char.description || '');
+            info.append(name, description);
+
+            const docLink = extractDocLink(char.description || '');
+            if (docLink) {
+              const link = document.createElement('a');
+              link.href = docLink;
+              link.target = '_blank';
+              link.rel = 'noopener noreferrer';
+              link.className = 'char-link';
+              link.textContent = 'More info →';
+              info.appendChild(link);
+            }
+            card.appendChild(info);
+            grid.appendChild(card);
+          });
+          section.appendChild(grid);
+          groupsContainer.appendChild(section);
         });
       } catch (err) {
         console.error(err);
-        grid.innerHTML = '<p class="error-state" data-en="Could not load characters." data-es="No se pudieron cargar los personajes.">Could not load characters.</p>';
+        groupsContainer.innerHTML = '<p class="error-state" data-en="Could not load characters." data-es="No se pudieron cargar los personajes.">Could not load characters.</p>';
       }
     }
 
