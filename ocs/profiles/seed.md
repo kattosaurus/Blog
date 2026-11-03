@@ -1,7 +1,13 @@
 # Seed
 
-Write Seed's full character description here using Markdown.
+Basic info:
+|--------|
+|15 Moons old|
+|Tom|
+|Rouge, In a group named "The Crest"|
+
+![Image of seed, made in clangen.kattosaur.us](https://github.com/kattosaurus/Blog/blob/main/ocs/Seed.png?raw=true)
 
 ## About
 
-Add their history, personality, relationships, and any other details here.
+
