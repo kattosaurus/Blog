@@ -1,6 +1,8 @@
 # Seed
 
-Basic info:
+Seed currently resides in **The Crest**
+
+Basic information
 |--------|
 |15 Moons old|
 |Tom|
@@ -10,4 +12,8 @@ Basic info:
 
 ## About
 
+Seed is a Tabby cat, with spots on his back, a patterned tail and scars on his neck.
+He's good with herbs, just like a medicine cat.
+
+Shy, but smart. Not a good speaker or hunter, he's a good storyteller.
 
