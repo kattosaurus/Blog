@@ -1,4 +1,5 @@
-/* Shared social footer, injected into every HTML page during the Pages build. */
+/* Shared social footer, injected into every HTML page during the Pages build.
+   Styled with the site's own CSS variables (theme toggle + EN/ES toggle aware). */
 (() => {
   const ICONS = {
     x: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
@@ -22,181 +23,135 @@
   footer.className = 'social-footer';
   footer.setAttribute('aria-label', 'Social links');
   footer.innerHTML = `
-    <p class="social-footer__title">Find me around the internet</p>
-    <nav aria-label="Social links">
-      ${LINKS.map((l, i) => `
-      <a href="${l.href}" target="_blank" rel="noopener noreferrer" data-social="${l.id}" aria-label="${l.label} (opens in a new tab)" style="--i:${i}">
-        <span class="social-icon">${ICONS[l.id]}</span>
-        <span class="social-label">${l.label}</span>
-      </a>`).join('')}
-    </nav>
-    <p class="social-footer__copy">© ${new Date().getFullYear()} kattosaurus</p>
+    <div class="social-footer__inner">
+      <p class="social-footer__title" data-en="Find me around the internet" data-es="Encuéntrame en internet">Find me around the internet</p>
+      <nav aria-label="Social links">
+        ${LINKS.map((l) => `
+        <a href="${l.href}" target="_blank" rel="noopener noreferrer" data-social="${l.id}" aria-label="${l.label} (opens in a new tab)">
+          <span class="social-icon">${ICONS[l.id]}</span>
+          <span>${l.label}</span>
+        </a>`).join('')}
+      </nav>
+      <p class="social-footer__copy">© ${new Date().getFullYear()} Katto</p>
+    </div>
   `;
 
   const style = document.createElement('style');
   style.textContent = `
     .social-footer {
-      --social-text: #f3f4f6;
-      --social-muted: rgba(243, 244, 246, .55);
-      isolation: isolate;
-      margin: 4rem auto 0;
-      max-width: 1100px;
-      padding: 2.75rem 1rem 2rem;
+      --sf-bg: var(--header-bg, #000000);
+      --sf-text: var(--text-main, #ffffff);
+      --sf-muted: var(--text-muted, #ffffff9a);
+      --sf-btn: var(--btn-bg, #ffffff20);
+      --sf-btn-hover: var(--prof-bg, #ffffff36);
+      --sf-accent: var(--colored-button, #434ed4);
+      background-color: var(--sf-bg);
+      color: var(--sf-text);
+      font-family: system-ui, -apple-system, sans-serif;
+      margin-top: 40px;
+      overflow: hidden;
+      padding: 40px 20px 28px;
       position: relative;
       text-align: center;
+      transition: background-color .3s ease, color .3s ease;
+      width: 100%;
     }
-    /* Glowing gradient divider that fades out at the edges */
-    .social-footer::before {
-      background: linear-gradient(90deg, transparent, #a78bfa 30%, #54e6d2 50%, #ff6b9d 70%, transparent);
-      content: "";
-      height: 1px;
-      left: 8%;
-      opacity: .7;
-      position: absolute;
-      right: 8%;
-      top: 0;
-    }
-    /* Soft ambient glow behind the footer */
-    .social-footer::after {
-      background:
-        radial-gradient(40% 100% at 30% 0%, rgba(167, 139, 250, .16), transparent 70%),
-        radial-gradient(40% 100% at 70% 0%, rgba(84, 230, 210, .10), transparent 70%);
-      content: "";
-      height: 140px;
-      left: 0;
-      pointer-events: none;
-      position: absolute;
-      right: 0;
-      top: 0;
-      z-index: -1;
+    .social-footer *,
+    .social-footer *::before,
+    .social-footer *::after { box-sizing: border-box; }
+    .social-footer__inner {
+      margin: 0 auto;
+      max-width: 1100px;
+      position: relative;
+      z-index: 1;
     }
     .social-footer__title {
-      color: var(--social-muted);
-      font-size: .78rem;
-      font-weight: 600;
-      letter-spacing: .18em;
-      margin: 0 0 1.4rem;
-      text-transform: uppercase;
-    }
-    .social-footer__copy {
-      color: var(--social-muted);
-      font-size: .8rem;
-      margin: 1.75rem 0 0;
+      color: var(--sf-muted);
+      font-size: 1.25rem;
+      font-weight: 300;
+      line-height: 1.6;
+      margin: 0 0 20px;
+      transition: color .3s ease;
     }
     .social-footer nav {
       display: flex;
       flex-wrap: wrap;
-      gap: .7rem;
+      gap: 10px;
       justify-content: center;
     }
     .social-footer a {
-      --social-accent: #a78bfa;
-      --mx: 50%;
-      --my: 50%;
+      -webkit-tap-highlight-color: transparent;
       align-items: center;
-      -webkit-backdrop-filter: blur(14px) saturate(140%);
-      backdrop-filter: blur(14px) saturate(140%);
-      background: linear-gradient(145deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .02));
-      border-radius: 16px;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, .25), inset 0 1px 0 rgba(255, 255, 255, .06);
-      color: var(--social-text);
+      background-color: var(--sf-btn);
+      border-radius: 30px;
+      color: var(--btn-text, var(--sf-text));
       display: inline-flex;
-      font-size: .92rem;
-      font-weight: 550;
-      gap: .65rem;
-      isolation: isolate;
-      min-height: 48px;
-      overflow: hidden;
-      padding: .45rem 1.05rem .45rem .5rem;
-      position: relative;
+      font-size: .9375rem;
+      font-weight: 500;
+      gap: 10px;
+      min-height: 44px;
+      padding: 8px 18px 8px 12px;
       text-decoration: none;
-      transition: transform .3s cubic-bezier(.2, .8, .2, 1), box-shadow .3s ease;
+      transition: background-color .2s, color .2s, transform .2s;
     }
-    /* Gradient border that lights up on hover */
-    .social-footer a::before {
-      background: linear-gradient(135deg, rgba(255, 255, 255, .16), var(--social-accent) 55%, rgba(255, 255, 255, .06));
-      border-radius: inherit;
-      content: "";
-      inset: 0;
-      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor;
-      mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
-      opacity: .35;
-      padding: 1px;
-      pointer-events: none;
-      position: absolute;
-      transition: opacity .3s ease;
-      z-index: 1;
-    }
-    /* Spotlight that follows the cursor */
-    .social-footer a::after {
-      background: radial-gradient(120px circle at var(--mx) var(--my), color-mix(in srgb, var(--social-accent) 30%, transparent), transparent 70%);
-      content: "";
-      inset: 0;
-      opacity: 0;
-      pointer-events: none;
-      position: absolute;
-      transition: opacity .3s ease;
-      z-index: -1;
-    }
-    .social-footer a[data-social="x"] { --social-accent: #e5e7eb; }
-    .social-footer a[data-social="youtube"] { --social-accent: #ff4d5a; }
-    .social-footer a[data-social="tiktok"] { --social-accent: #54e6d2; }
-    .social-footer a[data-social="discord"] { --social-accent: #8b9bff; }
-    .social-footer a[data-social="roblox"] { --social-accent: #ff6b6b; }
-    .social-footer a[data-social="github"] { --social-accent: #c4b5fd; }
     .social-footer .social-icon {
       align-items: center;
-      background: linear-gradient(145deg, color-mix(in srgb, var(--social-accent) 28%, transparent), color-mix(in srgb, var(--social-accent) 8%, transparent));
-      border-radius: 11px;
-      color: var(--social-accent);
       display: inline-flex;
-      height: 34px;
+      height: 20px;
       justify-content: center;
-      transition: transform .3s cubic-bezier(.2, .8, .2, 1), background-color .3s ease;
-      width: 34px;
+      width: 20px;
     }
     .social-footer .social-icon svg {
       fill: currentColor;
-      height: 17px;
-      width: 17px;
+      height: 18px;
+      width: 18px;
     }
     .social-footer a:hover,
     .social-footer a:focus-visible {
-      box-shadow: 0 12px 28px rgba(0, 0, 0, .35), 0 0 24px color-mix(in srgb, var(--social-accent) 22%, transparent), inset 0 1px 0 rgba(255, 255, 255, .1);
-      transform: translateY(-4px);
+      background-color: var(--sf-accent);
+      color: #ffffff;
+      transform: translateY(-2px);
     }
-    .social-footer a:hover::before,
-    .social-footer a:focus-visible::before { opacity: 1; }
-    .social-footer a:hover::after,
-    .social-footer a:focus-visible::after { opacity: 1; }
-    .social-footer a:hover .social-icon,
-    .social-footer a:focus-visible .social-icon { transform: scale(1.1) rotate(-6deg); }
-    .social-footer a:active { transform: translateY(-1px) scale(.98); }
+    .social-footer a:active { transform: scale(.96); }
     .social-footer a:focus-visible {
-      outline: 2px solid var(--social-accent);
+      outline: 2px solid var(--sf-text);
       outline-offset: 3px;
     }
-    /* Staggered entrance */
-    .social-footer.is-ready a {
-      opacity: 0;
-      transform: translateY(14px);
+    .social-footer__copy {
+      color: var(--sf-muted);
+      font-size: .875rem;
+      font-weight: 300;
+      margin: 24px 0 0;
+      transition: color .3s ease;
     }
-    .social-footer.is-ready.is-visible a {
-      animation: social-rise .6s cubic-bezier(.2, .8, .2, 1) both;
-      animation-delay: calc(var(--i) * 70ms);
+
+    /* Twinkling stars, same look as the page header */
+    .social-footer__star {
+      animation: social-twinkle var(--duration) infinite ease-in-out;
+      background-color: var(--star-color, #ffffff);
+      border-radius: 50%;
+      filter: var(--star-filter, drop-shadow(0 0 2px rgba(255, 255, 255, .9)));
+      pointer-events: none;
+      position: absolute;
+      transition: background-color .3s, filter .3s;
+      will-change: transform, opacity;
     }
-    @keyframes social-rise {
-      from { opacity: 0; transform: translateY(14px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes social-twinkle {
+      0%, 100% { opacity: var(--star-opacity-min, .4); transform: translate3d(0, 0, 0) scale(.8); }
+      50% { opacity: 1; transform: translate3d(var(--move-x), var(--move-y), 0) scale(1.2); }
     }
-    @media (max-width: 520px) {
-      .social-footer nav { display: grid; gap: .6rem; grid-template-columns: repeat(2, 1fr); }
+
+    @media (min-width: 768px) {
+      .social-footer__title { font-size: 1.5rem; }
+    }
+    @media (max-width: 480px) {
+      .social-footer { padding: 32px 16px 24px; }
+      .social-footer nav { display: grid; grid-template-columns: repeat(2, 1fr); }
       .social-footer a { justify-content: flex-start; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .social-footer a, .social-footer .social-icon, .social-footer a::before, .social-footer a::after { transition: none; }
-      .social-footer.is-ready a { animation: none !important; opacity: 1; transform: none; }
+      .social-footer__star { animation: none; opacity: .6; }
+      .social-footer a { transition: background-color .2s, color .2s; }
       .social-footer a:hover, .social-footer a:focus-visible { transform: none; }
     }
   `;
@@ -204,24 +159,21 @@
   document.head.appendChild(style);
   document.body.appendChild(footer);
 
-  // Cursor-following spotlight on each link
-  footer.querySelectorAll('a').forEach((a) => {
-    a.addEventListener('pointermove', (e) => {
-      const r = a.getBoundingClientRect();
-      a.style.setProperty('--mx', `${e.clientX - r.left}px`);
-      a.style.setProperty('--my', `${e.clientY - r.top}px`);
-    });
-  });
-
-  // Reveal animation when the footer scrolls into view
-  if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    footer.classList.add('is-ready');
-    const io = new IntersectionObserver((entries) => {
-      if (entries.some((en) => en.isIntersecting)) {
-        footer.classList.add('is-visible');
-        io.disconnect();
-      }
-    }, { threshold: 0.15 });
-    io.observe(footer);
+  // Stars (added after layout so they sit behind the content)
+  const fragment = document.createDocumentFragment();
+  for (let i = 0; i < 28; i++) {
+    const star = document.createElement('div');
+    star.className = 'social-footer__star';
+    const size = Math.random() * 1.5 + 1;
+    star.style.width = `${size}px`;
+    star.style.height = `${size}px`;
+    star.style.left = `${Math.random() * 100}%`;
+    star.style.top = `${Math.random() * 100}%`;
+    star.style.setProperty('--move-x', `${Math.random() * 16 - 8}px`);
+    star.style.setProperty('--move-y', `${Math.random() * 16 - 8}px`);
+    star.style.setProperty('--duration', `${Math.random() * 3 + 4}s`);
+    star.style.animationDelay = `${Math.random() * -4}s`;
+    fragment.appendChild(star);
   }
+  footer.insertBefore(fragment, footer.firstChild);
 })();
