@@ -22,5 +22,10 @@
     "description": "Seed is a Tabby cat, with spots on his back, a patterned tail and scars on his neck. He's good with herbs, just like a medicine cat.",
     "color": "#00FF91",
     "image": "ocs/Seed.png"
-  }
+  },
+   {
+     "name": "Katto",
+     "description": "Dr. Murray Arthur Barr, known as Dr. B, and later as Katto, was a head scientist at the Biological Studies Facility. He is now a white-grey latex katto.",
+     "color": "#EEEEEE",
+     "image": "portfolio/Origin.png"
 ]
