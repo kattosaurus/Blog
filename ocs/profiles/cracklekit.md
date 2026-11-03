@@ -8,7 +8,7 @@ Basic information
 |She-cat|
 |Kit, ShadowClan|
 
-![Image of cracklekit, made in clangen.kattosaur.us](https://github.com/kattosaurus/Blog/blob/main/ocs/Cracklekit.png?raw=true)
+![Image of cracklekit, made in clangen.kattosaur.us](https://github.com/kattosaurus/Blog/blob/main/ocs/Crackle.png?raw=true)
 
 ## About
 
