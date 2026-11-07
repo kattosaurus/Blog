@@ -15,8 +15,8 @@ const MODS_FILE = `${DIR}/mods.json`;
 const OUT_FILE = `${DIR}/downloads.json`;
 
 const { mods } = JSON.parse(await readFile(MODS_FILE, 'utf8'));
-let prev = {};
-try { prev = JSON.parse(await readFile(OUT_FILE, 'utf8')).mods || {}; } catch {}
+let previous = {};
+try { previous = JSON.parse(await readFile(OUT_FILE, 'utf8')).mods || {}; } catch {}
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const cfGet = async path => {
@@ -28,7 +28,6 @@ const cfGet = async path => {
 };
 
 // gameId 432 = Minecraft. Try the exact slug first, then a looser text search.
-// No classId filter, so a mod listed under a different category is still found.
 async function curseforge(slug) {
   const q = encodeURIComponent(slug);
   for (const path of [
@@ -36,11 +35,11 @@ async function curseforge(slug) {
     `/mods/search?gameId=432&searchFilter=${q}`
   ]) {
     const data = await cfGet(path);
-    const m = data.find(d => d.slug === slug);
-    if (m) return {
-      cf: m.downloadCount,
-      img: m.logo?.thumbnailUrl || m.logo?.url || '',
-      summary: typeof m.summary === 'string' ? m.summary.trim() : ''
+    const mod = data.find(item => item.slug === slug);
+    if (mod) return {
+      cf: mod.downloadCount,
+      img: mod.logo?.thumbnailUrl || mod.logo?.url || '',
+      desc: typeof mod.summary === 'string' ? mod.summary.trim() : ''
     };
   }
   throw new Error(`no CurseForge project with slug "${slug}"`);
@@ -54,10 +53,10 @@ async function modrinth(slugs) {
       headers: { 'User-Agent': 'changed-addons-list (github actions)' }
     });
     if (!res.ok) throw new Error(`Modrinth: HTTP ${res.status}`);
-    for (const p of await res.json()) {
-      const v = { dl: p.downloads, icon: p.icon_url || '' };
-      out[p.slug.toLowerCase()] = v;
-      out[p.id.toLowerCase()] = v;
+    for (const project of await res.json()) {
+      const value = { dl: project.downloads, icon: project.icon_url || '' };
+      out[project.slug.toLowerCase()] = value;
+      out[project.id.toLowerCase()] = value;
     }
   }
   return out;
@@ -65,41 +64,39 @@ async function modrinth(slugs) {
 
 let mr = {};
 try {
-  mr = await modrinth(mods.filter(m => m.mr).map(m => m.mr));
-} catch (e) {
-  console.warn(e.message, '- keeping previous Modrinth numbers');
+  mr = await modrinth(mods.filter(mod => mod.mr).map(mod => mod.mr));
+} catch (error) {
+  console.warn(error.message, '- keeping previous Modrinth numbers');
 }
 
 const result = {};
 const failed = [], noImage = [];
-for (const m of mods) {
-  const old = prev[m.cf] || {};
-  const lv = m.mr ? mr[m.mr.toLowerCase()] : null;
-  let cf = { cf: old.cf ?? 0, img: '', summary: '' };
+for (const mod of mods) {
+  const old = previous[mod.cf] || {};
+  const lv = mod.mr ? mr[mod.mr.toLowerCase()] : null;
+  let cf = { cf: old.cf ?? 0, img: '', desc: '' };
   try {
-    cf = await curseforge(m.cf);
-    // CurseForge provides this summary; escape it because the page renders descriptions as HTML.
-    if (cf.summary) m.desc = cf.summary.replace(/[&<>"']/g, c => ({
-      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-    })[c]);
-  } catch (e) {
-    failed.push(m.cf);
-    console.warn(`${m.cf}: ${e.message} - keeping previous values`);
+    cf = await curseforge(mod.cf);
+  } catch (error) {
+    failed.push(mod.cf);
+    console.warn(`${mod.cf}: ${error.message} - keeping previous values`);
   }
-  // CurseForge logo, else Modrinth icon, else whatever was saved last time
+
+  // Keep the last known summary if CurseForge temporarily fails or has no summary.
+  const desc = cf.desc || old.desc || old.summary || '';
   const img = cf.img || (lv && lv.icon) || old.img || '';
-  if (!img) noImage.push(m.cf);
-  result[m.cf] = { cf: cf.cf, img };
-  if (m.mr) result[m.cf].mr = lv ? lv.dl : (old.mr ?? 0);
+  if (!img) noImage.push(mod.cf);
+
+  result[mod.cf] = { cf: cf.cf, img, desc };
+  if (mod.mr) result[mod.cf].mr = lv ? lv.dl : (old.mr ?? 0);
   await sleep(200); // be polite to the API
 }
 
-await writeFile(MODS_FILE, JSON.stringify({ groups: JSON.parse(await readFile(MODS_FILE, 'utf8')).groups, mods }, null, 2) + '\n');
 await writeFile(
   OUT_FILE,
   JSON.stringify({ updated: new Date().toISOString().slice(0, 10), mods: result }, null, 2) + '\n'
 );
-console.log(`Updated ${Object.keys(result).length} mods and their available CurseForge summaries`);
+console.log(`Updated ${Object.keys(result).length} mods with available CurseForge summaries`);
 if (failed.length) console.log('CurseForge lookup failed for:', failed.join(', '));
 if (noImage.length) console.log('No image found for:', noImage.join(', '));
 if (failed.length === mods.length) {
