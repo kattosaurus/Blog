@@ -31,7 +31,7 @@ h1{margin:0}
 .header{background:var(--header-bg);width:100%;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:80px 20px 40px;position:relative;overflow:hidden}
 .your{font-weight:300;color:var(--text-muted);font-size:1.25rem;z-index:1}
 .profs{display:inline-block;background:var(--prof-bg);padding:10px 14px;font-size:1.5rem;z-index:1}
-.star{position:absolute;background:var(--star-color);border-radius:50%;pointer-events:none;will-change:transform,opacity;transform:translate3d(0,0,0);filter:var(--star-filter);animation:tw var(--duration) infinite ease-in-out}
+.star{position:absolute;background:var(--star-color);border-radius:50%;pointer-events:none;will-change:transform,opacity;transform:translate3d(0,0,0);filter:var(--star-filter);animation:tw var(--d,5s) ease-in-out infinite alternate;opacity:var(--star-opacity-min)}
 @keyframes tw{0%,100%{opacity:var(--star-opacity-min);transform:translate3d(0,0,0) scale(.8)}50%{opacity:1;transform:translate3d(var(--move-x),var(--move-y),0) scale(1.2)}}
 .summary{color:var(--muted);margin-top:10px}
 .summary b{color:var(--text);font-weight:600;font-variant-numeric:tabular-nums}
@@ -91,7 +91,7 @@ select option{background:#1b1b1b}
 .inner{padding:2px 18px 18px;display:flex;flex-direction:column;gap:12px;max-width:68ch}
 .split{display:flex;gap:16px;font-size:.875rem;color:var(--muted)}
 .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
-.more{background:var(--accent);padding:10px 20px;color:#fff;text-decoration:none;border-radius:30px;min-height:44px;display:flex;align-items:center;justify-content:center;font-size:.9375rem;font-weight:500}
+.more{background:var(--accent);padding:10px 20px;color:#fff;text-decoration:none;border-radius:30px;min-height:44px;display:flex;align-items:center;justify-content:center;font-size:.9375rem;font-weight:600}
 .more:hover{filter:brightness(1.15)}
 .more.alt{background:var(--btn-bg)}
 .row.flash,.card.flash{animation:flash 1.4s ease-out}
@@ -175,20 +175,21 @@ const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const fmt=n=>n<1000?String(n):n<1e6?Number((n/1000).toFixed(1))+'K':Number((n/1e6).toFixed(2))+'M';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const plain=s=>String(s||'').replace(/<[^>]*>/g,' ');
+const plain=s=>String(s||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
 const hue=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return h%360;};
-const initials=n=>{const w=n.replace(/[^A-Za-z0-9 ]/g,' ').trim().split(/\s+/);return((w[0]||'?')[0]+(w[1]?w[1][0]:'')).toUpperCase();};
+const initials=n=>{const w=n.replace(/[^A-Za-z0-9 ]/g,' ').trim().split(/\s+/);return((w[0]||'?')[0]+(w[1]?w[1][0]:'')) .toUpperCase();};
 
 async function getJSON(url){const r=await fetch(url,{cache:'no-cache'});if(!r.ok)throw new Error(url+' '+r.status);return r.json();}
 
-// Live Modrinth data (count, icon, brand colour) straight from the browser (their API allows CORS).
+// Modrinth exposes public project summaries and downloads directly from the browser.
 async function liveModrinth(slugs){
   const out={};
   for(let i=0;i<slugs.length;i+=100){
     const ids=encodeURIComponent(JSON.stringify(slugs.slice(i,i+100)));
     const list=await getJSON('https://api.modrinth.com/v2/projects?ids='+ids);
     list.forEach(p=>{
-      const v={dl:p.downloads,icon:p.icon_url||'',color:p.color!=null?'#'+p.color.toString(16).padStart(6,'0'):null};
+      const summary = typeof p.description === 'string' ? p.description.replace(/\s+/g,' ').trim() : '';
+      const v={dl:p.downloads??0,icon:p.icon_url||'',color:p.color!=null?'#'+p.color.toString(16).padStart(6,'0'):null,summary};
       out[p.slug.toLowerCase()]=v;out[p.id.toLowerCase()]=v;
     });
   }
@@ -206,9 +207,9 @@ function compute(){
     const d=DL[m.cf]||{};
     const lv=m.mr?LIVE[m.mr.toLowerCase()]:null;
     const cf=d.cf??0, mr=lv?lv.dl:(d.mr??0);
-    // Tried in order: mods.json "img" > downloads.json "img" > Modrinth icon > initials tile
     const imgs=[...new Set([m.img,d.img,lv&&lv.icon].filter(Boolean))];
-    return {...m,cfN:cf,mrN:mr,total:cf+mr,imgs,accent:lv&&lv.color};
+    const summary=(lv&&lv.summary&&lv.summary.trim()) || (m.desc||d.desc||'');
+    return {...m,cfN:cf,mrN:mr,total:cf+mr,imgs,accent:lv&&lv.color,desc:summary};
   });
   const byDl=[...MODS].sort((a,b)=>b.total-a.total);
   RANK={};byDl.forEach((m,i)=>RANK[m.cf]=i+1);
@@ -222,7 +223,7 @@ function nextImg(el){
 
 function iconHTML(m,lg){
   const style=`--h:${hue(m.name)}${m.accent?`;--c:${m.accent}`:''}`;
-  const img=m.imgs.length?`<img src="${esc(m.imgs[0])}" data-next="${esc(JSON.stringify(m.imgs.slice(1)))}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="nextImg(this)">`:'';
+  const img=m.imgs.length?`<img src="${esc(m.imgs[0])}" data-next="${esc(JSON.stringify(m.imgs.slice(1)))}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="nextImg(this)" />`:'';
   return `<span class="ico${lg?' lg':''}" style="${style}"><b>${esc(initials(m.name))}</b>${img}</span>`;
 }
 
@@ -302,7 +303,7 @@ function setSummary(animate){
 /* ---------- Controls ---------- */
 function buildChips(){
   $('chips').innerHTML=[['all','All'],...GKEYS.map(k=>[k,DATA.groups[k]])].map(([k,l])=>
-    `<button type="button" class="chip" data-g="${esc(k)}" aria-pressed="${k===S.group}"${k==='all'?'':` style="--g:${gHue(k)}"`}>${k==='all'?'':'<i></i>'}${l}<span data-c></span></button>`).join('');
+    `<button type="button" class="chip" data-g="${esc(k)}" aria-pressed="${k===S.group}"${k==='all'?'':' style="--g:${gHue(k)}"'}>${k==='all'?'':'<i></i>'}${l}<span data-c></span></button>`).join('');
 }
 
 function syncControls(){
@@ -374,7 +375,7 @@ function initUI(){
     try{
       const slugs=data.mods.filter(m=>m.mr).map(m=>m.mr);
       if(slugs.length){
-        LIVE=await liveModrinth(slugs);   // live counts + icons + brand colours
+        LIVE=await liveModrinth(slugs);
         compute();render();setSummary(true);
       }
     }catch(e){console.warn('Live Modrinth fetch failed, using cached values',e);}
@@ -386,18 +387,18 @@ function initUI(){
 
 /* ---------- Header stars (original) ---------- */
 (function(){
- const header=document.querySelector('.header'),f=document.createDocumentFragment();
- for(let i=0;i<45;i++){
-  const s=document.createElement('div'),z=Math.random()*1.5+1;
-  s.className='star';s.style.width=s.style.height=z+'px';
-  s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';
-  s.style.setProperty('--move-x',(Math.random()*16-8)+'px');
-  s.style.setProperty('--move-y',(Math.random()*16-8)+'px');
-  s.style.setProperty('--duration',(Math.random()*3+4)+'s');
-  s.style.animationDelay=Math.random()*-4+'s';
-  f.appendChild(s);
- }
- header.appendChild(f);
+  const header=document.querySelector('.header'),f=document.createDocumentFragment();
+  for(let i=0;i<45;i++){
+   const s=document.createElement('div'),z=Math.random()*1.5+1;
+   s.className='star';s.style.width=s.style.height=z+'px';
+   s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';
+   s.style.setProperty('--move-x',(Math.random()*16-8)+'px');
+   s.style.setProperty('--move-y',(Math.random()*16-8)+'px');
+   s.style.setProperty('--duration',(Math.random()*3+4)+'s');
+   s.style.animationDelay=Math.random()*-4+'s';
+   f.appendChild(s);
+  }
+  header.appendChild(f);
 })();
 </script>
 </body>
