@@ -1,4 +1,4 @@
-// Refreshes downloads.json with CurseForge counts + logos and Modrinth counts.
+// Refreshes downloads.json with CurseForge counts, logos, and summaries plus Modrinth counts.
 // Runs in GitHub Actions; the key is read from the CURSEFORGE_API_KEY secret
 // and never reaches the browser. Needs Node 18+ (built-in fetch).
 import { readFile, writeFile } from 'node:fs/promises';
@@ -37,7 +37,11 @@ async function curseforge(slug) {
   ]) {
     const data = await cfGet(path);
     const m = data.find(d => d.slug === slug);
-    if (m) return { cf: m.downloadCount, img: m.logo?.thumbnailUrl || m.logo?.url || '' };
+    if (m) return {
+      cf: m.downloadCount,
+      img: m.logo?.thumbnailUrl || m.logo?.url || '',
+      summary: typeof m.summary === 'string' ? m.summary.trim() : ''
+    };
   }
   throw new Error(`no CurseForge project with slug "${slug}"`);
 }
@@ -71,9 +75,13 @@ const failed = [], noImage = [];
 for (const m of mods) {
   const old = prev[m.cf] || {};
   const lv = m.mr ? mr[m.mr.toLowerCase()] : null;
-  let cf = { cf: old.cf ?? 0, img: '' };
+  let cf = { cf: old.cf ?? 0, img: '', summary: '' };
   try {
     cf = await curseforge(m.cf);
+    // CurseForge provides this summary; escape it because the page renders descriptions as HTML.
+    if (cf.summary) m.desc = cf.summary.replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[c]);
   } catch (e) {
     failed.push(m.cf);
     console.warn(`${m.cf}: ${e.message} - keeping previous values`);
@@ -86,11 +94,12 @@ for (const m of mods) {
   await sleep(200); // be polite to the API
 }
 
+await writeFile(MODS_FILE, JSON.stringify({ groups: JSON.parse(await readFile(MODS_FILE, 'utf8')).groups, mods }, null, 2) + '\n');
 await writeFile(
   OUT_FILE,
   JSON.stringify({ updated: new Date().toISOString().slice(0, 10), mods: result }, null, 2) + '\n'
 );
-console.log(`Updated ${Object.keys(result).length} mods`);
+console.log(`Updated ${Object.keys(result).length} mods and their available CurseForge summaries`);
 if (failed.length) console.log('CurseForge lookup failed for:', failed.join(', '));
 if (noImage.length) console.log('No image found for:', noImage.join(', '));
 if (failed.length === mods.length) {
