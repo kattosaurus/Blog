@@ -1,7 +1,260 @@
-        <div id="art-panel">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:image" content="https://kattosaur.us/Online.png">
+  <meta property="og:title" content="Katto Commissions">
+  <meta property="og:description" content="Commission prices and artwork by Katto.">
+  <title>Commissions | Katto dot online</title>
+  <link rel="icon" href="favicon.ico">
+  <style>
+    :root{color-scheme:dark;--bg:#121212;--surface:#1a1a1a;--surface-2:#242424;--text:#fff;--muted:#ffffff9a;--line:#ffffff20;--purple:#5865F2;--green:#57F287;--red:#ff4747;--shadow:#0008}
+    [data-theme="light"]{color-scheme:light;--bg:#f0f0f0;--surface:#fff;--surface-2:#e8e8e8;--text:#121212;--muted:#1212129a;--line:#00000020;--purple:#3b42b0;--green:#2a9d4a;--red:#d32f2f;--shadow:#0002}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;padding:76px 22px 64px;min-height:100vh;overflow-x:hidden;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,sans-serif;transition:background .2s,color .2s}
+    body.has-bar{padding-bottom:120px}
+    body.locked{overflow:hidden}
+    button,a,input,select{font:inherit}
+    button{cursor:pointer}
+    a{color:var(--purple)}
+    :focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+    [hidden]{display:none!important}
+
+    /* Toolbar */
+    .toolbar{position:fixed;z-index:20;inset:0 0 auto;display:flex;align-items:center;gap:12px;padding:13px max(22px,calc((100vw - 1080px)/2));background:var(--bg);border-bottom:1px solid var(--line)}
+    .toolbar .spacer{flex:1}
+    .toolbar a,.toolbar button{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:9px;padding:9px 13px;color:var(--text);background:var(--surface);text-decoration:none;font-weight:650}
+    .toolbar a:hover,.toolbar button:hover{border-color:var(--purple)}
+    .cart-count{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:99px;background:var(--green);color:#121212;font-size:.78rem}
+
+    main{max-width:1080px;margin:auto}
+
+    /* Hero + endless banner */
+    .hero{padding:24px 0 36px}
+    .lede{max-width:720px;margin:0 0 22px;color:var(--muted);font-size:1.04rem}
+    .sale-banner{display:flex;align-items:center;gap:15px;max-width:790px;padding:15px 18px;border:1px solid color-mix(in srgb,var(--green) 55%,transparent);border-radius:14px;background:color-mix(in srgb,var(--green) 8%,var(--surface))}
+    .sale-badge{flex:0 0 auto;padding:6px 10px;border-radius:8px;background:var(--green);color:#121212;font-size:.84rem;font-weight:850}
+    .sale-banner p{margin:0;color:var(--muted)}
+    .sale-banner strong{color:var(--text)}
+
+    .collage-window{position:relative;display:grid;place-items:center;width:100vw;height:clamp(400px,46vw,540px);margin:0 0 26px calc(50% - 50vw);overflow:hidden;background:var(--surface);isolation:isolate}
+    .collage-window::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,color-mix(in srgb,var(--bg) 28%,transparent) 0%,color-mix(in srgb,var(--bg) 22%,transparent) 60%,var(--bg) 100%)}
+    .art-collage{position:absolute;left:50%;top:50%;z-index:0;transform:translate(-50%,-50%) rotate(-8deg);pointer-events:none}
+    .collage-row{height:var(--tile);margin-bottom:var(--gap);overflow:hidden}
+    .collage-track{display:flex;width:max-content;animation:collage-marquee var(--dur,80s) linear infinite;will-change:transform}
+    .collage-row.reverse .collage-track{animation-direction:reverse}
+    .collage-group{display:flex;flex:0 0 auto}
+    .collage-tile{flex:0 0 auto;width:var(--tile);height:var(--tile);margin-right:var(--gap);border-radius:14px;overflow:hidden;background:var(--surface-2)}
+    .collage-tile img{display:block;width:100%;height:100%;object-fit:cover;filter:blur(2px) saturate(1.1);transform:scale(1.05)}
+    /* The track holds two identical groups, so sliding exactly half its width loops with no jump. */
+    @keyframes collage-marquee{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+    @media(hover:hover){.collage-window:hover .collage-track{animation-play-state:paused}}
+
+    .banner-card{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:14px;width:min(640px,calc(100% - 32px));padding:30px 34px;border:1px solid var(--line);border-radius:22px;background:color-mix(in srgb,var(--bg) 62%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);text-align:center;box-shadow:0 18px 50px var(--shadow)}
+    .banner-chip{display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border-radius:99px;background:var(--green);color:#121212;font-size:.84rem;font-weight:800}
+    .banner-title{margin:0;font-size:clamp(2.2rem,6vw,3.8rem);line-height:1.1;font-weight:750;letter-spacing:-.01em}
+    .banner-sub{margin:0;max-width:460px;color:var(--text);opacity:.82;font-size:1.02rem}
+    .banner-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:4px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:10px;padding:11px 20px;background:var(--surface);color:var(--text);font-weight:700;text-decoration:none}
+    .btn:hover{border-color:var(--purple)}
+    .btn.solid{border-color:var(--purple);background:var(--purple);color:#fff}
+    .btn.solid:hover{filter:brightness(1.12)}
+
+    /* Sections */
+    .section{margin:0 0 60px;scroll-margin-top:84px}
+    .section-heading{margin-bottom:22px}
+    .section-heading h2{margin:0;font-size:clamp(1.5rem,3vw,1.9rem)}
+    .section-heading p{max-width:700px;margin:7px 0 0;color:var(--muted)}
+
+    .seg{display:inline-flex;gap:4px;margin:0 0 26px;padding:4px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+    .seg button{border:0;border-radius:9px;padding:10px 20px;color:var(--muted);background:transparent;font-weight:700;transition:.18s ease}
+    .seg button[aria-pressed=true]{color:#fff;background:var(--purple)}
+
+    .sub{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:0 0 14px;font-size:1.08rem}
+    .sub small{color:var(--muted);font-size:.85rem;font-weight:500}
+    .step{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--purple);color:#fff;font-size:.82rem;font-weight:800}
+    .sub+.matrix,.sub+.chips{margin-bottom:12px}
+    .block-gap{margin-top:38px}
+
+    /* Price matrix */
+    .matrix{display:grid;grid-template-columns:minmax(110px,1.1fr) repeat(3,minmax(0,1fr));gap:10px;align-items:stretch}
+    .col-head{align-self:end;padding-bottom:2px;color:var(--muted);font-size:.85rem;font-weight:700;text-align:center}
+    .row-head{display:flex;flex-direction:column;justify-content:center;min-width:0}
+    .row-head strong{font-size:1rem}
+    .row-head small{color:var(--muted);font-size:.8rem;line-height:1.3}
+    .cell{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-height:76px;padding:10px 6px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);color:var(--text);text-align:center;transition:border-color .15s,background .15s,transform .15s}
+    .cell:hover{border-color:var(--purple);transform:translateY(-1px)}
+    .cell[aria-pressed=true]{border-color:var(--green);background:color-mix(in srgb,var(--green) 13%,var(--surface))}
+    .cell[aria-pressed=true]::after{content:"✓";position:absolute;top:5px;right:8px;color:var(--green);font-size:.85rem;font-weight:900}
+    .cell-old{color:var(--muted);text-decoration:line-through;font-size:.78rem;line-height:1.2}
+    .cell-price{color:var(--green);font-size:1.28rem;font-weight:800;line-height:1.2}
+    .qty-badge{position:absolute;top:5px;left:8px;color:var(--text);font-size:.78rem;font-weight:800}
+    .cell.unavailable{border-style:dashed;background:transparent;color:var(--muted);cursor:default}
+    .cell.unavailable:hover{border-color:var(--line);transform:none}
+    .cell.quote{border-style:dashed;background:transparent;color:var(--purple);font-size:.82rem;font-weight:700;line-height:1.3;text-decoration:none}
+
+    /* Add-on chips */
+    .chips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .chip{position:relative;display:flex;flex-direction:column;gap:6px;min-height:118px;padding:15px 16px 15px 48px;border:1.5px solid var(--line);border-radius:13px;background:var(--surface);color:var(--text);text-align:left;transition:border-color .15s,background .15s}
+    .chip:hover{border-color:var(--purple)}
+    .chip[aria-pressed=true]{border-color:var(--green);background:color-mix(in srgb,var(--green) 13%,var(--surface))}
+    .chip .check{position:absolute;left:15px;top:16px;display:grid;place-items:center;width:22px;height:22px;border:1.5px solid var(--line);border-radius:7px;color:transparent;font-size:.8rem;font-weight:900;line-height:1}
+    .chip[aria-pressed=true] .check{border-color:var(--green);background:var(--green);color:#121212}
+    .chip strong{font-size:1rem}
+    .chip .chip-desc{color:var(--muted);font-size:.86rem;line-height:1.4}
+    .chip .chip-price{margin-top:auto;display:flex;align-items:baseline;gap:8px}
+
+    /* Product card (software) */
+    .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+    .product-card{display:flex;flex-direction:column;min-height:220px;padding:22px;border:1px solid var(--line);border-radius:15px;background:var(--surface);box-shadow:0 9px 24px var(--shadow)}
+    .product-card h3{margin:0 0 8px;font-size:1.1rem}
+    .product-card p{margin:0 0 18px;color:var(--muted);font-size:.93rem}
+    .card-bottom{margin-top:auto}
+    .price-line{display:flex;align-items:baseline;gap:10px;margin-bottom:13px}
+    .old-price{color:var(--muted);text-decoration:line-through;font-size:.95rem}
+    .sale-price{color:var(--green);font-size:1.42rem;line-height:1.2;font-weight:800}
+    .add-button,.primary{width:100%;border:0;border-radius:10px;padding:13px 16px;background:var(--purple);color:#fff;font-weight:750}
+    .add-button:hover,.primary:hover{filter:brightness(1.12)}
+    .primary:disabled{opacity:.6;cursor:default;filter:none}
+    .add-button[aria-pressed=true]{background:var(--green);color:#121212}
+    [aria-pressed=true] .when-off,[aria-pressed=false] .when-on{display:none}
+    .fine-print{margin:14px 0 0;color:var(--muted);font-size:.88rem}
+
+    /* Terms */
+    .terms-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+    .term{padding:19px;border:1px solid var(--line);border-radius:13px;background:var(--surface)}
+    .term h3{margin:0 0 6px;font-size:1rem}
+    .term p{margin:0;color:var(--muted);font-size:.92rem}
+    footer{padding:24px 0 0;border-top:1px solid var(--line);color:var(--muted);text-align:center;font-size:.9rem}
+
+    /* Sticky order bar */
+    .order-bar{position:fixed;z-index:25;inset:auto 0 0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px max(16px,calc((100vw - 1080px)/2)) calc(12px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -10px 30px var(--shadow);transform:translateY(110%);visibility:hidden;transition:transform .25s ease,visibility .25s}
+    .order-bar.show{transform:none;visibility:visible}
+    .order-summary{display:flex;flex-direction:column;line-height:1.3;min-width:0}
+    .order-summary strong{font-size:1.15rem}
+    .order-summary small{color:var(--muted)}
+    .order-bar .primary{width:auto;flex:0 0 auto;padding:13px 26px}
+
+    /* Order dialog */
+    .dialog-wrap{position:fixed;z-index:40;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;background:#000a;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}
+    .dialog-wrap.open{opacity:1;visibility:visible}
+    .sheet,.dialog{display:flex;flex-direction:column;width:min(540px,100%);max-height:calc(100dvh - 36px);border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:0 20px 60px #0008;transform:translateY(14px);transition:transform .22s ease;overflow:hidden}
+    .dialog-wrap.open .sheet,.dialog-wrap.open .dialog{transform:none}
+    .dialog{padding:28px;text-align:center;overflow:auto}
+    .dialog h2{margin:0 0 10px}
+    .dialog p{margin:0 0 20px;color:var(--muted)}
+    .sheet-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--line)}
+    .sheet-head h2{margin:0;font-size:1.25rem}
+    .icon-btn{width:36px;height:36px;border:0;border-radius:9px;color:var(--text);background:transparent;font-size:1.4rem;line-height:1}
+    .icon-btn:hover{background:var(--surface-2)}
+    .sheet-body{flex:1;overflow:auto;padding:6px 22px 8px}
+    .sheet-foot{padding:14px 22px calc(16px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--surface)}
+    .sheet-foot .fine-print{margin:10px 0 0;text-align:center;font-size:.82rem}
+    .block{padding:16px 0;border-bottom:1px solid var(--line)}
+    .block:last-of-type{border-bottom:0}
+    .block .sub{font-size:1rem;margin-bottom:12px}
+    .empty{padding:36px 0;color:var(--muted);text-align:center}
+    .empty .btn{margin-top:14px}
+
+    .order-line{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:12px 0;border-bottom:1px solid var(--line)}
+    .order-line:last-child{border-bottom:0}
+    .order-line small{display:block;color:var(--muted);font-size:.82rem}
+    .line-total{font-weight:750;text-align:right}
+    .line-actions{display:flex;align-items:center;gap:8px;margin-top:6px}
+    .line-actions button{min-width:32px;height:32px;border:1px solid var(--line);border-radius:8px;padding:0 9px;color:var(--text);background:var(--surface-2);font-weight:700}
+    .line-actions .remove{min-width:0;border:0;background:transparent;color:var(--red);font-size:.84rem;font-weight:600}
+    .line-actions span{min-width:20px;text-align:center;font-weight:700}
+    .totals{margin-top:6px;padding-top:12px;border-top:1px solid var(--line)}
+    .totals div{display:flex;justify-content:space-between;color:var(--muted);font-size:.92rem}
+    .totals .grand{margin-top:6px;color:var(--text);font-size:1.15rem;font-weight:800}
+    .totals .grand span:last-child{color:var(--green)}
+
+    .pills{display:flex;flex-wrap:wrap;gap:8px}
+    .pill{position:relative}
+    .pill input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+    .pill span{display:block;padding:9px 15px;border:1.5px solid var(--line);border-radius:99px;background:var(--surface-2);font-weight:650;font-size:.93rem;transition:.15s}
+    .pill input:checked+span{border-color:var(--purple);background:var(--purple);color:#fff}
+    .pill input:focus-visible+span{outline:2px solid var(--purple);outline-offset:2px}
+    .field{display:block;width:100%;margin-top:10px;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;color:var(--text);background:var(--surface-2)}
+    .field:focus{outline:none;border-color:var(--purple)}
+    .error{min-height:1.3em;margin:10px 0 0;color:var(--red);font-size:.9rem}
+
+    @media(max-width:820px){
+      .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .chips{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media(max-width:560px){
+      body{padding:76px 15px 46px}
+      body.has-bar{padding-bottom:110px}
+      .toolbar{padding-inline:12px;gap:7px}
+      .toolbar a,.toolbar button{padding:9px 10px}
+      .hero{padding-top:18px}
+      .collage-window{height:420px;margin-bottom:22px}
+      .banner-card{padding:24px 20px}
+      .cards,.terms-grid,.chips{grid-template-columns:1fr}
+      .chip{min-height:0}
+      .section{margin-bottom:50px}
+      .matrix{grid-template-columns:minmax(66px,.8fr) repeat(3,minmax(0,1fr));gap:6px}
+      .row-head small{display:none}
+      .row-head strong{font-size:.9rem}
+      .col-head{font-size:.72rem}
+      .cell{min-height:68px;padding:8px 2px}
+      .cell-price{font-size:1.1rem}
+      .cell.quote{font-size:.72rem}
+      .sale-banner{align-items:flex-start}
+      .dialog-wrap{align-items:flex-end;padding:0}
+      .sheet{width:100%;max-height:94dvh;border-radius:18px 18px 0 0;border-bottom:0;transform:translateY(40px)}
+      .order-bar .primary{padding:13px 18px}
+    }
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important}
+      .collage-track{animation:none}
+    }
+  </style>
+</head>
+<body>
+  <header class="toolbar" aria-label="Page controls">
+    <a href="index.html">← Home</a>
+    <span class="spacer"></span>
+    <button id="theme-toggle" type="button" aria-label="Toggle color theme">◐</button>
+    <button id="cart-toggle" type="button">Your order <span class="cart-count" id="cart-count" hidden>0</span></button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="collage-window" aria-label="Portfolio artwork banner">
+        <div class="art-collage" id="art-collage" aria-hidden="true"></div>
+        <div class="banner-card">
+          <span class="banner-chip">50% off all fixed prices</span>
+          <h1 class="banner-title">Commissions</h1>
+          <p class="banner-sub">Art and custom mods, made to order. Pick what you want, send a request, and I’ll confirm everything before I start.</p>
+          <div class="banner-actions">
+            <a class="btn solid" href="#choose">Start an order</a>
+            <a class="btn" href="portfolio.html">See my work</a>
+          </div>
+        </div>
+      </div>
+      <p class="lede">Choose an option below. Your total updates as you go, and nothing is charged when you send a request.</p>
+      <div class="sale-banner" role="status"><span class="sale-badge">50% OFF</span><p><strong>All fixed prices are half their original price.</strong><br>The discount is already included in the prices shown and in your order total.</p></div>
+    </section>
+
+    <section class="section" id="choose" aria-labelledby="choose-title">
+      <div class="section-heading">
+        <h2 id="choose-title">Choose a commission</h2>
+        <p>Tap an option to add it to your order. A bar will appear at the bottom when you’re ready to review and send.</p>
+      </div>
+
+      <div class="seg" role="group" aria-label="Commission category">
+        <button class="category-tab" type="button" data-category="art" aria-pressed="true">Art</button>
+        <button class="category-tab" type="button" data-category="software" aria-pressed="false">Software &amp; mods</button>
+      </div>
+
+      <div id="art-panel">
         <h3 class="sub"><span class="step">1</span>Pick a style and size <small>Tap again to remove</small></h3>
         <div class="matrix" id="matrix" role="group" aria-label="Art styles and sizes"></div>
-        <p class="fine-print">Rendered art uses the listed prices. Full-body work starts at the listed minimum.</p>
+        <p class="fine-print">Rendered hips-up work is quoted based on complexity. <a href="https://discord.com/users/kattstarz">Ask for a quote on Discord</a>. Rendered full body starts at the listed minimum.</p>
 
         <h3 class="sub block-gap"><span class="step">2</span>Add extras <small>Optional, goes with an art commission</small></h3>
         <div class="chips" id="addon-cards" role="group" aria-label="Add-ons"></div>
@@ -12,3 +265,341 @@
         <div class="cards" id="software-cards"></div>
       </div>
     </section>
+
+    <section class="section" aria-labelledby="terms-title">
+      <div class="section-heading"><h2 id="terms-title">Before you order</h2><p>Please review these details before sending your request.</p></div>
+      <div class="terms-grid">
+        <article class="term"><h3>Payment</h3><p>Accepted methods: Discord Nitro, Nitro Basic, gift cards, or art trade. Choose a preference when you send your request; no payment is taken automatically.</p></article>
+        <article class="term"><h3>Content</h3><p>No explicit NSFW or fetish content. Zoophilia, pedophilia, and heavy gore are not accepted. Romantic themes and suggestive poses are okay.</p></article>
+        <article class="term"><h3>Rights &amp; use</h3><p>Personal use only. I retain copyright and may showcase commissioned work. No AI training or NFT use.</p></article>
+        <article class="term"><h3>Scope &amp; support</h3><p>Complexity may change a final quote, which will be confirmed before work begins. Software is built for an agreed version; future updates or compatibility fixes may need a separate quote.</p></article>
+      </div>
+    </section>
+
+    <footer>Questions? <a href="https://discord.com/users/kattstarz">Contact @kattstarz on Discord</a> or <a href="mailto:contact@kattosaur.us">contact@kattosaur.us</a>. <a href="portfolio.html">View the full portfolio</a>.</footer>
+  </main>
+
+  <!-- Sticky order bar -->
+  <div class="order-bar" id="order-bar" aria-hidden="true">
+    <div class="order-summary" aria-live="polite"><strong id="bar-total">$0.00</strong><small id="bar-count">0 items · 50% off applied</small></div>
+    <button class="primary" id="bar-open" type="button">Review &amp; send</button>
+  </div>
+
+  <!-- Review & send -->
+  <div class="dialog-wrap" id="order-dialog" role="dialog" aria-modal="true" aria-labelledby="order-title">
+    <form class="sheet" id="order-form" novalidate>
+      <div class="sheet-head">
+        <h2 id="order-title">Review &amp; send</h2>
+        <button class="icon-btn" type="button" id="order-close" aria-label="Close">×</button>
+      </div>
+      <div class="sheet-body">
+        <div class="empty" id="order-empty" hidden>
+          <p>Your order is empty. Pick a style and size to get started.</p>
+          <button class="btn solid" type="button" id="empty-browse">Browse commissions</button>
+        </div>
+        <div id="order-content">
+          <div class="block">
+            <h3 class="sub"><span class="step">1</span>Your order</h3>
+            <div id="order-items"></div>
+            <div class="totals">
+              <div><span>Original price</span><span id="tot-orig">$0.00</span></div>
+              <div><span>50% off</span><span id="tot-save">−$0.00</span></div>
+              <div class="grand"><span>Total</span><span id="tot-final">$0.00</span></div>
+            </div>
+          </div>
+          <div class="block">
+            <h3 class="sub"><span class="step">2</span>How can I reach you?</h3>
+            <div class="pills" role="radiogroup" aria-label="Contact method">
+              <label class="pill"><input type="radio" name="contact-type" value="Discord" checked><span>Discord</span></label>
+              <label class="pill"><input type="radio" name="contact-type" value="X (Twitter)"><span>X (Twitter)</span></label>
+              <label class="pill"><input type="radio" name="contact-type" value="Email"><span>Email</span></label>
+              <label class="pill"><input type="radio" name="contact-type" value="Other"><span>Other</span></label>
+            </div>
+            <input class="field" id="contact-handle" required maxlength="160" autocomplete="off" aria-label="Your username or email" placeholder="Your Discord username">
+          </div>
+          <div class="block">
+            <h3 class="sub"><span class="step">3</span>Payment preference <small>Nothing is charged now</small></h3>
+            <div class="pills" role="radiogroup" aria-label="Payment preference">
+              <label class="pill"><input type="radio" name="payment-method" value="Discord Nitro" checked><span>Discord Nitro</span></label>
+              <label class="pill"><input type="radio" name="payment-method" value="Nitro Basic"><span>Nitro Basic</span></label>
+              <label class="pill"><input type="radio" name="payment-method" value="Gift Card"><span>Gift card</span></label>
+              <label class="pill"><input type="radio" name="payment-method" value="Art Trade"><span>Art trade</span></label>
+            </div>
+          </div>
+          <p class="error" id="order-error" role="alert"></p>
+        </div>
+      </div>
+      <div class="sheet-foot" id="order-foot">
+        <button class="primary" id="place-order" type="submit">Send request</button>
+        <p class="fine-print">Your request and contact details are sent so I can follow up and confirm the project.</p>
+      </div>
+    </form>
+  </div>
+
+  <!-- Confirmation -->
+  <div class="dialog-wrap" id="confirmation-dialog" role="dialog" aria-modal="true" aria-labelledby="confirmation-title">
+    <div class="dialog">
+      <h2 id="confirmation-title">Request sent!</h2>
+      <p id="confirmation-message">Your request has been received.</p>
+      <button class="primary" type="button" id="confirmation-close">Done</button>
+    </div>
+  </div>
+
+  <script>
+    const DISCOUNT=.5,WORKER_URL='https://receipts.laminaxlabs.workers.dev/';
+    const $=id=>document.getElementById(id);
+    const el=(tag,props={},...kids)=>{const n=document.createElement(tag);for(const[k,v]of Object.entries(props)){if(v==null||v===false)continue;if(k==='class')n.className=v;else if(k==='text')n.textContent=v;else if(k.startsWith('on'))n.addEventListener(k.slice(2),v);else n.setAttribute(k,v===true?'':v)}kids.flat().forEach(c=>c!=null&&n.append(c));return n};
+
+    /* ---------- Products ---------- */
+    const SIZES=[['head','Headshot'],['hips','Hips & up'],['full','Full body']];
+    const STYLES=[['sketch','Sketch','Rough & quick'],['lineart','Line art','Clean inks'],['colored','Colored','Simple shading'],['render','Rendered','Full detail']];
+    const products=[
+      {id:'sketch-head',name:'Sketch · Headshot',kind:'art',style:'sketch',size:'head',price:2,desc:'Quick, rough sketch of your character’s head and shoulders.'},
+      {id:'sketch-hips',name:'Sketch · Hips & up',kind:'art',style:'sketch',size:'hips',price:5,desc:'A rough character sketch from the hips up.'},
+      {id:'sketch-full',name:'Sketch · Full body',kind:'art',style:'sketch',size:'full',price:8,desc:'A rough full-body character sketch.'},
+      {id:'line-head',name:'Line art · Headshot',kind:'art',style:'lineart',size:'head',price:5,desc:'Clean inked headshot, without color.'},
+      {id:'line-hips',name:'Line art · Hips & up',kind:'art',style:'lineart',size:'hips',price:8,desc:'Clean inked character art from the hips up.'},
+      {id:'line-full',name:'Line art · Full body',kind:'art',style:'lineart',size:'full',price:12,desc:'Clean inked full-body character art.'},
+      {id:'color-head',name:'Colored · Headshot',kind:'art',style:'colored',size:'head',price:8,desc:'Fully colored headshot with flat or simple shading.'},
+      {id:'color-hips',name:'Colored · Hips & up',kind:'art',style:'colored',size:'hips',price:12,desc:'Colored character art from the hips up, with simple shading.'},
+      {id:'color-full',name:'Colored · Full body',kind:'art',style:'colored',size:'full',price:15,desc:'Colored full-body character art with simple shading.'},
+      {id:'render-full',name:'Rendered · Full body',kind:'art',style:'render',size:'full',price:30,minimum:true,desc:'Fully rendered full-body art. Original $30 minimum; complexity may affect the final quote.'},
+      {id:'mod',name:'Mod commission',kind:'software',price:10,desc:'Custom logic or your OC in Changed Extras, including modeling, texturing, and implementation.'},
+      {id:'bg-simple',name:'Simple background',kind:'addon',price:5,desc:'A simple background to complement your art.'},
+      {id:'bg-detailed',name:'Detailed background',kind:'addon',price:8,desc:'A more involved background with extra detail.'},
+      {id:'extra-character',name:'Extra character',kind:'addon',price:5,desc:'Add one additional character to your illustration.'}
+    ];
+    const byId=Object.fromEntries(products.map(p=>[p.id,p]));
+    const cents=p=>Math.round(p.price*DISCOUNT*100);
+    const fmt=c=>'$'+(c/100).toFixed(2);
+    const short=c=>'$'+(c%100?(c/100).toFixed(2):String(c/100));
+
+    /* ---------- Storage (safe if blocked) ---------- */
+    const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(_){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(_){}}};
+
+    /* ---------- Cart ---------- */
+    const cart=new Map(); // product id -> quantity
+    const saved=store.get('kto-cart');
+    if(saved&&typeof saved==='object')for(const[id,q]of Object.entries(saved)){const n=Math.floor(Number(q));if(byId[id]&&n>=1&&n<=20)cart.set(id,n)}
+    const lines=()=>[...cart].map(([id,qty])=>({p:byId[id],qty}));
+    function totals(){let sale=0,orig=0,count=0;for(const{p,qty}of lines()){sale+=cents(p)*qty;orig+=p.price*100*qty;count+=qty}return{sale,orig,count}}
+    function toggle(id){cart.has(id)?cart.delete(id):cart.set(id,1);update()}
+    function setQty(id,q){if(q<=0)cart.delete(id);else cart.set(id,Math.min(q,20));update()}
+
+    /* ---------- Build the choosing UI ---------- */
+    function pickCell(p){
+      const c=cents(p);
+      const btn=el('button',{type:'button',class:'cell','data-pid':p.id,'aria-pressed':'false',title:p.desc,'aria-label':p.name+', '+short(c)+(p.minimum?' minimum':'')+', 50% off, original '+short(p.price*100)},
+        el('span',{class:'qty-badge'}),
+        el('span',{class:'cell-old',text:short(p.price*100)}),
+        el('span',{class:'cell-price',text:short(c)+(p.minimum?'+':'')}));
+      btn.addEventListener('click',()=>toggle(p.id));
+      return btn;
+    }
+    function artCell(style,size){
+      const p=products.find(x=>x.kind==='art'&&x.style===style&&x.size===size);
+      if(p)return pickCell(p);
+      if(style==='render'&&size==='hips')return el('a',{class:'cell quote',href:'https://discord.com/users/kattstarz',target:'_blank',rel:'noopener'},el('span',{text:'Ask for'}),el('span',{text:'a quote'}));
+      return el('span',{class:'cell unavailable','aria-label':'Not offered',text:'—'});
+    }
+    const matrix=$('matrix');
+    matrix.append(el('span'),...SIZES.map(([,label])=>el('span',{class:'col-head',text:label})));
+    STYLES.forEach(([style,label,note])=>{
+      matrix.append(el('div',{class:'row-head'},el('strong',{text:label}),el('small',{text:note})));
+      SIZES.forEach(([size])=>matrix.append(artCell(style,size)));
+    });
+
+    products.filter(p=>p.kind==='addon').forEach(p=>{
+      const chip=el('button',{type:'button',class:'chip','data-pid':p.id,'aria-pressed':'false'},
+        el('span',{class:'check','aria-hidden':'true',text:'✓'}),
+        el('strong',{text:p.name}),
+        el('span',{class:'chip-desc',text:p.desc}),
+        el('span',{class:'chip-price'},el('span',{class:'old-price',text:short(p.price*100)}),el('span',{class:'sale-price',text:short(cents(p))})));
+      chip.addEventListener('click',()=>toggle(p.id));
+      $('addon-cards').append(chip);
+    });
+
+    products.filter(p=>p.kind==='software').forEach(p=>{
+      const btn=el('button',{type:'button',class:'add-button','data-pid':p.id,'aria-pressed':'false'},el('span',{class:'when-off',text:'Add to order'}),el('span',{class:'when-on',text:'✓ Added · tap to remove'}));
+      btn.addEventListener('click',()=>toggle(p.id));
+      $('software-cards').append(el('article',{class:'product-card'},
+        el('h3',{text:p.name}),el('p',{text:p.desc}),
+        el('div',{class:'card-bottom'},el('div',{class:'price-line'},el('span',{class:'old-price',text:short(p.price*100)}),el('span',{class:'sale-price',text:short(cents(p))})),btn)));
+    });
+
+    document.querySelectorAll('.category-tab').forEach(b=>b.addEventListener('click',()=>{
+      const software=b.dataset.category==='software';
+      document.querySelectorAll('.category-tab').forEach(t=>t.setAttribute('aria-pressed',String(t===b)));
+      $('art-panel').hidden=software;$('software-panel').hidden=!software;
+    }));
+
+    /* ---------- Sync everything with the cart ---------- */
+    function syncButtons(){
+      document.querySelectorAll('[data-pid]').forEach(b=>{
+        const q=cart.get(b.dataset.pid)||0;
+        b.setAttribute('aria-pressed',String(q>0));
+        const badge=b.querySelector('.qty-badge');if(badge)badge.textContent=q>1?'×'+q:'';
+      });
+    }
+    function renderBar(){
+      const t=totals(),has=t.count>0;
+      $('order-bar').classList.toggle('show',has);
+      $('order-bar').setAttribute('aria-hidden',String(!has));
+      document.body.classList.toggle('has-bar',has);
+      $('bar-total').textContent=fmt(t.sale);
+      $('bar-count').textContent=t.count+(t.count===1?' item':' items')+' · 50% off applied';
+      $('cart-count').textContent=t.count;$('cart-count').hidden=!has;
+    }
+    function renderOrder(){
+      const t=totals(),items=$('order-items'),active=document.activeElement,key=active&&active.dataset&&active.dataset.key;
+      $('order-empty').hidden=t.count>0;$('order-content').hidden=t.count===0;$('order-foot').hidden=t.count===0;
+      items.replaceChildren();
+      lines().forEach(({p,qty})=>{
+        const c=cents(p);
+        const minus=el('button',{type:'button','aria-label':'Remove one '+p.name,'data-key':p.id+':minus',text:'−'});
+        const plus=el('button',{type:'button','aria-label':'Add one '+p.name,'data-key':p.id+':plus',text:'+'});
+        const remove=el('button',{type:'button',class:'remove','data-key':p.id+':remove',text:'Remove'});
+        minus.addEventListener('click',()=>setQty(p.id,qty-1));
+        plus.addEventListener('click',()=>setQty(p.id,qty+1));
+        remove.addEventListener('click',()=>setQty(p.id,0));
+        items.append(el('div',{class:'order-line'},
+          el('div',{},el('strong',{text:p.name}),el('small',{text:short(c)+' each · 50% off'}),p.minimum?el('small',{text:'Minimum price. Final quote is confirmed before work starts.'}):null),
+          el('div',{class:'line-total',text:fmt(c*qty)}),
+          el('div',{class:'line-actions'},minus,el('span',{text:qty}),plus,remove)));
+      });
+      $('tot-orig').textContent=fmt(t.orig);
+      $('tot-save').textContent='−'+fmt(t.orig-t.sale);
+      $('tot-final').textContent=fmt(t.sale);
+      $('place-order').textContent='Send request · '+fmt(t.sale);
+      if(key){const again=items.querySelector('[data-key="'+key+'"]');if(again)again.focus();else if(t.count)sheet.focus({preventScroll:true})}
+    }
+    function update(){syncButtons();renderBar();renderOrder();store.set('kto-cart',Object.fromEntries(cart))}
+
+    /* ---------- Dialogs ---------- */
+    const orderDialog=$('order-dialog'),confirmation=$('confirmation-dialog'),sheet=$('order-form');
+    let lastFocus=null;
+    function lock(){document.body.classList.toggle('locked',orderDialog.classList.contains('open')||confirmation.classList.contains('open'))}
+    function openOrder(){
+      lastFocus=document.activeElement;
+      $('order-error').textContent='';
+      renderOrder();
+      orderDialog.classList.add('open');lock();
+      sheet.tabIndex=-1;sheet.focus({preventScroll:true});
+    }
+    function closeOrder(){orderDialog.classList.remove('open');lock();if(lastFocus&&lastFocus.focus)lastFocus.focus({preventScroll:true})}
+    function closeConfirmation(){confirmation.classList.remove('open');lock()}
+    $('cart-toggle').addEventListener('click',openOrder);
+    $('bar-open').addEventListener('click',openOrder);
+    $('order-close').addEventListener('click',closeOrder);
+    $('empty-browse').addEventListener('click',()=>{closeOrder();$('choose').scrollIntoView()});
+    $('confirmation-close').addEventListener('click',closeConfirmation);
+    document.querySelectorAll('.dialog-wrap').forEach(d=>d.addEventListener('click',e=>{if(e.target!==d)return;d===orderDialog?closeOrder():closeConfirmation()}));
+    document.addEventListener('keydown',e=>{
+      if(e.key==='Escape'){if(confirmation.classList.contains('open'))closeConfirmation();else if(orderDialog.classList.contains('open'))closeOrder();return}
+      if(e.key==='Tab'&&orderDialog.classList.contains('open')){
+        const f=[...sheet.querySelectorAll('button,input,a[href]')].filter(n=>!n.disabled&&n.offsetParent!==null);
+        if(!f.length)return;
+        const first=f[0],last=f[f.length-1];
+        if(e.shiftKey&&(document.activeElement===first||document.activeElement===sheet)){e.preventDefault();last.focus()}
+        else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
+      }
+    });
+
+    /* ---------- Contact details ---------- */
+    const handleInput=$('contact-handle');
+    const PLACEHOLDERS={'Discord':'Your Discord username','X (Twitter)':'@yourhandle','Email':'you@example.com','Other':'How should I reach you?'};
+    const radio=name=>sheet.elements[name].value;
+    function syncContact(){const t=radio('contact-type');handleInput.placeholder=PLACEHOLDERS[t];handleInput.type=t==='Email'?'email':'text';handleInput.inputMode=t==='Email'?'email':'text'}
+    const savedContact=store.get('kto-contact');
+    if(savedContact){
+      if(savedContact.type){const r=sheet.querySelector('input[name="contact-type"][value="'+CSS.escape(savedContact.type)+'"]');if(r)r.checked=true}
+      if(savedContact.pay){const r=sheet.querySelector('input[name="payment-method"][value="'+CSS.escape(savedContact.pay)+'"]');if(r)r.checked=true}
+      if(typeof savedContact.handle==='string')handleInput.value=savedContact.handle.slice(0,160);
+    }
+    syncContact();
+    const saveContact=()=>store.set('kto-contact',{type:radio('contact-type'),pay:radio('payment-method'),handle:handleInput.value});
+    sheet.addEventListener('change',e=>{if(e.target.name==='contact-type')syncContact();saveContact()});
+    handleInput.addEventListener('input',()=>{$('order-error').textContent='';saveContact()});
+
+    /* ---------- Send ---------- */
+    sheet.addEventListener('submit',async e=>{
+      e.preventDefault();
+      const error=$('order-error'),submit=$('place-order'),handle=handleInput.value.trim(),type=radio('contact-type');
+      const fail=(msg,focus)=>{error.textContent=msg;if(focus)focus.focus()};
+      if(!cart.size)return fail('Your order is empty. Pick an option first.');
+      if(!lines().some(({p})=>p.kind!=='addon'))return fail('Add-ons go with a commission. Close this and pick a style and size first.');
+      if(!handle)return fail('Enter your '+(type==='Email'?'email address':'username')+' so I can reach you.',handleInput);
+      if(type==='Email'&&!/^\S+@\S+\.\S+$/.test(handle))return fail('That email address doesn’t look right. Check it and try again.',handleInput);
+      error.textContent='';
+      const t=totals();
+      const order={
+        purchaseId:'KTO-'+Math.random().toString(36).slice(2,10).toUpperCase(),
+        paymentMethod:radio('payment-method'),
+        items:lines().map(({p,qty})=>({name:p.name,qty,price:cents(p)/100})),
+        contact:type+': '+handle,
+        totalUsd:t.sale/100,
+        timestamp:Date.now(),
+        discountPercent:50
+      };
+      submit.disabled=true;submit.textContent='Sending…';
+      try{
+        const response=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(order)});
+        if(!response.ok)throw new Error('Request failed');
+        cart.clear();update();
+        orderDialog.classList.remove('open');
+        $('confirmation-message').textContent='Your request '+order.purchaseId+' was sent. I will contact you to confirm the details and payment.';
+        confirmation.classList.add('open');lock();
+        $('confirmation-close').focus();
+      }catch(_){
+        error.textContent='Could not send your request. Please try again or contact @kattstarz on Discord.';
+      }finally{
+        submit.disabled=false;renderOrder();
+      }
+    });
+
+    $('theme-toggle').addEventListener('click',()=>{const light=document.documentElement.dataset.theme!=='light';document.documentElement.dataset.theme=light?'light':'dark'});
+    update();
+
+    /* ---------- Endless art banner ----------
+       Several tilted rows, each a track made of two identical groups.
+       The animation slides the track by exactly half its width (one group),
+       so it loops seamlessly forever on any screen size. */
+    const collageWindow=document.querySelector('.collage-window'),collage=$('art-collage');
+    const artwork=['Untitled205_20260118103028.png','Thunderpath.png','Origin.png','Lichen.png','LuminaraCat2.png','Untitled203_20260114155132.png'];
+    const ANGLE=8,SPEED=44,ROW_SPEED=[1,.78,1.14,.9];
+    let lastWidth=0;
+    function buildCollage(){
+      const W=collageWindow.clientWidth,H=collageWindow.clientHeight;
+      if(!W)return;
+      lastWidth=W;
+      const tile=Math.round(Math.min(300,Math.max(170,W*.2))),gap=8,pitch=tile+gap,rad=ANGLE*Math.PI/180;
+      const stageW=Math.ceil(W*Math.cos(rad)+H*Math.sin(rad))+pitch;
+      const stageH=Math.ceil(W*Math.sin(rad)+H*Math.cos(rad))+pitch;
+      const rows=Math.ceil(stageH/pitch);
+      // Whole number of artwork cycles per group so the order continues cleanly across the loop point.
+      const perGroup=Math.ceil((Math.ceil(stageW/pitch)+1)/artwork.length)*artwork.length;
+      collage.replaceChildren();
+      collage.style.setProperty('--tile',tile+'px');
+      collage.style.setProperty('--gap',gap+'px');
+      collage.style.width=stageW+'px';
+      for(let r=0;r<rows;r++){
+        const makeGroup=()=>{
+          const group=el('div',{class:'collage-group'});
+          for(let i=0;i<perGroup;i++){
+            const img=el('img',{src:'portfolio/'+artwork[(i+r*2)%artwork.length],alt:'',decoding:'async',draggable:'false'});
+            img.addEventListener('error',()=>{img.style.visibility='hidden'});
+            group.append(el('div',{class:'collage-tile'},img));
+          }
+          return group;
+        };
+        const track=el('div',{class:'collage-track'},makeGroup(),makeGroup());
+        track.style.setProperty('--dur',(perGroup*pitch/(SPEED*ROW_SPEED[r%ROW_SPEED.length])).toFixed(1)+'s');
+        collage.append(el('div',{class:'collage-row'+(r%2?' reverse':'')},track));
+      }
+    }
+    buildCollage();
+    let collageTimer;
+    window.addEventListener('resize',()=>{clearTimeout(collageTimer);collageTimer=setTimeout(()=>{if(Math.abs(collageWindow.clientWidth-lastWidth)>8)buildCollage()},200)});
+  </script>
+</body>
+</html>
