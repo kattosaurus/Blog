@@ -9,8 +9,8 @@
   <title>Characters | Katto dot online</title>
   <link rel="icon" href="favicon.ico">
   <style>
-    :root { --bg-color:#121212; --header-bg:#000; --text-main:#fff; --text-muted:#ffffff9a; --prof-bg:#ffffff36; --btn-bg:#ffffff20; --btn-text:#fff; --dropdown-shadow:rgba(0,0,0,.5); --colored-button:#434ed4; --card-bg:#1a1a1a; --card-border:#ffffff15; --section-bg:#ffffff08; }
-    [data-theme="light"] { --bg-color:#f0f0f0; --header-bg:#e0e0e0; --text-main:#121212; --text-muted:#1212129a; --prof-bg:#0000001a; --btn-bg:#00000015; --btn-text:#121212; --dropdown-shadow:rgba(0,0,0,.1); --colored-button:#151b68; --card-bg:#fff; --card-border:#00000015; --section-bg:#00000008; }
+    :root { --bg-color:#121212; --header-bg:#000; --text-main:#fff; --text-muted:#ffffff9a; --prof-bg:#ffffff36; --btn-bg:#ffffff20; --btn-text:#fff; --dropdown-shadow:rgba(0,0,0,.5); --colored-button:#ffb347; --card-bg:rgba(255,255,255,.02); --card-border:rgba(255,255,255,.12); --section-bg:rgba(255,255,255,.04); }
+    [data-theme="light"] { --bg-color:#f0f0f0; --header-bg:#e0e0e0; --text-main:#121212; --text-muted:#1212129a; --prof-bg:#0000001a; --btn-bg:#00000015; --btn-text:#121212; --dropdown-shadow:rgba(0,0,0,.18); --colored-button:#a65d00; --card-bg:rgba(0,0,0,.02); --card-border:rgba(0,0,0,.1); --section-bg:rgba(0,0,0,.03); }
     * { box-sizing:border-box; margin:0; padding:0; }
     html { scroll-behavior:smooth; }
     body { min-height:100vh; background:var(--bg-color); transition:background-color .3s; font-family:system-ui,-apple-system,sans-serif; color:var(--text-main); padding-top:60px; }
@@ -19,7 +19,7 @@
     .control-btn,.burger { color:var(--btn-text); background:var(--btn-bg); border:0; padding:8px 12px; border-radius:6px; cursor:pointer; font:500 14px system-ui; }
     .control-btn:hover,.burger:hover { background:var(--prof-bg); }
     .burger { margin-right:auto; background:transparent; font-size:20px; }
-    .dropdown { display:flex; flex-direction:column; position:fixed; top:60px; left:15px; background:var(--header-bg); min-width:180px; border-radius:8px; box-shadow:0 8px 24px var(--dropdown-shadow); border:1px solid var(--btn-bg); overflow:hidden; z-index:100; opacity:0; visibility:hidden; transform:translateY(-10px); pointer-events:none; transition:.25s; }
+    .dropdown { display:flex; flex-direction:column; position:fixed; top:60px; left:15px; background:var(--header-bg); min-width:180px; border-radius:8px; box-shadow:0 8px 24px var(--dropdown-shadow); opacity:0; visibility:hidden; transform:translateY(-10px); transition:all .2s ease; pointer-events:none; z-index:19; }
     .dropdown.show { opacity:1; visibility:visible; transform:translateY(0); pointer-events:auto; }
     .dropdown a { color:var(--text-main); padding:12px 16px; text-decoration:none; font-size:14px; font-weight:500; }
     .dropdown a:hover { background:var(--prof-bg); }
@@ -43,9 +43,17 @@
     .char-desc { font-size:.88rem; color:var(--text-muted); line-height:1.5; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
     .char-link { margin-top:auto; padding-top:10px; font-size:.8rem; color:var(--colored-button); text-decoration:none; font-weight:500; align-self:flex-start; }
     .char-link:hover { opacity:.7; }
+    .password-gate { display:flex; flex-direction:column; gap:14px; max-width:480px; margin:0 auto; padding:24px 20px; border:1px solid var(--card-border); background:var(--card-bg); border-radius:18px; box-shadow:0 10px 28px var(--dropdown-shadow); }
+    .password-gate h3 { font-size:1.25rem; }
+    .password-text { color:var(--text-muted); }
+    .password-form { display:flex; gap:10px; flex-wrap:wrap; }
+    .password-form input { flex:1 1 200px; min-width:180px; padding:10px 12px; border-radius:8px; border:1px solid var(--card-border); background:var(--section-bg); color:var(--text-main); font:inherit; }
+    .password-form button { padding:10px 16px; border:0; border-radius:8px; background:var(--btn-bg); color:var(--btn-text); cursor:pointer; font:600 14px system-ui; }
+    .password-form button:hover { background:var(--prof-bg); }
+    .password-error { color:#ff6b6b; font-size:.9rem; min-height:1.2em; }
     .loading-state,.error-state { text-align:center; padding:80px 20px; }
     .loading-state { color:var(--text-muted); font-weight:300; font-size:1.1rem; } .error-state { color:#ff4747; }
-    @media(max-width:600px) { .char-grid { grid-template-columns:1fr; } .tab-container { padding:16px 16px 50px; } }
+    @media(max-width:600px) { .char-grid { grid-template-columns:1fr; } .tab-container { padding:16px 16px 50px; } .password-form { flex-direction:column; } }
     ::-webkit-scrollbar { width:6px; } ::-webkit-scrollbar-track { background:transparent; } ::-webkit-scrollbar-thumb { background:var(--btn-bg); border-radius:10px; }
   </style>
 </head>
@@ -72,6 +80,7 @@
   </main>
   <script>
     let currentLang = 'en';
+    const changedExtrasPassword = 'I trust you with my lore';
     const langBtn = document.getElementById('lang-toggle');
     langBtn.addEventListener('click', () => {
       currentLang = currentLang === 'en' ? 'es' : 'en';
@@ -87,8 +96,15 @@
       if (!event.target.matches('.burger')) document.querySelectorAll('.dropdown.show').forEach(dropdown => dropdown.classList.remove('show'));
     };
     const groupsContainer = document.getElementById('char-groups');
-    function extractDocLink(desc) { const match = desc.match(/https:\/\/docs\.google\.com\/[^\"]+/); return match ? match[0] : null; }
-    function cleanDescription(desc) { return desc.replace(/https:\/\/[^\s]+/g, '').replace(/::\s*/g, ' • ').trim(); }
+    function isChangedExtrasUnlocked() {
+      return sessionStorage.getItem('changed-extras-unlocked') === 'true';
+    }
+    function setChangedExtrasUnlocked(value) {
+      if (value) sessionStorage.setItem('changed-extras-unlocked', 'true');
+      else sessionStorage.removeItem('changed-extras-unlocked');
+    }
+    function extractDocLink(desc) { const match = desc.match(/https:\/\/docs\.google\.com\/[^"]+/); return match ? match[0] : null; }
+    function cleanDescription(desc) { return desc.replace(/https:\/\/[^"]+/g, '').replace(/::\s*/g, ' • ').trim(); }
     function renderCharacter(char, grid) {
       const card = document.createElement('article'); card.className = 'char-card';
       const accent = document.createElement('div'); accent.className = 'char-accent'; accent.style.backgroundColor = char.color || '#999'; card.appendChild(accent);
@@ -99,11 +115,43 @@
       const name = document.createElement('a'); name.className = 'char-name'; name.textContent = char.name; name.href = `oc.html?name=${encodeURIComponent(char.name)}`;
       const description = document.createElement('div'); description.className = 'char-desc'; description.textContent = cleanDescription(char.description || ''); info.append(name, description);
       const docLink = extractDocLink(char.description || '');
-      if (docLink) { const link = document.createElement('a'); link.href = docLink; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.className = 'char-link'; link.textContent = 'More info →'; info.appendChild(link); }
+      if (docLink) { const link = document.createElement('a'); link.href = docLink; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.className = 'char-link'; link.textContent = 'More info'; link.setAttribute('data-en', 'More info'); link.setAttribute('data-es', 'Más información'); info.appendChild(link); }
       card.appendChild(info); grid.appendChild(card);
+    }
+    function renderPasswordGate(groupName, onUnlock) {
+      const section = document.createElement('section'); section.className = 'char-group';
+      const heading = document.createElement('h3'); heading.className = 'group-title'; heading.textContent = groupName; section.appendChild(heading);
+      const gate = document.createElement('div'); gate.className = 'password-gate';
+      const title = document.createElement('h3'); title.textContent = 'Restricted section'; title.setAttribute('data-en', 'Restricted section'); title.setAttribute('data-es', 'Sección restringida');
+      const subtitle = document.createElement('p'); subtitle.className = 'password-text'; subtitle.textContent = 'Enter the password to view this character group.'; subtitle.setAttribute('data-en', 'Enter the password to view this character group.'); subtitle.setAttribute('data-es', 'Ingresa la contraseña para ver este grupo de personajes.');
+      const form = document.createElement('form'); form.className = 'password-form';
+      const input = document.createElement('input'); input.type = 'password'; input.placeholder = 'Password'; input.autocomplete = 'off';
+      const submit = document.createElement('button'); submit.type = 'submit'; submit.textContent = 'Unlock'; submit.setAttribute('data-en', 'Unlock'); submit.setAttribute('data-es', 'Desbloquear');
+      const error = document.createElement('p'); error.className = 'password-error'; error.hidden = true;
+      form.append(input, submit);
+      gate.append(title, subtitle, form, error);
+      section.appendChild(gate);
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        if (input.value === changedExtrasPassword) {
+          setChangedExtrasUnlocked(true);
+          onUnlock();
+          return;
+        }
+        error.hidden = false;
+        error.textContent = 'Incorrect password.';
+      });
+      groupsContainer.appendChild(section);
     }
     function renderGroup(groupName, characters) {
       if (!characters.length) return;
+      if (groupName === 'Changed Extras' && !isChangedExtrasUnlocked()) {
+        renderPasswordGate(groupName, () => {
+          groupsContainer.replaceChildren();
+          loadCharacters();
+        });
+        return;
+      }
       const section = document.createElement('section'); section.className = 'char-group';
       const heading = document.createElement('h3'); heading.className = 'group-title'; heading.textContent = groupName; section.appendChild(heading);
       const grid = document.createElement('div'); grid.className = 'char-grid'; characters.forEach(char => renderCharacter(char, grid));
@@ -116,7 +164,8 @@
         const [characters, manifest] = await Promise.all([charactersRes.json(), manifestRes.json()]);
         if (!Array.isArray(characters) || !Array.isArray(manifest.groups)) throw new Error('Invalid character list or manifest');
         const charactersByName = new Map(characters.map(char => [char.name, char]));
-        const assignedNames = new Set(); groupsContainer.replaceChildren();
+        const assignedNames = new Set();
+        groupsContainer.replaceChildren();
         manifest.groups.forEach(group => {
           if (typeof group.name !== 'string' || !Array.isArray(group.characters)) return;
           const members = group.characters.filter(name => typeof name === 'string' && !assignedNames.has(name)).map(name => { assignedNames.add(name); return charactersByName.get(name); }).filter(Boolean);
