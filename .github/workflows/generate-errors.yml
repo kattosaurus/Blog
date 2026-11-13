@@ -24,19 +24,21 @@ jobs:
           mkdir -p errors/generated
           
           # Define error data: filename|code|title|description
+          # NOTE: don't use | / & \ or double quotes inside descriptions,
+          # they would break the field split or the sed replacement below.
           declare -a errors=(
-            "bad-request|400|Bad Request|The server cannot process this request."
-            "unauthorized|401|Unauthorized|Authentication is required to access this resource."
-            "forbidden|403|Forbidden|You don't have permission to access this."
-            "not-found|404|Not Found|The page you're looking for doesn't exist."
-            "method-not-allowed|405|Method Not Allowed|The request method is not supported."
-            "timed-out|408|Request Timeout|The server timed out waiting for the request."
-            "content-too-large|413|Content Too Large|The request payload exceeds the limit."
-            "uri-too-long|414|URI Too Long|The requested URL is too long."
-            "too-many-requests|429|Too Many Requests|You're sending too many requests. Slow down."
-            "internal-server-error|500|Internal Server Error|The server encountered an unexpected error."
-            "bad-gateway|502|Bad Gateway|The server received an invalid response."
-            "service-unavailable|503|Service Unavailable|The server is temporarily unavailable."
+            "bad-request|400|Bad Request|The server couldn't understand this request because something about it was malformed. Check the address or the data being sent and try again."
+            "unauthorized|401|Unauthorized|You need to sign in or provide valid credentials to view this page. Without proper authentication, access is denied."
+            "forbidden|403|Forbidden|The server understood your request but is refusing to let you in. You don't have permission to view this page or resource."
+            "not-found|404|Not Found|We couldn't find anything at this address. The page may have been moved or deleted, or the link may have a typo."
+            "method-not-allowed|405|Method Not Allowed|This page doesn't accept the type of request that was sent, such as trying to submit data to a page that only displays content."
+            "timed-out|408|Request Timeout|The server waited too long for your request to finish arriving and gave up. This is usually caused by a slow or unstable connection, so try again."
+            "content-too-large|413|Content Too Large|The data sent to the server is larger than it allows. Try sending something smaller, such as a smaller file."
+            "uri-too-long|414|URI Too Long|The web address you used is too long for the server to handle. Try a shorter link or remove extra parameters from it."
+            "too-many-requests|429|Too Many Requests|You've sent too many requests in a short time, so the server is limiting you. Wait a minute or so, then try again."
+            "internal-server-error|500|Internal Server Error|Something went wrong on the server's end and it couldn't finish your request. It isn't anything you did, so try again in a bit."
+            "bad-gateway|502|Bad Gateway|A server acting as a middleman got a bad response from the server behind it. This is usually temporary, so try again shortly."
+            "service-unavailable|503|Service Unavailable|The server can't handle requests right now, usually because of maintenance or heavy traffic. Please try again soon."
           )
           
           for entry in "${errors[@]}"; do
