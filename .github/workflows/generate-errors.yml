@@ -1,0 +1,80 @@
+name: Generate Error Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'errors/template.html'
+      - 'assets/**'
+      - '.github/workflows/generate-errors.yml'
+  workflow_dispatch:  # Allows manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Generate error pages
+        run: |
+          mkdir -p errors/generated
+          
+          # Define error data: filename|code|title|description
+          declare -a errors=(
+            "bad-request|400|Bad Request|The server cannot process this request."
+            "unauthorized|401|Unauthorized|Authentication is required to access this resource."
+            "forbidden|403|Forbidden|You don't have permission to access this."
+            "not-found|404|Not Found|The page you're looking for doesn't exist."
+            "method-not-allowed|405|Method Not Allowed|The request method is not supported."
+            "timed-out|408|Request Timeout|The server timed out waiting for the request."
+            "content-too-large|413|Content Too Large|The request payload exceeds the limit."
+            "uri-too-long|414|URI Too Long|The requested URL is too long."
+            "too-many-requests|429|Too Many Requests|You're sending too many requests. Slow down."
+            "internal-server-error|500|Internal Server Error|The server encountered an unexpected error."
+            "bad-gateway|502|Bad Gateway|The server received an invalid response."
+            "service-unavailable|503|Service Unavailable|The server is temporarily unavailable."
+          )
+          
+          for entry in "${errors[@]}"; do
+            IFS='|' read -r slug code title desc <<< "$entry"
+            
+            # Find the image file (try multiple extensions)
+            img=""
+            for ext in gif jpg jpeg png webp; do
+              if [[ -f "assets/${slug}.${ext}" ]]; then
+                img="${slug}.${ext}"
+                break
+              fi
+            done
+            
+            if [[ -z "$img" ]]; then
+              echo "::warning::No image found for ${slug}, skipping..."
+              continue
+            fi
+            
+            # Replace placeholders
+            sed -e "s/{{CODE}}/${code}/g" \
+                -e "s/{{TITLE}}/${title}/g" \
+                -e "s/{{DESCRIPTION}}/${desc}/g" \
+                -e "s/{{IMAGE}}/${img}/g" \
+                errors/template.html > "errors/generated/${code}.html"
+            
+            echo "Generated ${code}.html using ${img}"
+          done
+          
+          # Also create a 404.html in root for GitHub Pages
+          if [[ -f "errors/generated/404.html" ]]; then
+            cp errors/generated/404.html 404.html
+          fi
+      
+      - name: Commit generated files
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add errors/generated/ 404.html
+          git diff --staged --quiet || git commit -m "Auto-generate error pages [skip ci]"
+          git push
