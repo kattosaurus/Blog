@@ -14,6 +14,8 @@
     --ratio: 3 / 2;
     --ratio-num: 1.5;
     --reserved: 28dvh;
+    --frame-black: clamp(3px, 0.6vmin, 7px);   /* inner black frame */
+    --frame-white: clamp(1px, 0.25vmin, 3px);  /* outer white frame */
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { width: 100%; height: 100%; background: var(--bg); }
@@ -25,6 +27,10 @@
   .image-area {
     width: min(100%, calc((100dvh - var(--reserved)) * var(--ratio-num)));
     aspect-ratio: var(--ratio); background: var(--panel); overflow: hidden;
+    /* Double frame: black inner frame, then a white outer frame for separation */
+    box-shadow:
+      0 0 0 var(--frame-black) #000,
+      0 0 0 calc(var(--frame-black) + var(--frame-white)) #fff;
   }
   .image-area img {
     display: block; width: 100%; height: 100%; max-width: none;
