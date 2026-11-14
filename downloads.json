@@ -1,87 +1,87 @@
 {
-  "updated": "2026-11-13",
+  "updated": "2026-11-14",
   "mods": {
     "changed-minecraft-mod": {
-      "cf": 460548,
+      "cf": 461143,
       "img": "https://media.forgecdn.net/avatars/thumbnails/935/8/256/256/638411523058980029.png",
       "desc": "A Minecraft experience in the world of Changed.",
-      "mr": 205596
+      "mr": 205948
     },
     "changed-vanilla": {
-      "cf": 14660,
+      "cf": 14751,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1833/902/256/256/639156816589843767.png",
       "desc": "Addon mod for Changed containing transfurs for vanilla Minecraft mobs.",
-      "mr": 4789
+      "mr": 4821
     },
     "changed-addon-plus": {
-      "cf": 352515,
+      "cf": 352956,
       "img": "https://media.forgecdn.net/avatars/thumbnails/949/783/256/256/638438127646487503.png",
       "desc": "Adds new mechanics to Changed: MC Mod, including survival Untransfurmation, New Transfurs and more features",
-      "mr": 164529
+      "mr": 164764
     },
     "changed-additions": {
-      "cf": 40190,
+      "cf": 40264,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1265/141/256/256/638823511331003742.png",
       "desc": "Adds extra content to the Changed Mod by LtxProgrammer but keeping a Vanilla style",
-      "mr": 22385
+      "mr": 22436
     },
     "changed-synergy": {
-      "cf": 16948,
+      "cf": 17380,
       "img": "https://media.forgecdn.net/avatars/thumbnails/2154/593/256/256/639287531996844048.png",
       "desc": "Turns aggressive latex creatures into neighbors you can actually get along with. An orange or a friendly pat will often get you further than fists and blades. Transfur is not always the end anymore cause sometimes you can even talk your way back out of it!",
-      "mr": 5655
+      "mr": 5833
     },
     "changed-extra": {
-      "cf": 3975,
+      "cf": 4001,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1813/75/256/256/639146284460605322.png",
       "desc": "Technology is our mission: to develop better forms and understand latex creatures themselves."
     },
     "changedextras": {
-      "cf": 19133,
+      "cf": 19325,
       "img": "https://media.forgecdn.net/avatars/thumbnails/2058/37/256/256/639254521693528551.png",
       "desc": "The Changed: Minecraft Mod Addon that adds creatures, features and structures that just won't be implemented by the other addons or the main mod.",
-      "mr": 11901
+      "mr": 11986
     },
     "changed-siren-course": {
-      "cf": 2571,
+      "cf": 2589,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1985/328/256/256/639223873174584090.png",
       "desc": "Become a cursed siren or shark mermaid in the Changed universe, where water is your life and your curse."
     },
     "changed-true-transfur": {
-      "cf": 5330,
+      "cf": 5455,
       "img": "https://media.forgecdn.net/avatars/thumbnails/2071/452/256/256/639260160034807000.png",
       "desc": "True Transfur is an add‑on to Changed that will change the rules of the game. A full‑fledged Transformation system and the INSTINCT mode."
     },
     "additional-transfurs": {
-      "cf": 11789,
+      "cf": 11848,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1730/813/256/256/639101518266857814.png",
       "desc": "Some additional transfurs to changed minecraft mod.",
-      "mr": 7300
+      "mr": 7396
     },
     "changed-untransfur": {
-      "cf": 6414,
+      "cf": 6443,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1693/266/256/256/639074686950947898.png",
       "desc": "A simple untransfur mod for the changed minecraft mod."
     },
     "un-safe-transfur": {
-      "cf": 474,
+      "cf": 475,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1798/955/256/256/639139216822396903.png",
       "desc": "A mod about getting transfurred in not necesarily the safest ways.",
       "mr": 228
     },
     "latexs-delight": {
-      "cf": 18076,
+      "cf": 18162,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1410/494/256/256/638914040211725170.png",
       "desc": "An extention to Farmer's Delight that adapts the items and creatures from the ChangedMC or Changed mod."
     },
     "changed-survive-protocol": {
-      "cf": 14938,
+      "cf": 14996,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1844/174/256/256/639160966578487274.png",
       "desc": "Survival expansion for the Changed-Minecraft Mod.",
-      "mr": 4614
+      "mr": 4639
     },
     "furmutage-mod-early-testing-a-changed-addon": {
-      "cf": 13730,
+      "cf": 13780,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1879/232/256/256/639176889525834592.png",
       "desc": "This is an addon for the changed minecraft mod, right now it is super early access, and adds concepts and ideas that are not fully baked but are almost ready."
     },
@@ -89,52 +89,52 @@
       "cf": 4300,
       "img": "https://cdn.modrinth.com/data/Z0fF8GYW/07c08692d54c7232c77343e484422e7a8ddc6809_96.webp",
       "desc": "",
-      "mr": 14883
+      "mr": 14986
     },
     "changed-pooltoys-tfs": {
-      "cf": 4590,
+      "cf": 4637,
       "img": "https://media.forgecdn.net/avatars/thumbnails/2151/797/256/256/639286521022189157.png",
       "desc": "A Changed addon mod that adds all the tfs into a pooltoy variant"
     },
     "latex-caves": {
-      "cf": 1722,
+      "cf": 1782,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1836/88/256/256/639157808765913093.webp",
       "desc": "Latex Caves Dimension using Changed: Minecraft Mod"
     },
     "changed-ai-boss": {
-      "cf": 621,
+      "cf": 627,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1981/198/256/256/639222103918230311.png",
       "desc": "AI-powered dynamic English combat dialogue for Changed Addon Plus bosses. Early Alpha, Zhipu-only, more providers coming."
     },
     "changedarmy": {
-      "cf": 1363,
+      "cf": 1392,
       "img": "https://media.forgecdn.net/avatars/thumbnails/2082/777/256/256/639264107926254526.jpg",
       "desc": "Adds latex creature squads and hostile outposts, makes human‑player survival more challenging. Requires Changed MC 1.15.0 or higher"
     },
     "goopcattech": {
-      "cf": 160,
+      "cf": 163,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1823/264/256/256/639151680784716727.png",
       "desc": "Strangest but Cutest Tech Mod around :3"
     },
     "peos-custom-transfurs": {
-      "cf": 2868,
+      "cf": 2886,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1846/279/256/256/639161944936730864.png",
       "desc": "Adds custom transfurs for the changed mod",
-      "mr": 1136
+      "mr": 1140
     },
     "changed-xtras": {
       "cf": 32400,
       "img": "https://cdn.modrinth.com/data/wpaeMfU5/6356566bb17e5014baa1f050b21c5f5f8e8a3a04_96.webp",
       "desc": "",
-      "mr": 14143
+      "mr": 14155
     },
     "changed-doomsday": {
-      "cf": 16941,
+      "cf": 16951,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1390/153/256/256/638901242914808632.png",
       "desc": "A mod that allows you to make your Changed experiences more challenging with new gamerules, configurations, and data packs."
     },
     "changed-more-music-discs": {
-      "cf": 9450,
+      "cf": 9455,
       "img": "https://media.forgecdn.net/avatars/thumbnails/1356/293/256/256/638881101653381471.png",
       "desc": "Adds more music discs that are survival-friendly."
     }
