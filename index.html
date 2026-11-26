@@ -11,458 +11,99 @@
   <meta name="twitter:image" content="https://kattosaur.us/Online.png">
   <title>Katto dot online</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    :root{color-scheme:dark;--bg:#000;--win:#000000e6;--bar:#1e1e1e;--text:#e5e5e5;--muted:#9a9a9a;--line:#3c3c3c;--box:#d4d4d4;--green:#23d18b;--cyan:#29b8db;--yellow:#f5f543;--red:#f14c4c;--onacc:#000;--ui:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display",Inter,"Helvetica Neue",system-ui,sans-serif;--mono:ui-monospace,"Cascadia Code","JetBrains Mono",Menlo,Consolas,"DejaVu Sans Mono",monospace}
+    [data-theme="light"]{color-scheme:light;--bg:#f2f2f2;--win:#fffffff0;--bar:#dcdcdc;--text:#1a1a1a;--muted:#5c5c5c;--line:#b4b4b4;--box:#333;--green:#00875a;--cyan:#0a6f8c;--yellow:#8a6d00;--red:#c4281c;--onacc:#fff}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;overflow-x:hidden}
+    html,body{margin:0}
+    body{min-height:100dvh;overflow-x:hidden;background:var(--bg);color:var(--text);font:14px/21px var(--mono);-webkit-text-size-adjust:100%;transition:background .3s,color .3s}
+    a{color:var(--cyan)}
+    h1,h2,p{margin:0}
+    :focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+    #stars{position:fixed;inset:0;z-index:-1;width:100%;height:100%;pointer-events:none}
 
-    :root {
-      --bg-color: #121212;
-      --header-bg: #000000;
-      --text-main: #ffffff;
-      --text-muted: #ffffff9a;
-      --prof-bg: #ffffff36;
-      --star-color: #ffffff;
-      --star-opacity-min: 0.4;
-      --star-filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.9));
-      --btn-bg: #ffffff20;
-      --btn-text: #ffffff;
-      --dropdown-shadow: rgba(0, 0, 0, 0.5);
-      --colored-button: #434ed4
-    }
+    /* The whole site is one terminal window */
+    .term-bar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:8px;padding:8px clamp(12px,2vw,22px);background:var(--bar);border-bottom:1px solid var(--line)}
+    .term-bar i{width:11px;height:11px;border-radius:50%;background:var(--red)}
+    .term-bar i:nth-child(2){background:var(--yellow)}
+    .term-bar i:nth-child(3){background:var(--green)}
+    .term-bar .spacer{flex:1}
+    .menus{display:flex;align-items:center;gap:10px;margin-left:22px}
+    .term-bar button{padding:2px 12px;border:0;border-radius:5px;background:none;color:var(--text);font:500 13px/1.5 var(--ui);white-space:nowrap;cursor:pointer}
+    .term-bar button:hover{background:color-mix(in srgb,var(--text) 14%,transparent)}
+    .screen{max-width:1500px;margin:auto;padding:22px clamp(14px,3vw,36px) 50px}
 
-    [data-theme="light"] {
-      --bg-color: #f0f0f0;
-      --header-bg: #e0e0e0;
-      --text-main: #121212;
-      --text-muted: #1212129a;
-      --prof-bg: #0000001a;
-      --star-color: #4a5568;
-      --star-opacity-min: 0.3;
-      --star-filter: drop-shadow(0 0 2px rgba(74, 85, 104, 0.5));
-      --btn-bg: #00000015;
-      --btn-text: #121212;
-      --dropdown-shadow: rgba(0, 0, 0, 0.1);
-      --colored-button: #151b68
-    }
+    /* "Your [X]" on a single line */
+    .headline{margin:0 0 20px;font-size:1.15rem;line-height:1.5;font-weight:700;white-space:nowrap;overflow:hidden}
+    .your{color:var(--muted);font-weight:400}
+    .spinny{display:inline-block;overflow:hidden;height:1.5em;vertical-align:bottom;max-width:100%}
+    .profs{display:inline-block;padding:0 8px;background:var(--green);color:var(--onacc);transition:transform .6s cubic-bezier(.22,1,.36,1)}
+    .visible{opacity:1;transform:translateY(0)}
+    .exit{opacity:1;transform:translateY(1.6em)}
+    .enter{opacity:1;transform:translateY(-1.6em);transition:none!important}
+    .cursor{display:inline-block;width:.55em;height:1em;margin-left:6px;vertical-align:-.15em;background:var(--green);animation:blink 1.1s steps(1) infinite}
+    @keyframes blink{50%{opacity:0}}
 
-    html {
-      scroll-behavior: smooth;
-      overflow-x: hidden;
-      width: 100%;
-      /* solid base for rem units */
-      font-size: 16px;
-    }
+    .home{display:grid;grid-template-columns:1.15fr 1fr;gap:28px;align-items:stretch;margin-bottom:40px}
 
-    body {
-      min-height: 100dvh;
-      height: auto;
-      width: 100%;
-      overflow-x: hidden;
-      background-color: var(--bg-color);
-      transition: background-color 0.3s ease;
-      font-family: system-ui, -apple-system, sans-serif;
-      color: var(--text-main);
-      /* prevent iOS auto-zoom on inputs */
-      -webkit-text-size-adjust: 100%;
-    }
+    /* Character-drawn windows: + - | */
+    .box{position:relative;display:flex;flex-direction:column;min-width:0;background:var(--win);color:var(--box)}
+    .b-top,.b-bot{display:flex;line-height:21px;white-space:pre;overflow:hidden;user-select:none}
+    .b-top .d,.b-bot .d{flex:1;min-width:0;overflow:hidden}
+    .b-l,.b-r{position:absolute;top:21px;bottom:21px;width:1ch;overflow:hidden;white-space:pre;line-height:16px;user-select:none}
+    .b-l{left:0}.b-r{right:0}
+    .b-body{flex:1;min-height:0;margin:0 1ch;padding:10px 2ch;color:var(--text)}
+    .box.big .b-body{min-height:52vh}
+    .art{position:relative;min-height:52vh;overflow:hidden}
+    .pixel{position:absolute;inset:0;display:block;width:100%;height:100%;border:0;outline:0;object-fit:cover;object-position:center}
 
-    h1 { margin: 0; }
+    /* Neofetch-style about */
+    .about .b-body h2{margin-bottom:10px;font-size:1.05rem;color:var(--cyan)}
+    .about .b-body p{margin-bottom:12px;font-size:.88rem;line-height:1.6;color:var(--text)}
+    .about .b-body .gender{margin-top:6px;color:var(--muted)}
+    .swatches{display:flex;margin-top:14px}
+    .swatches i{width:22px;height:14px}
 
-    /* consistent paragraph sizing */
-    p {
-      font-weight: 300;
-      font-size: 1rem;
-      line-height: 1.6;
-    }
+    /* Services */
+    .services h2.section-title{margin-bottom:14px;font-size:1.15rem}
+    .services h2.section-title::before{content:"$ ";color:var(--green)}
+    .svc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:stretch}
+    .servicebox .b-body{display:flex;flex-direction:column;gap:8px}
+    .servicebox h2{font-size:1rem;color:var(--cyan)}
+    .servicebox p{font-size:.88rem;line-height:1.6;color:var(--text)}
+    .servicebox .subtitle{color:var(--muted);font-size:.78rem;line-height:1.5}
+    .more{align-self:flex-start;margin-top:auto;padding:0 12px;border:1px solid var(--green);color:var(--green);font-weight:700;text-decoration:none}
+    .more:hover{background:var(--green);color:var(--onacc)}
 
-    .amp {
-      font-size: 1rem;
-      line-height: 1.6;
-    }
+    /* Menu: macOS-style dropdown */
+    .dropdown{position:fixed;top:40px;left:12px;z-index:100;min-width:230px;padding:5px;border-radius:10px;background:color-mix(in srgb,var(--bar) 80%,transparent);-webkit-backdrop-filter:blur(22px) saturate(1.6);backdrop-filter:blur(22px) saturate(1.6);border:1px solid color-mix(in srgb,var(--text) 18%,transparent);box-shadow:0 12px 32px #0009;font:13px/1.25 var(--ui);opacity:0;visibility:hidden;transform:translateY(-4px) scale(.98);transform-origin:top left;pointer-events:none;transition:opacity .15s,visibility .15s,transform .15s}
+    .dropdown.show{opacity:1;visibility:visible;transform:none;pointer-events:auto}
+    .dropdown a{display:flex;align-items:center;padding:6px 12px;border-radius:5px;color:var(--text);text-decoration:none}
+    .dropdown a:hover,.dropdown a:focus-visible{background:#0a64d6;color:#fff;outline:0}
+    .dropdown .tick{display:inline-block;width:1.4em;font-weight:700}
+    .dropdown [aria-checked=true] .tick::before{content:"✓"}
+    .dropdown .separator{height:1px;margin:5px 8px;background:color-mix(in srgb,var(--text) 18%,transparent)}
 
-    .controls {
-      position: fixed;
-      top: 15px;
-      left: 0;
-      right: 15px;
-      display: flex;
-      gap: 10px;
-      z-index: 20;
-      padding-left: 15px;
-    }
-
-    .control-btn {
-      background-color: var(--btn-bg);
-      color: var(--btn-text);
-      border: none;
-      padding: 8px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.875rem;
-      font-weight: 500;
-      transition: background-color 0.2s, color 0.2s;
-      -webkit-tap-highlight-color: transparent;
-      min-height: 44px;
-      min-width: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .control-btn:hover {
-      background-color: var(--prof-bg);
-    }
-
-    .dropdown {
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      top: 60px;
-      left: 15px;
-      background-color: var(--header-bg);
-      min-width: 180px;
-      border-radius: 8px;
-      box-shadow: 0px 8px 24px var(--dropdown-shadow);
-      border: 1px solid var(--btn-bg);
-      overflow: hidden;
-      z-index: 100;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-10px) scale(0.98);
-      pointer-events: none;
-      transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s ease, border 0.3s ease;
-    }
-
-    .dropdown.show {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0) scale(1);
-      pointer-events: auto;
-    }
-
-    .dropdown a {
-      color: var(--text-main);
-      padding: 12px 16px;
-      text-decoration: none;
-      font-size: 0.9375rem;
-      font-weight: 500;
-      transition: background-color 0.2s, color 0.2s;
-      -webkit-tap-highlight-color: transparent;
-      min-height: 44px;
-      display: flex;
-      align-items: center;
-    }
-
-    .dropdown a:hover {
-      background-color: var(--prof-bg);
-    }
-
-    .dropdown .separator {
-      height: 1px;
-      background-color: var(--btn-bg);
-      margin: 4px 0;
-    }
-
-    .your {
-      font-weight: 300;
-      color: var(--text-muted);
-      z-index: 1;
-      transition: color 0.3s ease;
-      font-size: 1.25rem;
-    }
-
-    .profs {
-      color: var(--text-main);
-      display: inline-block;
-      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s, color 0.3s;
-      background-color: var(--prof-bg);
-      padding: 10px 14px;
-      z-index: 1;
-      font-size: 1.5rem;
-    }
-
-    .header-wrapper {
-      width: 100%;
-    }
-
-    .header {
-      background-color: var(--header-bg);
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 6px;
-      padding: 80px 20px 40px;
-      position: relative;
-      overflow: hidden;
-      transition: background-color 0.3s ease;
-    }
-
-    .spinny {
-      overflow: hidden;
-      width: 100%;
-      height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .exit {
-      opacity: 1;
-      transform: translateY(60px);
-    }
-
-    .enter {
-      opacity: 1;
-      transform: translateY(-60px);
-      transition: none !important;
-    }
-
-    .star {
-      position: absolute;
-      background-color: var(--star-color);
-      border-radius: 50%;
-      pointer-events: none;
-      will-change: transform, opacity;
-      transform: translate3d(0,0,0);
-      filter: var(--star-filter);
-      animation: brightTwinkleMove var(--duration) infinite ease-in-out;
-      transition: background-color 0.3s, filter 0.3s;
-    }
-
-    @keyframes brightTwinkleMove {
-      0%, 100% {
-        opacity: var(--star-opacity-min);
-        transform: translate3d(0, 0, 0) scale(0.8);
-      }
-      50% {
-        opacity: 1;
-        transform: translate3d(var(--move-x), var(--move-y), 0) scale(1.2);
-      }
-    }
-
-    @media (hover: hover) {
-      .header:hover .star {
-        filter: drop-shadow(0 0 4px var(--star-color));
-      }
-    }
-
-    h2 {
-      font-size: 1.25rem;
-      margin-bottom: 0.75rem;
-      font-weight: 600;
-    }
-
-    @media (min-width: 768px) {
-      html { font-size: 17px; }
-      h2 { font-size: 1.5rem; }
-      .your { font-size: 1.5rem; }
-      .profs { font-size: 2rem; }
-    }
-
-    @media (min-width: 1200px) {
-      html { font-size: 18px; }
-      h2 { font-size: 1.75rem; }
-    }
-
-    .burger {
-      color: var(--btn-text);
-      padding: 8px 12px;
-      background-color: transparent;
-      border: none;
-      margin-right: auto;
-      cursor: pointer;
-      font-size: 1.25rem;
-      display: flex;
-      align-items: center;
-      border-radius: 6px;
-      -webkit-tap-highlight-color: transparent;
-      transition: background-color 0.2s;
-      min-height: 44px;
-      min-width: 44px;
-      justify-content: center;
-    }
-
-    .burger:hover {
-      background-color: var(--btn-bg);
-    }
-
-    #about {
-      margin-top: 40px;
-      padding: 20px;
-      color: var(--text-main);
-    }
-
-    #services {
-      margin-top: 50px;
-      padding: 20px;
-      color: var(--text-main);
-      padding-bottom: 50px;
-    }
-
-    .aboutmeimg {
-      max-width: 100%;
-      height: auto;
-      display: block;
-      margin: 0 auto;
-    }
-
-    .aboutmes {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 0.75rem;
-    }
-
-    /* carousel */
-    .carousel-wrapper {
-      position: relative;
-      width: 100%;
-      padding: 0 44px;
-      margin-top: 20px;
-    }
-
-    .carousel-track-container {
-      overflow: hidden;
-      width: 100%;
-    }
-
-    .carousel-track {
-      display: flex;
-      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-      width: 100%;
-    }
-
-    .carousel-slide {
-      min-width: 100%;
-      padding: 0 8px;
-      display: flex;
-      justify-content: center;
-      align-items: stretch;
-    }
-
-    .carousel-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background-color: var(--btn-bg);
-      color: var(--btn-text);
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 16px;
-      line-height: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-      transition: background-color 0.2s, color 0.2s, transform 0.2s;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
-      min-height: 44px;
-      min-width: 44px;
-    }
-
-    .carousel-btn:hover {
-      background-color: var(--prof-bg);
-      transform: translateY(-50%) scale(1.1);
-    }
-
-    .carousel-btn:active {
-      transform: translateY(-50%) scale(0.95);
-    }
-
-    .carousel-prev {
-      left: 2px;
-    }
-
-    .carousel-next {
-      right: 2px;
-    }
-
-    .servicebox {
-      background-color: var(--header-bg);
-      padding: 24px 20px;
-      border-radius: 24px;
-      min-height: 240px;
-      height: auto;
-      width: 100%;
-      max-width: 340px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      text-align: center;
-    }
-
-    .servicebox h2 {
-      font-size: 1.15rem;
-      margin-bottom: 0.25rem;
-    }
-
-    .servicebox p {
-      font-size: 0.9375rem;
-      line-height: 1.5;
-    }
-
-    .more {
-      background-color: var(--colored-button);
-      padding: 10px 24px;
-      color: #ffffff;
-      border: none;
-      text-decoration: none;
-      border-radius: 30px;
-      margin-top: auto;
-      min-height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.9375rem;
-      font-weight: 500;
-    }
-
-    .subtitle {
-      font-size: 0.75rem;
-      opacity: 0.5;
-      line-height: 1.4;
-    }
-
-    .gender {
-      font-weight: 200;
-      opacity: 0.5;
-      font-size: 0.875rem;
-      margin-top: 0.5rem;
-    }
-
-    /* small screen tweaks */
-    @media (max-width: 480px) {
-      .header { padding: 80px 16px 32px; }
-      #about, #services { padding: 16px; }
-      .carousel-wrapper { padding: 0 40px; }
-      .servicebox { padding: 20px 16px; border-radius: 20px; }
-    }
+    @media(max-width:900px){.home{grid-template-columns:1fr}.svc-grid{grid-template-columns:1fr}.art{min-height:34vh}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important}.cursor{animation:none}}
   </style>
 </head>
 <body>
+  <canvas id="stars" aria-hidden="true"></canvas>
 
-  <div class="controls">
-    <button id="burger" class="burger" onclick="toggleDropdown()">≡</button>
-    <button id="theme-toggle" class="control-btn" data-en="Theme" data-es="Tema">Theme</button>
-    <button id="lang-toggle" class="control-btn">EN</button>
-  </div>
+  <header class="term-bar controls">
+    <i></i><i></i><i></i>
+    <nav class="menus" aria-label="Page menus">
+      <button id="burger" class="burger menu-btn" type="button" data-menu="dropmeow" aria-haspopup="menu" aria-expanded="false" data-en="Navigate" data-es="Navegar">Navigate</button>
+      <button id="theme-toggle" class="control-btn menu-btn" type="button" data-menu="theme-menu" aria-haspopup="menu" aria-expanded="false" data-en="Theme" data-es="Tema">Theme</button>
+      <button id="lang-toggle" class="control-btn menu-btn" type="button" data-menu="lang-menu" aria-haspopup="menu" aria-expanded="false" data-en="Language" data-es="Idioma">Language</button>
+    </nav>
+    <span class="spacer"></span>
+  </header>
 
-  <div class="dropdown" id="dropmeow">
+  <div class="dropdown" id="dropmeow" role="menu">
       <a href="#about" data-en="About myself" data-es="Sobre mí">About myself</a>
       <a href="#services" data-en="My services" data-es="Mis servicios">My services</a>
       <a href="portfolio.html" data-en="Portfolio" data-es="Portafolio">Portfolio</a>
@@ -472,68 +113,102 @@
       <a href="stories.html" data-en="Stories" data-es="Historias">Stories</a>
   </div>
 
-  <div class="header-wrapper">
-    <div class="header">
-      <h1 class="your" data-en="Your" data-es="Tu">Your</h1>
-      <div class="spinny">
-        <h1 id="prof" class="profs visible">Artist</h1>
-      </div>
-    </div>
+  <div class="dropdown" id="theme-menu" role="menu">
+      <a href="#" role="menuitemradio" aria-checked="true" data-theme-opt="dark"><span class="tick"></span><span class="lbl" data-en="Dark" data-es="Oscuro">Dark</span></a>
+      <a href="#" role="menuitemradio" aria-checked="false" data-theme-opt="light"><span class="tick"></span><span class="lbl" data-en="Light" data-es="Claro">Light</span></a>
+      <div class="separator"></div>
+      <a href="old.html" role="menuitem"><span class="tick"></span><span class="lbl" data-en="View old layout" data-es="Ver diseño anterior">View old layout</span></a>
   </div>
 
-  <section class="aboutmes" id="about">
-    <h2 data-en="About Myself" data-es="Sobre mi">About Myself</h2>
-    <p data-en="Hi! I'm Katto, I am an artist, and tech enthusiast in general. I believe some of you reading this have met me by multiple names, including katt, void, fashui, or even cattleox if you are from minecraft. I enjoy making art and coding and also game a lot. I have quite a bit of free time as of right now, so I am available for commissions and programming!" data-es="¡Hola! Soy Katto, soy artista y entusiasta de la tecnología en general. Creo que algunos de ustedes que están leyendo esto me han conocido por varios nombres, incluyendo katt, void, fashui o incluso cattleox si son de Minecraft. Disfruto haciendo arte y programando, y también juego mucho. Tengo bastante tiempo libre por ahora, ¡así que estoy disponible para comisiones y programación!">Hi! I'm Katto, I am an artist, and tech enthusiast in general. I believe some of you reading this have met me by multiple names, including katt, void, fashui, or even cattleox if you are from minecraft. I enjoy making art and coding and also game a lot. I have quite a bit of free time as of right now, so I am available for commissions and programming!</p>
-    <p data-en="I plan on studying medicine and pathology in the future, and/or maybe computer science." data-es="Planeo estudiar medicina y patología en el futuro, y/o posiblemente ingeniería informática.">I plan on studying medicine and pathology in the future, and/or maybe computer science.</p>
-    <p data-en="I'm a furry, if that wasn't obvious from the header, I have NOT gone to any convention yet, but whenever I get a fursuit I probably will." data-es="Soy furry, si no era obvio por el encabezado, aún NO he ido a ninguna convención, pero cuando tenga un fursuit probablemente lo haré.">I'm a furry, if that wasn't obvious from the header, I have NOT gone to any convention yet, but whenever I get a fursuit I probably will.</p>
-    <p data-en="I don't like there's a twitch streamer with the same name that I have on my socials, it's pretty confusing to see multiple people with the same name. It makes me a bit sad now that I think about it." data-es="No me gusta que haya un streamer de Twitch con el mismo nombre que tengo en mis redes sociales; es bastante confuso ver a varias personas con el mismo nombre. Me pone un poco triste ahora que lo pienso.">I don't like there's a twitch streamer with the same name that I have on my socials, it's pretty confusing to see multiple people with the same name. It makes me a bit sad now that I think about it.</p>
+  <div class="dropdown" id="lang-menu" role="menu">
+      <a href="#" role="menuitemradio" aria-checked="true" data-lang-opt="en"><span class="tick"></span><span class="lbl">English</span></a>
+      <a href="#" role="menuitemradio" aria-checked="false" data-lang-opt="es"><span class="tick"></span><span class="lbl">Español</span></a>
+  </div>
 
-    <p class="gender" data-en="I'm Bisexual, and Non-binary. I go by any pronouns." data-es="Soy bisexual y no binario. Uso cualquier pronombre.">I'm Bisexual, and Non-binary. I go by any pronouns.</p>
-  </section>
+  <main class="screen">
+    <h1 class="headline"><span class="your" data-en="Your" data-es="Tu">Your</span> <span class="spinny"><span id="prof" class="profs visible">Artist</span></span><span class="cursor" aria-hidden="true"></span></h1>
 
-  <img src="AboutMe.png" alt="Katto holding a sign that says About Me" class="aboutmeimg">
+    <div class="home">
+      <section class="art" aria-label="Pixel art">
+        <img class="pixel" src="https://kattosaur.us/Online.png" alt="Pixel art placeholder" decoding="async">
+      </section>
 
-  <section id="services">
-    <h2 data-en="My Services" data-es="Mis Servicios">My Services</h2>
+      <section class="aboutmes about box" id="about">
+        <h2 data-en="About Myself" data-es="Sobre mi">About Myself</h2>
+        <p data-en="Hi! I'm Katto, I am an artist, and tech enthusiast in general. I believe some of you reading this have met me by multiple names, including katt, void, fashui, or even cattleox if you are from minecraft. I enjoy making art and coding and also game a lot. I have quite a bit of free time as of right now, so I am available for commissions and programming!" data-es="¡Hola! Soy Katto, soy artista y entusiasta de la tecnología en general. Creo que algunos de ustedes que están leyendo esto me han conocido por varios nombres, incluyendo katt, void, fashui o incluso cattleox si son de Minecraft. Disfruto haciendo arte y programando, y también juego mucho. Tengo bastante tiempo libre por ahora, ¡así que estoy disponible para comisiones y programación!">Hi! I'm Katto, I am an artist, and tech enthusiast in general. I believe some of you reading this have met me by multiple names, including katt, void, fashui, or even cattleox if you are from minecraft. I enjoy making art and coding and also game a lot. I have quite a bit of free time as of right now, so I am available for commissions and programming!</p>
+        <p data-en="I plan on studying medicine and pathology in the future, and/or maybe computer science." data-es="Planeo estudiar medicina y patología en el futuro, y/o posiblemente ingeniería informática.">I plan on studying medicine and pathology in the future, and/or maybe computer science.</p>
+        <p data-en="I'm a furry, if that wasn't obvious from the header, I have NOT gone to any convention yet, but whenever I get a fursuit I probably will." data-es="Soy furry, si no era obvio por el encabezado, aún NO he ido a ninguna convención, pero cuando tenga un fursuit probablemente lo haré.">I'm a furry, if that wasn't obvious from the header, I have NOT gone to any convention yet, but whenever I get a fursuit I probably will.</p>
+        <p data-en="I don't like there's a twitch streamer with the same name that I have on my socials, it's pretty confusing to see multiple people with the same name. It makes me a bit sad now that I think about it." data-es="No me gusta que haya un streamer de Twitch con el mismo nombre que tengo en mis redes sociales; es bastante confuso ver a varias personas con el mismo nombre. Me pone un poco triste ahora que lo pienso.">I don't like there's a twitch streamer with the same name that I have on my socials, it's pretty confusing to see multiple people with the same name. It makes me a bit sad now that I think about it.</p>
+        <p class="gender" data-en="I'm Bisexual, and Non-binary. I go by any pronouns." data-es="Soy bisexual y no binario. Uso cualquier pronombre.">I'm Bisexual, and Non-binary. I go by any pronouns.</p>
+        <div class="swatches" aria-hidden="true"><i style="background:#cd3131"></i><i style="background:#0dbc79"></i><i style="background:#e5e510"></i><i style="background:#2472c8"></i><i style="background:#bc3fbc"></i><i style="background:#11a8cd"></i><i style="background:#e5e5e5"></i></div>
+      </section>
+    </div>
 
-    <div class="carousel-wrapper">
-      <button class="carousel-btn carousel-prev" aria-label="Previous service">&#10094;</button>
+    <section class="services" id="services">
+      <h2 class="section-title" data-en="My Services" data-es="Mis Servicios">My Services</h2>
+      <div class="svc-grid">
+        <div class="servicebox box">
+          <h2 data-en="Commissions" data-es="Comisiones">Commissions</h2>
+          <p data-en="You can commission me (If theres slots of course) I do mainly furry art for cheap but I can draw feral and human art (NO NSFW)" data-es="Puedes encargarme comisiones (si hay cupos, por supuesto). Principalmente hago arte furry a bajo costo, pero también puedo dibujar arte feral y humano (NADA NSFW)">You can commission me (If theres slots of course) I do mainly furry art for cheap but I can draw feral and human art (NO NSFW)</p>
+          <a href="commission.html" class="more">More Info</a>
+        </div>
 
-      <div class="carousel-track-container">
-        <div class="carousel-track">
+        <div class="servicebox box">
+          <h2 data-en="Web Development" data-es="Desarrollo Web">Web Development</h2>
+          <p data-en="I can make you a website like this one, or basically most other styles, price may vary, hosting not included." data-es="Puedo hacerte una página web como esta o casi cualquier otro estilo. El precio puede variar, alojamiento no incluido.">I can make you a website like this one, or basically most other styles, price may vary, hosting not included.</p>
+          <p class="subtitle" data-en="For more info, send me an email at silly@kattosaur.us or contact@kattosaur.us, or DM on discord at @kattosaur." data-es="Para más información, envíame un correo a silly@kattosaur.us o contact@kattosaur.us, o mándame un mensaje por Discord a @kattosaur.">For more info, send me an email at silly@kattosaur.us or contact@kattosaur.us, or DM on discord at @kattosaur.</p>
+        </div>
 
-          <div class="carousel-slide">
-            <div class="servicebox">
-              <h2 data-en="Commissions" data-es="Comisiones">Commissions</h2>
-              <p data-en="You can commission me (If theres slots of course) I do mainly furry art for cheap but I can draw feral and human art (NO NSFW)" data-es="Puedes encargarme comisiones (si hay cupos, por supuesto). Principalmente hago arte furry a bajo costo, pero también puedo dibujar arte feral y humano (NADA NSFW)">You can commission me (If theres slots of course) I do mainly furry art for cheap but I can draw feral and human art (NO NSFW)</p>
-              <a href="commission.html" class="more">More Info</a>
-            </div>
-          </div>
-
-          <div class="carousel-slide">
-            <div class="servicebox">
-              <h2 data-en="Web Development" data-es="Desarrollo Web">Web Development</h2>
-              <p data-en="I can make you a website like this one, or basically most other styles, price may vary, hosting not included." data-es="Puedo hacerte una página web como esta o casi cualquier otro estilo. El precio puede variar, alojamiento no incluido.">I can make you a website like this one, or basically most other styles, price may vary, hosting not included.</p>
-              <p class="subtitle" data-en="For more info, send me an email at silly@kattosaur.us or contact@kattosaur.us, or DM on discord at @kattosaur." data-es="Para más información, envíame un correo a silly@kattosaur.us o contact@kattosaur.us, o mándame un mensaje por Discord a @kattosaur.">For more info, send me an email at silly@kattosaur.us or contact@kattosaur.us, or DM on discord at @kattosaur.</p>
-            </div>
-          </div>
-
-          <div class="carousel-slide">
-            <div class="servicebox">
-              <h2 data-en="Mod Development (MC)" data-es="Desarrollo de Mods (MC)">Mod Development (MC)</h2>
-              <p data-en="I can make you minecraft mods (specially on forge!) or add your character to my minecraft mod: Changed Extras" data-es="Puedo hacerte mods para Minecraft (¡especialmente en Forge!) o añadir tu personaje a mi mod de Minecraft: Changed Extras">I can make you minecraft mods (specially on forge!) or add your character to my minecraft mod: Changed Extras</p>
-              <a href="portfolio.html" class="more">More Info</a>
-            </div>
-          </div>
-
+        <div class="servicebox box">
+          <h2 data-en="Mod Development (MC)" data-es="Desarrollo de Mods (MC)">Mod Development (MC)</h2>
+          <p data-en="I can make you minecraft mods (specially on forge!) or add your character to my minecraft mod: Changed Extras" data-es="Puedo hacerte mods para Minecraft (¡especialmente en Forge!) o añadir tu personaje a mi mod de Minecraft: Changed Extras">I can make you minecraft mods (specially on forge!) or add your character to my minecraft mod: Changed Extras</p>
+          <a href="portfolio.html" class="more">More Info</a>
         </div>
       </div>
-
-      <button class="carousel-btn carousel-next" aria-label="Next service">&#10095;</button>
-    </div>
-  </section>
+    </section>
+  </main>
 
   <script>
+    const el=(tag,props={},...kids)=>{const n=document.createElement(tag);for(const[k,v]of Object.entries(props)){if(v==null||v===false)continue;if(k==='class')n.className=v;else if(k==='text')n.textContent=v;else n.setAttribute(k,v===true?'':v)}kids.flat().forEach(c=>c!=null&&n.append(c));return n};
+
+    /* ---------- Windows drawn from characters: + - | ---------- */
+    const D='-'.repeat(400),V='|\n'.repeat(150);
+    /* Corner characters. Plain dashes by default; to use symbols instead, set e.g. tl:'⌜',tr:'⌝',bl:'⌞',br:'⌟' */
+    const C={tl:'-',tr:'-',bl:'-',br:'-'};
+    const edge=(cls,t,l,r)=>el('div',{class:cls,'aria-hidden':'true'},el('span',{text:l}),el('span',{class:'d',text:t}),el('span',{text:r}));
+    function wrap(b,title){
+      const body=el('div',{class:'b-body'});body.append(...b.childNodes);
+      b.append(edge('b-top',title?'-- '+title+' '+D:D,C.tl,C.tr),el('div',{class:'b-l','aria-hidden':'true',text:V}),el('div',{class:'b-r','aria-hidden':'true',text:V}),body,edge('b-bot',D,C.bl,C.br));
+      return b;
+    }
+    document.querySelectorAll('.box').forEach(b=>wrap(b,b.dataset.title));
+
+    /* ---------- Starfield: background of the whole site ---------- */
+    const stars=(function(){
+      const cv=document.getElementById('stars'),cx=cv.getContext('2d'),still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let list=[],w=0,h=0,color='#fff';
+      function init(){
+        const dpr=Math.min(devicePixelRatio||1,2);
+        w=innerWidth;h=innerHeight;cv.width=w*dpr;cv.height=h*dpr;cx.setTransform(dpr,0,0,dpr,0,0);
+        list=Array.from({length:Math.round(w*h/5500)},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.2+.3,p:Math.random()*6.28,s:Math.random()*.02+.004,v:Math.random()*.04+.01}));
+        if(still)paint();
+      }
+      function paint(){
+        cx.clearRect(0,0,w,h);cx.fillStyle=color;
+        for(const s of list){
+          s.p+=s.s;
+          if(!still){s.y+=s.v;if(s.y>h+2){s.y=-2;s.x=Math.random()*w}}
+          cx.globalAlpha=.3+.7*Math.abs(Math.sin(s.p));
+          cx.beginPath();cx.arc(s.x,s.y,s.r,0,6.283);cx.fill();
+        }
+        if(!still)requestAnimationFrame(paint);
+      }
+      let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(init,200)});
+      init();if(!still)paint();
+      return{setColor(c){color=c;if(still)paint()}};
+    })();
+
+    /* ---------- Rotating "Your [X]" word ---------- */
     let currentLang = 'en';
     const wordsDict = {
       en: ["Artist", "Web developer", "Mod developer", "Furry"],
@@ -565,98 +240,54 @@
 
     let wordInterval = setInterval(cycleText, 2000);
 
-    const langBtn = document.getElementById('lang-toggle');
-    langBtn.addEventListener('click', () => {
-      currentLang = currentLang === 'en' ? 'es' : 'en';
-      langBtn.textContent = currentLang.toUpperCase();
+    const checked=(sel,attr,val)=>document.querySelectorAll(sel).forEach(a=>a.setAttribute('aria-checked',String(a.getAttribute(attr)===val)));
 
+    function setLang(l) {
+      currentLang = l;
+      document.documentElement.lang = l;
       document.querySelectorAll('[data-en]').forEach(el => {
-        el.textContent = el.getAttribute(`data-${currentLang}`);
+        el.textContent = el.getAttribute(`data-${l}`);
       });
-
       clearInterval(wordInterval);
       currentIndex = 0;
-      textElement.textContent = wordsDict[currentLang][currentIndex];
+      textElement.textContent = wordsDict[l][currentIndex];
       wordInterval = setInterval(cycleText, 2000);
-    });
+      checked('[data-lang-opt]', 'data-lang-opt', l);
+    }
 
-    const themeBtn = document.getElementById('theme-toggle');
-    themeBtn.addEventListener('click', () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-      document.documentElement.setAttribute('data-theme', newTheme);
-    });
+    function setTheme(t) {
+      document.documentElement.setAttribute('data-theme', t);
+      stars.setColor(t === 'light' ? '#222' : '#fff');
+      checked('[data-theme-opt]', 'data-theme-opt', t);
+    }
 
-    function generateStars(starCount) {
-      const header = document.querySelector('.header');
-      if(!header) return;
-      const fragment = document.createDocumentFragment();
+    document.querySelectorAll('[data-lang-opt]').forEach(a => a.addEventListener('click', e => {
+      e.preventDefault();
+      setLang(a.dataset.langOpt);
+    }));
+    document.querySelectorAll('[data-theme-opt]').forEach(a => a.addEventListener('click', e => {
+      e.preventDefault();
+      setTheme(a.dataset.themeOpt);
+    }));
 
-      for (let i = 0; i < starCount; i++) {
-        const star = document.createElement('div');
-        star.classList.add('star');
-
-        const size = Math.random() * 1.5 + 1;
-        star.style.width = `${size}px`;
-        star.style.height = `${size}px`;
-
-        star.style.left = `${Math.random() * 100}%`;
-        star.style.top = `${Math.random() * 100}%`;
-
-        const moveX = (Math.random() * 16 - 8) + 'px';
-        const moveY = (Math.random() * 16 - 8) + 'px';
-        star.style.setProperty('--move-x', moveX);
-        star.style.setProperty('--move-y', moveY);
-
-        const duration = (Math.random() * 3 + 4) + 's';
-        star.style.setProperty('--duration', duration);
-        star.style.animationDelay = `${Math.random() * -4}s`;
-
-        fragment.appendChild(star);
+    /* ---------- macOS-style dropdown menus ---------- */
+    function closeMenus() {
+      document.querySelectorAll('.dropdown').forEach(m => m.classList.remove('show'));
+      document.querySelectorAll('.menu-btn').forEach(b => b.setAttribute('aria-expanded', 'false'));
+    }
+    document.querySelectorAll('.menu-btn').forEach(btn => btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const menu = document.getElementById(btn.dataset.menu);
+      const wasOpen = menu.classList.contains('show');
+      closeMenus();
+      if (!wasOpen) {
+        menu.style.left = Math.max(8, btn.getBoundingClientRect().left) + 'px';
+        menu.classList.add('show');
+        btn.setAttribute('aria-expanded', 'true');
       }
-
-      header.appendChild(fragment);
-    }
-
-    generateStars(45);
-
-    function toggleDropdown() {
-      document.getElementById("dropmeow").classList.toggle("show");
-    }
-
-    window.onclick = function(event) {
-      if (!event.target.matches('.burger')) {
-        var dropdowns = document.getElementsByClassName("dropdown");
-        for (var i = 0; i < dropdowns.length; i++) {
-          var openDropdown = dropdowns[i];
-          if (openDropdown.classList.contains('show')) {
-            openDropdown.classList.remove('show');
-          }
-        }
-      }
-    }
-
-    const track = document.querySelector('.carousel-track');
-    const slides = document.querySelectorAll('.carousel-slide');
-    const prevBtn = document.querySelector('.carousel-prev');
-    const nextBtn = document.querySelector('.carousel-next');
-    let currentSlide = 0;
-
-    function updateCarousel() {
-      track.style.transform = `translateX(-${currentSlide * 100}%)`;
-    }
-
-    if (prevBtn && nextBtn && track && slides.length > 0) {
-      prevBtn.addEventListener('click', () => {
-        currentSlide = (currentSlide > 0) ? currentSlide - 1 : slides.length - 1;
-        updateCarousel();
-      });
-
-      nextBtn.addEventListener('click', () => {
-        currentSlide = (currentSlide < slides.length - 1) ? currentSlide + 1 : 0;
-        updateCarousel();
-      });
-    }
+    }));
+    document.addEventListener('click', closeMenus);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenus(); });
   </script>
 </body>
 </html>
