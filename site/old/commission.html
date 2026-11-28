@@ -50,7 +50,7 @@
       <div id="art-panel">
         <h3 class="sub"><span class="step">1</span>Pick a style and size <small>Tap again to remove</small></h3>
         <div class="matrix" id="matrix" role="group" aria-label="Art styles and sizes"></div>
-        <p class="fine-print">Rendered hips-up work is quoted based on complexity. <a href="https://discord.com/users/kattstarz">Ask for a quote on Discord</a>. Rendered full body starts at the listed minimum.</p>
+        <p class="fine-print">Rendered hips-up work is quoted based on complexity. <a href="https://kattosaur.us/discord">Ask for a quote on Discord</a>. Rendered full body starts at the listed minimum.</p>
 
         <h3 class="sub block-gap"><span class="step">2</span>Add extras <small>Optional, goes with an art commission</small></h3>
         <div class="chips" id="addon-cards" role="group" aria-label="Add-ons"></div>
@@ -72,7 +72,7 @@
       </div>
     </section>
 
-    <footer>Questions? <a href="https://discord.com/users/kattstarz">Contact @kattstarz on Discord</a> or <a href="mailto:contact@kattosaur.us">contact@kattosaur.us</a>. <a href="portfolio.html">View the full portfolio</a>.</footer>
+    <footer>Questions? <a href="https://kattosaur.us/discord">Contact @kattstarz on Discord</a> or <a href="mailto:contact@kattosaur.us">contact@kattosaur.us</a>. <a href="portfolio.html">View the full portfolio</a>.</footer>
   </main>
 
   <!-- Sticky order bar -->
@@ -195,7 +195,7 @@
     function artCell(style,size){
       const p=products.find(x=>x.kind==='art'&&x.style===style&&x.size===size);
       if(p)return pickCell(p);
-      if(style==='render'&&size==='hips')return el('a',{class:'cell quote',href:'https://discord.com/users/kattstarz',target:'_blank',rel:'noopener'},el('span',{text:'Ask for'}),el('span',{text:'a quote'}));
+      if(style==='render'&&size==='hips')return el('a',{class:'cell quote',href:'https://kattosaur.us/discord',target:'_blank',rel:'noopener'},el('span',{text:'Ask for'}),el('span',{text:'a quote'}));
       return el('span',{class:'cell unavailable','aria-label':'Not offered',text:'—'});
     }
     const matrix=$('matrix');

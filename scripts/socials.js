@@ -23,7 +23,7 @@
     { id: 'x', label: 'X', href: 'https://x.com/kattosauruz' },
     { id: 'youtube', label: 'YouTube', href: 'https://youtube.com/@kattosaurus' },
     { id: 'tiktok', label: 'TikTok', href: 'https://tiktok.com/@kattosaurus' },
-    { id: 'discord', label: 'Discord', href: 'https://discord.gg/e8GxE4e4Bb' },
+    { id: 'discord', label: 'Discord', href: 'https://kattosaur.us/discord' },
     { id: 'roblox', label: 'Roblox', href: 'https://www.roblox.com/users/2008729969/profile' },
     { id: 'github', label: 'GitHub', href: 'https://github.com/kattosaurus' }
   ];
