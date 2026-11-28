@@ -1,5 +1,8 @@
 /* Shared social footer, injected into every HTML page during the Pages build.
-   Styled with the site's own CSS variables (theme toggle + EN/ES toggle aware).
+   Terminal-style to match the site. Uses the new theme variables (--win, --text,
+   --muted, --line, --green, --onacc, --mono) and falls back to the old ones
+   (--header-bg, --text-main, ...) so legacy pages such as old.html still work.
+   Theme toggle + EN/ES toggle aware.
    Pages can opt out with <meta name="no-socials" content=""> in their <head>.
    Anything under /errors/ is skipped automatically. */
 (() => {
@@ -45,20 +48,21 @@
   const style = document.createElement('style');
   style.textContent = `
     .social-footer {
-      --sf-bg: var(--header-bg, #000000);
-      --sf-text: var(--text-main, #ffffff);
-      --sf-muted: var(--text-muted, #ffffff9a);
-      --sf-btn: var(--btn-bg, #ffffff20);
-      --sf-btn-hover: var(--prof-bg, #ffffff36);
-      --sf-accent: var(--colored-button, #434ed4);
+      --sf-bg: var(--win, var(--header-bg, #000000));
+      --sf-text: var(--text, var(--text-main, #ffffff));
+      --sf-muted: var(--muted, var(--text-muted, #ffffff9a));
+      --sf-line: var(--line, var(--btn-bg, #ffffff20));
+      --sf-accent: var(--green, var(--colored-button, #434ed4));
+      --sf-onacc: var(--onacc, #ffffff);
       background-color: var(--sf-bg);
+      border-top: 1px solid var(--sf-line);
       color: var(--sf-text);
-      font-family: system-ui, -apple-system, sans-serif;
+      font: 14px/21px var(--mono, ui-monospace, "Cascadia Code", "JetBrains Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace);
       margin-top: 40px;
       overflow: hidden;
-      padding: 40px 20px 28px;
+      padding: 26px 0 22px;
       position: relative;
-      text-align: center;
+      text-align: left;
       transition: background-color .3s ease, color .3s ease;
       width: 100%;
     }
@@ -67,98 +71,94 @@
     .social-footer *::after { box-sizing: border-box; }
     .social-footer__inner {
       margin: 0 auto;
-      max-width: 1100px;
+      max-width: 1500px;
+      padding: 0 clamp(14px, 3vw, 36px);
       position: relative;
       z-index: 1;
     }
     .social-footer__title {
-      color: var(--sf-muted);
-      font-size: 1.25rem;
-      font-weight: 300;
-      line-height: 1.6;
-      margin: 0 0 20px;
-      transition: color .3s ease;
+      color: var(--sf-text);
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.5;
+      margin: 0 0 16px;
+    }
+    .social-footer__title::before {
+      color: var(--sf-accent);
+      content: "$ ";
     }
     .social-footer nav {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      justify-content: center;
+      justify-content: flex-start;
     }
     .social-footer a {
       -webkit-tap-highlight-color: transparent;
       align-items: center;
-      background-color: var(--sf-btn);
-      border-radius: 30px;
-      color: var(--btn-text, var(--sf-text));
+      background: none;
+      border: 1px solid var(--sf-accent);
+      border-radius: 0;
+      color: var(--sf-accent);
       display: inline-flex;
-      font-size: .9375rem;
-      font-weight: 500;
-      gap: 10px;
-      min-height: 44px;
-      padding: 8px 18px 8px 12px;
+      font-size: .8125rem;
+      font-weight: 700;
+      gap: 8px;
+      min-height: 32px;
+      padding: 4px 12px 4px 10px;
       text-decoration: none;
-      transition: background-color .2s, color .2s, transform .2s;
+      transition: background-color .15s, color .15s;
     }
     .social-footer .social-icon {
       align-items: center;
       display: inline-flex;
-      height: 20px;
+      height: 18px;
       justify-content: center;
-      width: 20px;
+      width: 18px;
     }
     .social-footer .social-icon svg {
       fill: currentColor;
-      height: 18px;
-      width: 18px;
+      height: 16px;
+      width: 16px;
     }
     .social-footer a:hover,
     .social-footer a:focus-visible {
       background-color: var(--sf-accent);
-      color: #ffffff;
-      transform: translateY(-2px);
+      color: var(--sf-onacc);
     }
-    .social-footer a:active { transform: scale(.96); }
     .social-footer a:focus-visible {
       outline: 2px solid var(--sf-text);
-      outline-offset: 3px;
+      outline-offset: 2px;
     }
     .social-footer__copy {
       color: var(--sf-muted);
-      font-size: .875rem;
-      font-weight: 300;
-      margin: 24px 0 0;
-      transition: color .3s ease;
+      font-size: .8125rem;
+      margin: 20px 0 0;
     }
 
-    /* Twinkling stars, same look as the page header */
+    /* Twinkling stars, same look as the page background */
     .social-footer__star {
       animation: social-twinkle var(--duration) infinite ease-in-out;
-      background-color: var(--star-color, #ffffff);
+      background-color: var(--star-color, var(--sf-text));
       border-radius: 50%;
-      filter: var(--star-filter, drop-shadow(0 0 2px rgba(255, 255, 255, .9)));
       pointer-events: none;
       position: absolute;
-      transition: background-color .3s, filter .3s;
+      transition: background-color .3s;
       will-change: transform, opacity;
     }
     @keyframes social-twinkle {
-      0%, 100% { opacity: var(--star-opacity-min, .4); transform: translate3d(0, 0, 0) scale(.8); }
-      50% { opacity: 1; transform: translate3d(var(--move-x), var(--move-y), 0) scale(1.2); }
+      0%, 100% { opacity: var(--star-opacity-min, .3); transform: translate3d(0, 0, 0) scale(.8); }
+      50% { opacity: .9; transform: translate3d(var(--move-x), var(--move-y), 0) scale(1.2); }
     }
 
-    @media (min-width: 768px) {
-      .social-footer__title { font-size: 1.5rem; }
-    }
     @media (max-width: 480px) {
-      .social-footer { padding: 32px 16px 24px; }
+      .social-footer { padding: 22px 0 18px; }
       .social-footer nav { display: grid; grid-template-columns: repeat(2, 1fr); }
       .social-footer a { justify-content: flex-start; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .social-footer__star { animation: none; opacity: .6; }
-      .social-footer a { transition: background-color .2s, color .2s; }
-      .social-footer a:hover, .social-footer a:focus-visible { transform: none; }
+      .social-footer__star { animation: none; opacity: .5; }
+      .social-footer a { transition: none; }
     }
   `;
 
