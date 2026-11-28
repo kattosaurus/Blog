@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Sandpaw",
+    "description": "A sand-colored she-cat with dark patterning, amber eyes and scars on her tail. Seen wearing a blueberry branch on her right ear. Egoistic.",
+    "color": "#CDAA6D",
+    "image": "assets/ocs/Sandpaw.png"
+  },
+  {
+    "name": "Dorito",
+    "description": "Orange / red tom cat, Amber eyes, with darker stripes on his back and tail. White paws and tip of the tail. Wears a black collar with a golden bell.",
+    "color": "#e3763b",
+    "image": "assets/ocs/Dorito.png"
+  },
+   {
+    "name": "Cracklekit",
+    "description": "Cracklekit is a sand / yellow tabby she-cat, white paws and tail tip, small leaves always stick to her fur. Amber eyes. Calm and patient, pays attention to every detail. Good storyteller",
+    "color": "#e3763b",
+    "image": "assets/ocs/Crackle.png"
+  },
+    {
+    "name": "Seed",
+    "description": "Seed is a Tabby cat, with spots on his back, a patterned tail and scars on his neck. He's good with herbs, just like a medicine cat.",
+    "color": "#00FF91",
+    "image": "assets/ocs/Seed.png"
+  },
+   {
+     "name": "Katto",
+     "description": "Dr. Murray Arthur Barr, known as Dr. B, and later as Katto, was a head scientist at the Biological Studies Facility. He is now a white-grey latex katto.",
+     "color": "#EEEEEE",
+     "image": "assets/portfolio/Origin.png"
+   },
+     {
+     "name": "Experiment 012",
+     "description": "Experiment 012, also known as An Artist, is an experiment born in the Biological Studies Facility.",
+     "color": "#EEEEEE",
+     "image": "assets/ocs/artist.png"
+   }
+]

@@ -21,12 +21,12 @@ jobs:
       - name: Fetch CurseForge + Modrinth data
         env:
           CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
-          DATA_DIR: .   # folder containing mods.json and downloads.json, e.g. changed-addons
-        run: node update-downloads.mjs
+          DATA_DIR: data/addons
+        run: node scripts/update-downloads.mjs
 
       - name: Commit changes
         env:
-          DATA_DIR: .   # keep in sync with the step above
+          DATA_DIR: data/addons
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

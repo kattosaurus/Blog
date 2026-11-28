@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:image" content="https://kattosaur.us/assets/Online.png">
+  <meta property="og:title" content="Katto | Character">
+  <meta property="og:description" content="Meet one of Katto's original characters.">
+  <title>Character | Katto dot online</title>
+  <link rel="icon" href="../assets/Online.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="page-old-oc">
+  <div class="controls">
+    <button class="burger" aria-label="Toggle navigation" onclick="toggleDropdown()">≡</button>
+    <button id="theme-toggle">Theme</button>
+  </div>
+  <nav class="dropdown" id="dropmeow">
+    <a href="index.html">Home</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="characters.html">My characters</a>
+    <a href="stories.html">Stories</a>
+  </nav>
+
+  <main>
+    <a class="back-link" href="characters.html">← All characters</a>
+    <article class="profile" id="profile">
+      <p class="state">Loading character…</p>
+    </article>
+  </main>
+
+  <script>
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      const root = document.documentElement;
+      root.setAttribute('data-theme', root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+    });
+    function toggleDropdown() { document.getElementById('dropmeow').classList.toggle('show'); }
+    window.addEventListener('click', event => {
+      if (!event.target.closest('.burger') && !event.target.closest('.dropdown')) {
+        document.getElementById('dropmeow').classList.remove('show');
+      }
+    });
+
+    function slugify(name) {
+      return name.normalize('NFKD').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    }
+    function resolveProfileAsset(path) {
+      if (!path || /^(https?:|data:|blob:|#|\/)/i.test(path)) return path;
+      return '../assets/ocs/profiles/' + path.replace(/^\.\//, '');
+    }
+    async function loadProfile() {
+      const profileEl = document.getElementById('profile');
+      try {
+        const name = new URLSearchParams(location.search).get('name');
+        if (!name) throw new Error('No character was selected.');
+        const response = await fetch('../assets/ocs/characters.json', { cache: 'no-cache' });
+        if (!response.ok) throw new Error('Could not load the character list.');
+        const characters = await response.json();
+        const character = characters.find(item => item.name === name);
+        if (!character) throw new Error('Character not found.');
+
+        let markdown = '';
+        let hasProfile = false;
+        const profilePath = `../assets/ocs/profiles/${slugify(character.name)}.md`;
+        const markdownResponse = await fetch(profilePath, { cache: 'no-cache' });
+        if (markdownResponse.ok) {
+          markdown = await markdownResponse.text();
+          hasProfile = true;
+        } else {
+          markdown = `# ${character.name}\n\n${character.description || 'Add this character’s description to their Markdown profile.'}`;
+        }
+
+        const hero = document.createElement('header');
+        hero.className = 'hero';
+        const image = document.createElement('img');
+        image.src = character.image.startsWith('assets/') ? '../' + character.image : character.image;
+        image.alt = character.name;
+        image.onerror = () => { image.hidden = true; };
+        const intro = document.createElement('div');
+        const title = document.createElement('h1');
+        title.textContent = character.name;
+        const summary = document.createElement('p');
+        summary.className = 'summary';
+        summary.textContent = character.description || '';
+        intro.append(title, summary);
+        hero.append(image, intro);
+
+        const content = document.createElement('div');
+        content.className = 'markdown';
+        content.innerHTML = marked.parse(markdown);
+        content.querySelectorAll('img[src]').forEach(img => img.src = resolveProfileAsset(img.getAttribute('src')));
+        content.querySelectorAll('a[href]').forEach(link => {
+          const href = link.getAttribute('href');
+          if (href && !/^(https?:|mailto:|#|\/)/i.test(href)) link.href = resolveProfileAsset(href);
+        });
+        profileEl.replaceChildren(hero, content);
+        document.title = `${character.name} | Katto dot online`;
+        if (!hasProfile) {
+          const note = document.createElement('p');
+          note.className = 'state';
+          note.textContent = `Markdown profile not found. Create ${profilePath} to add a full description.`;
+          content.prepend(note);
+        }
+      } catch (error) {
+        console.error(error);
+        profileEl.innerHTML = '<p class="state error">Could not load this character profile.</p>';
+      }
+    }
+    loadProfile();
+  </script>
+</body>
+</html>

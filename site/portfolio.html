@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:image" content="https://kattosaur.us/assets/Online.png">
+  <meta property="og:image:alt" content="Katto — art, web development, and Minecraft mods">
+  <meta property="og:title" content="Katto">
+  <meta property="og:description" content="Art, web development, and Minecraft mods by Katto.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://kattosaur.us/assets/Online.png">
+  <title>Portfolio | Katto dot online</title>
+  <link rel="icon" href="assets/Online.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-portfolio">
+  <canvas id="stars" aria-hidden="true"></canvas>
+
+  <header class="term-bar controls">
+    <i></i><i></i><i></i>
+    <nav class="menus" aria-label="Page menus">
+      <button id="burger" class="burger menu-btn" type="button" data-menu="dropmeow" aria-haspopup="menu" aria-expanded="false" data-en="Navigate" data-es="Navegar">Navigate</button>
+      <button id="theme-toggle" class="control-btn menu-btn" type="button" data-menu="theme-menu" aria-haspopup="menu" aria-expanded="false" data-en="Theme" data-es="Tema">Theme</button>
+      <button id="lang-toggle" class="control-btn menu-btn" type="button" data-menu="lang-menu" aria-haspopup="menu" aria-expanded="false" data-en="Language" data-es="Idioma">Language</button>
+    </nav>
+    <span class="spacer"></span>
+  </header>
+
+  <div class="dropdown" id="dropmeow" role="menu">
+      <a href="index.html" data-en="Home" data-es="Inicio">Home</a>
+      <a href="index.html#about" data-en="About myself" data-es="Sobre mí">About myself</a>
+      <a href="index.html#services" data-en="My services" data-es="Mis servicios">My services</a>
+      <a href="portfolio.html" data-en="Portfolio" data-es="Portafolio">Portfolio</a>
+      <a href="commission.html" data-en="Commission me" data-es="Comisiones">Commission me</a>
+      <div class="separator"></div>
+      <a href="characters.html" data-en="My characters" data-es="Mis personajes">My characters</a>
+      <a href="stories.html" data-en="Stories" data-es="Historias">Stories</a>
+  </div>
+
+  <div class="dropdown" id="theme-menu" role="menu">
+      <a href="#" role="menuitemradio" aria-checked="true" data-theme-opt="dark"><span class="tick"></span><span class="lbl" data-en="Dark" data-es="Oscuro">Dark</span></a>
+      <a href="#" role="menuitemradio" aria-checked="false" data-theme-opt="light"><span class="tick"></span><span class="lbl" data-en="Light" data-es="Claro">Light</span></a>
+      <div class="separator"></div>
+      <a href="/old/portfolio.html" id="old-layout" role="menuitem"><span class="tick"></span><span class="lbl" data-en="View old layout" data-es="Ver diseño anterior">View old layout</span></a>
+  </div>
+
+  <div class="dropdown" id="lang-menu" role="menu">
+      <a href="#" role="menuitemradio" aria-checked="true" data-lang-opt="en"><span class="tick"></span><span class="lbl">English</span></a>
+      <a href="#" role="menuitemradio" aria-checked="false" data-lang-opt="es"><span class="tick"></span><span class="lbl">Español</span></a>
+  </div>
+
+  <main class="screen">
+    <h1 class="headline"><span class="prompt">$</span> <span class="cmd">ls portfolio/</span><span class="cursor" aria-hidden="true"></span></h1>
+
+    <section class="portfolio box big" id="portfolio" data-title="portfolio">
+      <div id="tab-bar"></div>
+      <div class="grid-container" id="grid">
+        <p class="portfolio-loading" data-en="Loading portfolio..." data-es="Cargando portafolio...">Loading portfolio...</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const el=(tag,props={},...kids)=>{const n=document.createElement(tag);for(const[k,v]of Object.entries(props)){if(v==null||v===false)continue;if(k==='class')n.className=v;else if(k==='text')n.textContent=v;else n.setAttribute(k,v===true?'':v)}kids.flat().forEach(c=>c!=null&&n.append(c));return n};
+
+    /* ---------- Windows drawn from characters: + - | ---------- */
+    const D='-'.repeat(400),V='|\n'.repeat(150);
+    /* Corner characters. Plain dashes by default; to use symbols instead, set e.g. tl:'⌜',tr:'⌝',bl:'⌞',br:'⌟' */
+    const C={tl:'-',tr:'-',bl:'-',br:'-'};
+    const edge=(cls,t,l,r)=>el('div',{class:cls,'aria-hidden':'true'},el('span',{text:l}),el('span',{class:'d',text:t}),el('span',{text:r}));
+    function wrap(b,title){
+      const body=el('div',{class:'b-body'});body.append(...b.childNodes);
+      b.append(edge('b-top',title?'-- '+title+' '+D:D,C.tl,C.tr),el('div',{class:'b-l','aria-hidden':'true',text:V}),el('div',{class:'b-r','aria-hidden':'true',text:V}),body,edge('b-bot',D,C.bl,C.br));
+      return b;
+    }
+    document.querySelectorAll('.box').forEach(b=>wrap(b,b.dataset.title));
+
+    /* ---------- Starfield: background of the whole site ---------- */
+    const stars=(function(){
+      const cv=document.getElementById('stars'),cx=cv.getContext('2d'),still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let list=[],w=0,h=0,color='#fff';
+      function init(){
+        const dpr=Math.min(devicePixelRatio||1,2);
+        w=innerWidth;h=innerHeight;cv.width=w*dpr;cv.height=h*dpr;cx.setTransform(dpr,0,0,dpr,0,0);
+        list=Array.from({length:Math.round(w*h/5500)},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.2+.3,p:Math.random()*6.28,s:Math.random()*.02+.004,v:Math.random()*.04+.01}));
+        if(still)paint();
+      }
+      function paint(){
+        cx.clearRect(0,0,w,h);cx.fillStyle=color;
+        for(const s of list){
+          s.p+=s.s;
+          if(!still){s.y+=s.v;if(s.y>h+2){s.y=-2;s.x=Math.random()*w}}
+          cx.globalAlpha=.3+.7*Math.abs(Math.sin(s.p));
+          cx.beginPath();cx.arc(s.x,s.y,s.r,0,6.283);cx.fill();
+        }
+        if(!still)requestAnimationFrame(paint);
+      }
+      let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(init,200)});
+      init();if(!still)paint();
+      return{setColor(c){color=c;if(still)paint()}};
+    })();
+
+    /* ---------- Language & Theme ---------- */
+    const checked=(sel,attr,val)=>document.querySelectorAll(sel).forEach(a=>a.setAttribute('aria-checked',String(a.getAttribute(attr)===val)));
+
+    function setLang(l) {
+      document.documentElement.lang = l;
+      document.querySelectorAll('[data-en]').forEach(n => {
+        n.textContent = n.getAttribute(`data-${l}`);
+      });
+      checked('[data-lang-opt]', 'data-lang-opt', l);
+    }
+
+    function setTheme(t) {
+      document.documentElement.setAttribute('data-theme', t);
+      stars.setColor(t === 'light' ? '#222' : '#fff');
+      checked('[data-theme-opt]', 'data-theme-opt', t);
+    }
+
+    document.querySelectorAll('[data-lang-opt]').forEach(a => a.addEventListener('click', e => {
+      e.preventDefault();
+      setLang(a.dataset.langOpt);
+    }));
+    document.querySelectorAll('[data-theme-opt]').forEach(a => a.addEventListener('click', e => {
+      e.preventDefault();
+      setTheme(a.dataset.themeOpt);
+    }));
+
+    /* ---------- macOS-style dropdown menus ---------- */
+    function closeMenus() {
+      document.querySelectorAll('.dropdown').forEach(m => m.classList.remove('show'));
+      document.querySelectorAll('.menu-btn').forEach(b => b.setAttribute('aria-expanded', 'false'));
+    }
+    document.querySelectorAll('.menu-btn').forEach(btn => btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const menu = document.getElementById(btn.dataset.menu);
+      const wasOpen = menu.classList.contains('show');
+      closeMenus();
+      if (!wasOpen) {
+        menu.style.left = Math.max(8, btn.getBoundingClientRect().left) + 'px';
+        menu.classList.add('show');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    }));
+    document.addEventListener('click', closeMenus);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenus(); });
+
+    /* ---------- Portfolio Loader ---------- */
+    const grid = document.getElementById('grid');
+    const tabBar = document.getElementById('tab-bar');
+
+    function createMediaItem(entry) {
+      return new Promise((resolve) => {
+        const file = (typeof entry === 'string') ? entry : entry.file;
+        const category = (typeof entry === 'string') ? 'Uncategorized' : (entry.category || 'Uncategorized');
+        const lower = file.toLowerCase();
+        const item = document.createElement('div');
+        item.className = 'grid-item';
+        item.dataset.category = category;
+        const path = `assets/portfolio/${file}`;
+
+        if (lower.endsWith('.png') || lower.endsWith('.jpg') || lower.endsWith('.jpeg')) {
+          const img = new Image();
+          img.src = path;
+          img.loading = 'lazy';
+          img.alt = file;
+          resolve({ element: item });
+          img.onload = () => {
+            const ratio = img.naturalWidth / img.naturalHeight;
+            if (ratio > 1.2) item.classList.add('orientation-landscape');
+            else if (ratio < 0.8) item.classList.add('orientation-portrait');
+            else item.classList.add('orientation-square');
+          };
+          img.onerror = () => item.remove();
+          item.appendChild(img);
+        }
+        else if (lower.endsWith('.mp4')) {
+          const video = document.createElement('video');
+          video.src = path;
+          video.muted = true;
+          video.autoplay = true;
+          video.loop = true;
+          video.playsInline = true;
+          video.preload = 'metadata';
+          video.onloadedmetadata = () => {
+            const ratio = video.videoWidth / video.videoHeight || 1.77;
+            if (ratio > 1.2) item.classList.add('orientation-landscape');
+            else if (ratio < 0.8) item.classList.add('orientation-portrait');
+            else item.classList.add('orientation-square');
+            resolve({ element: item });
+            video.play().catch(() => {});
+          };
+          video.onerror = () => resolve(null);
+          item.appendChild(video);
+        }
+        else {
+          resolve(null);
+        }
+      });
+    }
+
+    function applyFilter(activeCategory) {
+      const items = grid.querySelectorAll('.grid-item');
+      items.forEach(item => {
+        const match = activeCategory === 'All' || item.dataset.category === activeCategory;
+        item.classList.toggle('hidden', !match);
+      });
+    }
+
+    async function loadManifest() {
+      try {
+        const res = await fetch('assets/portfolio/manifest.json', { cache: 'no-cache' });
+        const entries = await res.json();
+        const categories = ['All', ...new Set(entries.map(e => e.category).filter(Boolean))];
+
+        tabBar.className = 'portfolio-tabs';
+        tabBar.setAttribute('role', 'tablist');
+        let activeCategory = 'All';
+
+        categories.forEach(cat => {
+          const btn = document.createElement('button');
+          btn.className = 'portfolio-tab-btn' + (cat === 'All' ? ' active' : '');
+          btn.textContent = cat;
+          btn.setAttribute('role', 'tab');
+          btn.setAttribute('aria-selected', cat === 'All' ? 'true' : 'false');
+          btn.addEventListener('click', () => {
+            activeCategory = cat;
+            tabBar.querySelectorAll('.portfolio-tab-btn').forEach(b => {
+              const isActive = b.textContent === cat;
+              b.classList.toggle('active', isActive);
+              b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            });
+            applyFilter(activeCategory);
+          });
+          tabBar.appendChild(btn);
+        });
+
+        grid.innerHTML = '';
+        const chunkSize = 5;
+        for (let i = 0; i < entries.length; i += chunkSize) {
+          const chunk = entries.slice(i, i + chunkSize);
+          const results = await Promise.all(chunk.map(e => createMediaItem(e)));
+          results.forEach(result => {
+            if (!result) return;
+            grid.appendChild(result.element);
+          });
+        }
+        applyFilter('All');
+      } catch (err) {
+        console.error(err);
+        grid.innerHTML = '<p class="portfolio-error" data-en="Could not load portfolio." data-es="No se pudo cargar el portafolio.">Could not load portfolio.</p>';
+      }
+    }
+
+    loadManifest();
+  </script>
+  <script>
+    /* "View old layout" goes to /old/<this page's filename>, keeping any ?query and #hash */
+    (function(){var a=document.getElementById("old-layout");if(!a)return;var f=location.pathname.split("/").pop()||"index.html";if(f.indexOf(".")<0)f+=".html";a.href="/old/"+f+location.search+location.hash;})();
+  </script>
+</body>
+</html>

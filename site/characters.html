@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:image" content="https://kattosaur.us/assets/Online.png">
+  <meta property="og:image:alt" content="Katto — art, web development, and Minecraft mods">
+  <meta property="og:title" content="Katto">
+  <meta property="og:description" content="Art, web development, and Minecraft mods by Katto.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://kattosaur.us/assets/Online.png">
+  <title>Characters | Katto dot online</title>
+  <link rel="icon" href="assets/Online.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-characters">
+  <canvas id="stars" aria-hidden="true"></canvas>
+
+  <header class="term-bar controls">
+    <i></i><i></i><i></i>
+    <nav class="menus" aria-label="Page menus">
+      <button id="burger" class="burger menu-btn" type="button" data-menu="dropmeow" aria-haspopup="menu" aria-expanded="false" data-en="Navigate" data-es="Navegar">Navigate</button>
+      <button id="theme-toggle" class="control-btn menu-btn" type="button" data-menu="theme-menu" aria-haspopup="menu" aria-expanded="false" data-en="Theme" data-es="Tema">Theme</button>
+      <button id="lang-toggle" class="control-btn menu-btn" type="button" data-menu="lang-menu" aria-haspopup="menu" aria-expanded="false" data-en="Language" data-es="Idioma">Language</button>
+    </nav>
+    <span class="spacer"></span>
+  </header>
+
+  <div class="dropdown" id="dropmeow" role="menu">
+      <a href="index.html" data-en="Home" data-es="Inicio">Home</a>
+      <a href="index.html#about" data-en="About myself" data-es="Sobre mí">About myself</a>
+      <a href="index.html#services" data-en="My services" data-es="Mis servicios">My services</a>
+      <a href="portfolio.html" data-en="Portfolio" data-es="Portafolio">Portfolio</a>
+      <a href="commission.html" data-en="Commission me" data-es="Comisiones">Commission me</a>
+      <div class="separator"></div>
+      <a href="characters.html" data-en="My characters" data-es="Mis personajes">My characters</a>
+      <a href="stories.html" data-en="Stories" data-es="Historias">Stories</a>
+  </div>
+
+  <div class="dropdown" id="theme-menu" role="menu">
+      <a href="#" role="menuitemradio" aria-checked="true" data-theme-opt="dark"><span class="tick"></span><span class="lbl" data-en="Dark" data-es="Oscuro">Dark</span></a>
+      <a href="#" role="menuitemradio" aria-checked="false" data-theme-opt="light"><span class="tick"></span><span class="lbl" data-en="Light" data-es="Claro">Light</span></a>
+      <div class="separator"></div>
+      <a href="/old/characters.html" id="old-layout" role="menuitem"><span class="tick"></span><span class="lbl" data-en="View old layout" data-es="Ver diseño anterior">View old layout</span></a>
+  </div>
+
+  <div class="dropdown" id="lang-menu" role="menu">
+      <a href="#" role="menuitemradio" aria-checked="true" data-lang-opt="en"><span class="tick"></span><span class="lbl">English</span></a>
+      <a href="#" role="menuitemradio" aria-checked="false" data-lang-opt="es"><span class="tick"></span><span class="lbl">Español</span></a>
+  </div>
+
+  <main class="screen">
+    <h1 class="headline"><span class="prompt">$</span> <span class="cmd">ls characters/</span><span class="cursor" aria-hidden="true"></span></h1>
+    <p class="intro-text" data-en="A collection of my original characters (OCs). Click any card to learn more about them." data-es="Una colección de mis personajes originales (OCs). Haz clic en cualquier tarjeta para saber más sobre ellos.">A collection of my original characters (OCs). Click any card to learn more about them.</p>
+    <div id="char-groups"><p class="loading-state" data-en="Loading characters..." data-es="Cargando personajes...">Loading characters...</p></div>
+  </main>
+
+  <script>
+    const el=(tag,props={},...kids)=>{const n=document.createElement(tag);for(const[k,v]of Object.entries(props)){if(v==null||v===false)continue;if(k==='class')n.className=v;else if(k==='text')n.textContent=v;else n.setAttribute(k,v===true?'':v)}kids.flat().forEach(c=>c!=null&&n.append(c));return n};
+
+    /* ---------- Windows drawn from characters: + - | ---------- */
+    const D='-'.repeat(400),V='|\n'.repeat(150);
+    /* Corner characters. Plain dashes by default; to use symbols instead, set e.g. tl:'⌜',tr:'⌝',bl:'⌞',br:'⌟' */
+    const C={tl:'-',tr:'-',bl:'-',br:'-'};
+    const edge=(cls,t,l,r)=>el('div',{class:cls,'aria-hidden':'true'},el('span',{text:l}),el('span',{class:'d',text:t}),el('span',{text:r}));
+    function wrap(b,title){
+      const body=el('div',{class:'b-body'});body.append(...b.childNodes);
+      b.append(edge('b-top',title?'-- '+title+' '+D:D,C.tl,C.tr),el('div',{class:'b-l','aria-hidden':'true',text:V}),el('div',{class:'b-r','aria-hidden':'true',text:V}),body,edge('b-bot',D,C.bl,C.br));
+      return b;
+    }
+
+    /* ---------- Starfield: background of the whole site ---------- */
+    const stars=(function(){
+      const cv=document.getElementById('stars'),cx=cv.getContext('2d'),still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let list=[],w=0,h=0,color='#fff';
+      function init(){
+        const dpr=Math.min(devicePixelRatio||1,2);
+        w=innerWidth;h=innerHeight;cv.width=w*dpr;cv.height=h*dpr;cx.setTransform(dpr,0,0,dpr,0,0);
+        list=Array.from({length:Math.round(w*h/5500)},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.2+.3,p:Math.random()*6.28,s:Math.random()*.02+.004,v:Math.random()*.04+.01}));
+        if(still)paint();
+      }
+      function paint(){
+        cx.clearRect(0,0,w,h);cx.fillStyle=color;
+        for(const s of list){
+          s.p+=s.s;
+          if(!still){s.y+=s.v;if(s.y>h+2){s.y=-2;s.x=Math.random()*w}}
+          cx.globalAlpha=.3+.7*Math.abs(Math.sin(s.p));
+          cx.beginPath();cx.arc(s.x,s.y,s.r,0,6.283);cx.fill();
+        }
+        if(!still)requestAnimationFrame(paint);
+      }
+      let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(init,200)});
+      init();if(!still)paint();
+      return{setColor(c){color=c;if(still)paint()}};
+    })();
+
+    /* ---------- Language & Theme ---------- */
+    let currentLang = 'en';
+    const checked=(sel,attr,val)=>document.querySelectorAll(sel).forEach(a=>a.setAttribute('aria-checked',String(a.getAttribute(attr)===val)));
+
+    function applyLang() {
+      document.documentElement.lang = currentLang;
+      document.querySelectorAll('[data-en]').forEach(n => {
+        const text = n.getAttribute(`data-${currentLang}`);
+        if (text) n.textContent = text;
+      });
+      checked('[data-lang-opt]', 'data-lang-opt', currentLang);
+    }
+    function setLang(l) { currentLang = l; applyLang(); }
+
+    function setTheme(t) {
+      document.documentElement.setAttribute('data-theme', t);
+      stars.setColor(t === 'light' ? '#222' : '#fff');
+      checked('[data-theme-opt]', 'data-theme-opt', t);
+    }
+
+    document.querySelectorAll('[data-lang-opt]').forEach(a => a.addEventListener('click', e => {
+      e.preventDefault();
+      setLang(a.dataset.langOpt);
+    }));
+    document.querySelectorAll('[data-theme-opt]').forEach(a => a.addEventListener('click', e => {
+      e.preventDefault();
+      setTheme(a.dataset.themeOpt);
+    }));
+
+    /* ---------- macOS-style dropdown menus ---------- */
+    function closeMenus() {
+      document.querySelectorAll('.dropdown').forEach(m => m.classList.remove('show'));
+      document.querySelectorAll('.menu-btn').forEach(b => b.setAttribute('aria-expanded', 'false'));
+    }
+    document.querySelectorAll('.menu-btn').forEach(btn => btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const menu = document.getElementById(btn.dataset.menu);
+      const wasOpen = menu.classList.contains('show');
+      closeMenus();
+      if (!wasOpen) {
+        menu.style.left = Math.max(8, btn.getBoundingClientRect().left) + 'px';
+        menu.classList.add('show');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    }));
+    document.addEventListener('click', closeMenus);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenus(); });
+
+    /* ---------- Characters ---------- */
+    const changedExtrasPassword = 'I trust you with my lore';
+    const groupsContainer = document.getElementById('char-groups');
+    function isChangedExtrasUnlocked() {
+      return sessionStorage.getItem('changed-extras-unlocked') === 'true';
+    }
+    function setChangedExtrasUnlocked(value) {
+      if (value) sessionStorage.setItem('changed-extras-unlocked', 'true');
+      else sessionStorage.removeItem('changed-extras-unlocked');
+    }
+    function extractDocLink(desc) { const match = desc.match(/https:\/\/docs\.google\.com\/[^"]+/); return match ? match[0] : null; }
+    function cleanDescription(desc) { return desc.replace(/https:\/\/[^"]+/g, '').replace(/::\s*/g, ' • ').trim(); }
+    function renderCharacter(char, grid) {
+      const card = document.createElement('article'); card.className = 'char-card';
+      const accent = document.createElement('div'); accent.className = 'char-accent'; accent.style.backgroundColor = char.color || '#999'; card.appendChild(accent);
+      const imageWrap = document.createElement('div'); imageWrap.className = 'char-img-wrap';
+      const image = document.createElement('img'); image.src = char.image; image.alt = char.name; image.loading = 'lazy'; image.onerror = () => { image.style.display = 'none'; };
+      imageWrap.appendChild(image); card.appendChild(imageWrap);
+      const info = document.createElement('div'); info.className = 'char-info';
+      const name = document.createElement('a'); name.className = 'char-name'; name.textContent = char.name; name.href = `oc.html?name=${encodeURIComponent(char.name)}`;
+      const description = document.createElement('div'); description.className = 'char-desc'; description.textContent = cleanDescription(char.description || ''); info.append(name, description);
+      const docLink = extractDocLink(char.description || '');
+      if (docLink) { const link = document.createElement('a'); link.href = docLink; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.className = 'char-link'; link.textContent = 'More info'; link.setAttribute('data-en', 'More info'); link.setAttribute('data-es', 'Más información'); info.appendChild(link); }
+      card.appendChild(info); grid.appendChild(card);
+    }
+    function renderPasswordGate(groupName, onUnlock) {
+      const section = document.createElement('section'); section.className = 'char-group box';
+      const gate = document.createElement('div'); gate.className = 'password-gate';
+      const title = document.createElement('h3'); title.textContent = 'Restricted section'; title.setAttribute('data-en', 'Restricted section'); title.setAttribute('data-es', 'Sección restringida');
+      const subtitle = document.createElement('p'); subtitle.className = 'password-text'; subtitle.textContent = 'Enter the password to view this character group.'; subtitle.setAttribute('data-en', 'Enter the password to view this character group.'); subtitle.setAttribute('data-es', 'Ingresa la contraseña para ver este grupo de personajes.');
+      const form = document.createElement('form'); form.className = 'password-form';
+      const input = document.createElement('input'); input.type = 'password'; input.placeholder = 'Password'; input.autocomplete = 'off';
+      const submit = document.createElement('button'); submit.type = 'submit'; submit.textContent = 'Unlock'; submit.setAttribute('data-en', 'Unlock'); submit.setAttribute('data-es', 'Desbloquear');
+      const error = document.createElement('p'); error.className = 'password-error'; error.hidden = true;
+      form.append(input, submit);
+      gate.append(title, subtitle, form, error);
+      section.appendChild(gate);
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        if (input.value === changedExtrasPassword) {
+          setChangedExtrasUnlocked(true);
+          onUnlock();
+          return;
+        }
+        error.hidden = false;
+        error.textContent = 'Incorrect password.';
+      });
+      wrap(section, groupName);
+      groupsContainer.appendChild(section);
+    }
+    function renderGroup(groupName, characters) {
+      if (!characters.length) return;
+      if (groupName === 'Changed Extras' && !isChangedExtrasUnlocked()) {
+        renderPasswordGate(groupName, () => {
+          groupsContainer.replaceChildren();
+          loadCharacters();
+        });
+        return;
+      }
+      const section = document.createElement('section'); section.className = 'char-group box';
+      const grid = document.createElement('div'); grid.className = 'char-grid'; characters.forEach(char => renderCharacter(char, grid));
+      section.appendChild(grid);
+      wrap(section, groupName);
+      groupsContainer.appendChild(section);
+    }
+    async function loadCharacters() {
+      try {
+        const [charactersRes, manifestRes] = await Promise.all([fetch('assets/ocs/characters.json', {cache:'no-cache'}), fetch('assets/ocs/manifest.json', {cache:'no-cache'})]);
+        if (!charactersRes.ok || !manifestRes.ok) throw new Error('Could not load characters or manifest');
+        const [characters, manifest] = await Promise.all([charactersRes.json(), manifestRes.json()]);
+        if (!Array.isArray(characters) || !Array.isArray(manifest.groups)) throw new Error('Invalid character list or manifest');
+        const charactersByName = new Map(characters.map(char => [char.name, char]));
+        const assignedNames = new Set();
+        groupsContainer.replaceChildren();
+        manifest.groups.forEach(group => {
+          if (typeof group.name !== 'string' || !Array.isArray(group.characters)) return;
+          const members = group.characters.filter(name => typeof name === 'string' && !assignedNames.has(name)).map(name => { assignedNames.add(name); return charactersByName.get(name); }).filter(Boolean);
+          renderGroup(group.name, members);
+        });
+        renderGroup(manifest.ungroupedGroup || 'Other OCs', characters.filter(char => !assignedNames.has(char.name)));
+        if (currentLang !== 'en') applyLang();
+      } catch (error) {
+        console.error(error);
+        groupsContainer.innerHTML = '<p class="error-state" data-en="Could not load characters." data-es="No se pudieron cargar los personajes.">Could not load characters.</p>';
+      }
+    }
+    loadCharacters();
+  </script>
+  <script>
+    /* "View old layout" goes to /old/<this page's filename>, keeping any ?query and #hash */
+    (function(){var a=document.getElementById("old-layout");if(!a)return;var f=location.pathname.split("/").pop()||"index.html";if(f.indexOf(".")<0)f+=".html";a.href="/old/"+f+location.search+location.hash;})();
+  </script>
+</body>
+</html>

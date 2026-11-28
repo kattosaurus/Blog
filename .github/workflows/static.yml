@@ -32,6 +32,14 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Assemble the published site
+        run: |
+          mkdir -p site/assets site/addons site/scripts
+          cp -a assets/. site/assets/
+          cp -a data/addons/. site/addons/
+          cp scripts/socials.js site/scripts/socials.js
+          cp styles.css site/styles.css
+          cp index.html site/index.html
       - name: Inject social footer into every HTML page
         run: |
           python3 - <<'PY'
@@ -40,7 +48,8 @@ jobs:
           import re
 
           root = Path.cwd()
-          for page in root.rglob('*.html'):
+          site = root / 'site'
+          for page in site.rglob('*.html'):
               if '.git' in page.parts:
                   continue
 
@@ -48,7 +57,7 @@ jobs:
               if 'socials.js' in content:
                   continue
 
-              script_path = os.path.relpath(root / 'socials.js', page.parent).replace(os.sep, '/')
+              script_path = os.path.relpath(site / 'scripts/socials.js', page.parent).replace(os.sep, '/')
               script_tag = f'<script src="{script_path}" defer></script>'
               updated, count = re.subn(
                   r'</body\s*>',
@@ -63,8 +72,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          # Publish the site directory as the Pages document root
+          path: './site'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5

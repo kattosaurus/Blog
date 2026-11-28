@@ -16,7 +16,7 @@
 ## Site Structure & Navigation
 - **Home / About:** `#about` — Personal bio, identity, and background details.
 - **Services:** `#services` — Carousel outlining commission availability, web design, and Minecraft mod development.
-- **Portfolio:** `portfolio.html` / `portfolio/` — Showcase of past work and projects.
+- **Portfolio:** `portfolio.html` / `assets/portfolio/` — Showcase of past work and projects.
 - **Commissions:** `commission.html` / `commission/` — Pricing, terms, and request information.
 - **Characters:** `characters.html` — Original characters and fursona details.
 

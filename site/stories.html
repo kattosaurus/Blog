@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:image" content="https://kattosaur.us/assets/Online.png">
+  <meta property="og:image:alt" content="Katto — art, web development, and Minecraft mods">
+  <meta property="og:title" content="Katto">
+  <meta property="og:description" content="Stories and posts by Katto.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://kattosaur.us/assets/Online.png">
+  <title>Stories | Katto dot online</title>
+  <link rel="icon" href="assets/Online.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-stories">
+  <canvas id="stars" aria-hidden="true"></canvas>
+
+  <header class="term-bar controls">
+    <i></i><i></i><i></i>
+    <nav class="menus" aria-label="Page menus">
+      <button id="burger" class="burger menu-btn" type="button" data-menu="dropmeow" aria-haspopup="menu" aria-expanded="false" data-en="Navigate" data-es="Navegar">Navigate</button>
+      <button id="theme-toggle" class="control-btn menu-btn" type="button" data-menu="theme-menu" aria-haspopup="menu" aria-expanded="false" data-en="Theme" data-es="Tema">Theme</button>
+      <button id="lang-toggle" class="control-btn menu-btn" type="button" data-menu="lang-menu" aria-haspopup="menu" aria-expanded="false" data-en="Language" data-es="Idioma">Language</button>
+    </nav>
+    <span class="spacer"></span>
+  </header>
+
+  <div class="dropdown" id="dropmeow" role="menu">
+      <a href="index.html" data-en="Home" data-es="Inicio">Home</a>
+      <a href="index.html#about" data-en="About myself" data-es="Sobre mí">About myself</a>
+      <a href="index.html#services" data-en="My services" data-es="Mis servicios">My services</a>
+      <a href="portfolio.html" data-en="Portfolio" data-es="Portafolio">Portfolio</a>
+      <a href="commission.html" data-en="Commission me" data-es="Comisiones">Commission me</a>
+      <div class="separator"></div>
+      <a href="characters.html" data-en="My characters" data-es="Mis personajes">My characters</a>
+      <a href="stories.html" data-en="Stories" data-es="Historias">Stories</a>
+  </div>
+
+  <div class="dropdown" id="theme-menu" role="menu">
+      <a href="#" role="menuitemradio" aria-checked="true" data-theme-opt="dark"><span class="tick"></span><span class="lbl" data-en="Dark" data-es="Oscuro">Dark</span></a>
+      <a href="#" role="menuitemradio" aria-checked="false" data-theme-opt="light"><span class="tick"></span><span class="lbl" data-en="Light" data-es="Claro">Light</span></a>
+      <div class="separator"></div>
+      <a href="/old/stories.html" id="old-layout" role="menuitem"><span class="tick"></span><span class="lbl" data-en="View old layout" data-es="Ver diseño anterior">View old layout</span></a>
+  </div>
+
+  <div class="dropdown" id="lang-menu" role="menu">
+      <a href="#" role="menuitemradio" aria-checked="true" data-lang-opt="en"><span class="tick"></span><span class="lbl">English</span></a>
+      <a href="#" role="menuitemradio" aria-checked="false" data-lang-opt="es"><span class="tick"></span><span class="lbl">Español</span></a>
+  </div>
+
+  <main class="screen">
+    <h1 class="headline"><span class="prompt">$</span> <span class="cmd">ls stories/</span><span class="cursor" aria-hidden="true"></span></h1>
+    <p class="intro-text" data-en="Posts and writeups by <strong>Katt</strong>. Click a post to read the full thing." data-es="Publicaciones y escritos por <strong>Katt</strong>. Haz clic en una publicación para leerla completa.">Posts and writeups by <strong>Katt</strong>. Click a post to read the full thing.</p>
+
+    <section class="box" data-title="stories">
+      <div class="posts-list" id="posts-list">
+        <p class="state-msg" id="state-msg" data-en="Loading posts…" data-es="Cargando publicaciones…">Loading posts…</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Post reader modal -->
+  <div class="modal-overlay" id="reader-modal">
+    <div class="reader-box box" data-title="post">
+      <button class="reader-close" id="reader-close" type="button" aria-label="Close">✕</button>
+      <h2 class="reader-title" id="reader-title"></h2>
+      <div class="reader-meta" id="reader-meta"></div>
+      <div class="md-body" id="reader-body"></div>
+
+      <div class="rating-section" id="rating-section">
+        <h3 data-en="Rate this post" data-es="Califica esta publicación">Rate this post</h3>
+        <div class="rate-stars" id="rating-stars">
+          <span class="star" data-value="1">★</span>
+          <span class="star" data-value="2">★</span>
+          <span class="star" data-value="3">★</span>
+          <span class="star" data-value="4">★</span>
+          <span class="star" data-value="5">★</span>
+        </div>
+        <textarea
+          class="rating-comment"
+          id="rating-comment"
+          rows="3"
+          data-en-placeholder="Add a comment (optional)"
+          data-es-placeholder="Agrega un comentario (opcional)"
+          placeholder="Add a comment (optional)"
+        ></textarea>
+        <button class="rating-submit-btn" id="rating-submit" type="button" data-en="Submit rating" data-es="Enviar calificación">Submit rating</button>
+        <div class="rating-feedback" id="rating-feedback"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const el=(tag,props={},...kids)=>{const n=document.createElement(tag);for(const[k,v]of Object.entries(props)){if(v==null||v===false)continue;if(k==='class')n.className=v;else if(k==='text')n.textContent=v;else n.setAttribute(k,v===true?'':v)}kids.flat().forEach(c=>c!=null&&n.append(c));return n};
+
+    /* ---------- Windows drawn from characters: + - | ---------- */
+    const D='-'.repeat(400),V='|\n'.repeat(150);
+    /* Corner characters. Plain dashes by default; to use symbols instead, set e.g. tl:'⌜',tr:'⌝',bl:'⌞',br:'⌟' */
+    const C={tl:'-',tr:'-',bl:'-',br:'-'};
+    const edge=(cls,t,l,r)=>el('div',{class:cls,'aria-hidden':'true'},el('span',{text:l}),el('span',{class:'d',text:t}),el('span',{text:r}));
+    function wrap(b,title){
+      const body=el('div',{class:'b-body'});body.append(...b.childNodes);
+      b.append(edge('b-top',title?'-- '+title+' '+D:D,C.tl,C.tr),el('div',{class:'b-l','aria-hidden':'true',text:V}),el('div',{class:'b-r','aria-hidden':'true',text:V}),body,edge('b-bot',D,C.bl,C.br));
+      return b;
+    }
+    document.querySelectorAll('.box').forEach(b=>wrap(b,b.dataset.title));
+
+    /* ---------- Starfield: background of the whole site ---------- */
+    const stars=(function(){
+      const cv=document.getElementById('stars'),cx=cv.getContext('2d'),still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let list=[],w=0,h=0,color='#fff';
+      function init(){
+        const dpr=Math.min(devicePixelRatio||1,2);
+        w=innerWidth;h=innerHeight;cv.width=w*dpr;cv.height=h*dpr;cx.setTransform(dpr,0,0,dpr,0,0);
+        list=Array.from({length:Math.round(w*h/5500)},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.2+.3,p:Math.random()*6.28,s:Math.random()*.02+.004,v:Math.random()*.04+.01}));
+        if(still)paint();
+      }
+      function paint(){
+        cx.clearRect(0,0,w,h);cx.fillStyle=color;
+        for(const s of list){
+          s.p+=s.s;
+          if(!still){s.y+=s.v;if(s.y>h+2){s.y=-2;s.x=Math.random()*w}}
+          cx.globalAlpha=.3+.7*Math.abs(Math.sin(s.p));
+          cx.beginPath();cx.arc(s.x,s.y,s.r,0,6.283);cx.fill();
+        }
+        if(!still)requestAnimationFrame(paint);
+      }
+      let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(init,200)});
+      init();if(!still)paint();
+      return{setColor(c){color=c;if(still)paint()}};
+    })();
+
+    /* ---------- Language & Theme ---------- */
+    let currentLang = 'en';
+    const checked=(sel,attr,val)=>document.querySelectorAll(sel).forEach(a=>a.setAttribute('aria-checked',String(a.getAttribute(attr)===val)));
+
+    function applyLang() {
+      document.documentElement.lang = currentLang;
+      document.querySelectorAll('[data-en]').forEach(n => {
+        const newText = n.getAttribute(`data-${currentLang}`);
+        if (!newText) return;
+        if (/<\w/.test(newText)) n.innerHTML = newText;          // text that carries inline HTML (e.g. <strong>)
+        else if (n.children.length === 0) n.textContent = newText;
+      });
+      document.querySelectorAll('[data-en-placeholder]').forEach(n => {
+        const ph = n.getAttribute(`data-${currentLang}-placeholder`);
+        if (ph) n.setAttribute('placeholder', ph);
+      });
+      checked('[data-lang-opt]', 'data-lang-opt', currentLang);
+    }
+
+    function setLang(l) {
+      currentLang = l;
+      applyLang();
+      refreshPostsForLang();
+    }
+
+    function setTheme(t) {
+      document.documentElement.setAttribute('data-theme', t);
+      stars.setColor(t === 'light' ? '#222' : '#fff');
+      checked('[data-theme-opt]', 'data-theme-opt', t);
+    }
+
+    document.querySelectorAll('[data-lang-opt]').forEach(a => a.addEventListener('click', e => {
+      e.preventDefault();
+      setLang(a.dataset.langOpt);
+    }));
+    document.querySelectorAll('[data-theme-opt]').forEach(a => a.addEventListener('click', e => {
+      e.preventDefault();
+      setTheme(a.dataset.themeOpt);
+    }));
+
+    /* ---------- macOS-style dropdown menus ---------- */
+    function closeMenus() {
+      document.querySelectorAll('.dropdown').forEach(m => m.classList.remove('show'));
+      document.querySelectorAll('.menu-btn').forEach(b => b.setAttribute('aria-expanded', 'false'));
+    }
+    document.querySelectorAll('.menu-btn').forEach(btn => btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const menu = document.getElementById(btn.dataset.menu);
+      const wasOpen = menu.classList.contains('show');
+      closeMenus();
+      if (!wasOpen) {
+        menu.style.left = Math.max(8, btn.getBoundingClientRect().left) + 'px';
+        menu.classList.add('show');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    }));
+    document.addEventListener('click', closeMenus);
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Escape') return;
+      closeMenus();
+      closeReader();
+    });
+
+    /* ── Forum / posts logic ──
+       Each post is its own folder inside /stories, containing a
+       post-en.md and a post-es.md (one markdown file per language),
+       plus any images (or other assets) that post uses:
+
+         stories/
+           manifest.json
+           my-trauma/
+             post-en.md
+             post-es.md
+             example.png
+           learning-to-draw/
+             post-en.md
+             post-es.md
+
+       /assets/stories/manifest.json lists which folders to load, e.g.:
+       ["my-trauma", "learning-to-draw"]
+
+       Switching language re-fetches each post's markdown in the newly
+       selected language. If a translation is missing for a post, it
+       falls back to whichever language file does exist.
+
+       Inside post-en.md / post-es.md, reference images/assets by
+       filename only (e.g. ![alt](example.png)) — they resolve
+       relative to that post's own folder automatically, and are
+       shared between both language versions.
+
+       To add a new post: make a new folder in /stories, drop a
+       post-en.md and post-es.md in it plus whatever images it needs,
+       and add the folder name to manifest.json. No other code
+       changes needed. */
+
+    const STORIES_DIR = 'assets/stories/';
+    const MANIFEST_URL = STORIES_DIR + 'manifest.json';
+    let postFolders = [];       // cached folder list from manifest.json
+    let openPostFolder = null;  // folder currently shown in the reader modal, if any
+
+    marked.setOptions({ gfm: true, breaks: false }); // raw HTML (for align="center" etc.) passes through by default
+
+    function extractMeta(markdown, fallbackName) {
+      const titleMatch = markdown.match(/^#\s+(.+)$/m);
+      const title = titleMatch ? titleMatch[1].trim() : fallbackName;
+
+      const bodyAfterTitle = titleMatch
+        ? markdown.slice(markdown.indexOf(titleMatch[0]) + titleMatch[0].length)
+        : markdown;
+
+      const firstBlock = bodyAfterTitle.trim().split(/\n\s*\n/)[0] || '';
+      let preview = firstBlock
+        .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+        .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+        .replace(/<[^>]+>/g, '')
+        .replace(/[#*_>`~]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+      if (preview.length > 220) preview = preview.slice(0, 220).trim() + '…';
+      if (!preview) preview = '—';
+
+      const imgMatch =
+        markdown.match(/!\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)/) ||
+        markdown.match(/<img[^>]+src=["']([^"']+)["']/i);
+      const image = imgMatch ? imgMatch[1] : null;
+
+      return { title, preview, image };
+    }
+
+    function resolveAsset(path, folder) {
+      if (!path) return path;
+      if (/^https?:\/\//i.test(path) || path.startsWith('data:')) return path;
+      return STORIES_DIR + folder + '/' + path.replace(/^\.?\/+/, '');
+    }
+
+    // After marked renders the markdown to HTML, relative <img src> and
+    // <a href> (including ones written as raw HTML in the post) need to be
+    // pointed at the post's own folder — marked only rewrites markdown
+    // image/link syntax, not raw HTML, so this catches both.
+    function fixRelativeAssets(containerEl, folder) {
+      containerEl.querySelectorAll('img[src]').forEach(img => {
+        img.setAttribute('src', resolveAsset(img.getAttribute('src'), folder));
+      });
+      containerEl.querySelectorAll('a[href]').forEach(a => {
+        const href = a.getAttribute('href');
+        if (!href || /^(https?:|mailto:|#)/i.test(href)) return;
+        a.setAttribute('href', resolveAsset(href, folder));
+      });
+    }
+
+    /* ── Rating system ──
+       Stars (1-5) + an optional comment. On submit, sends the rating to the backend proxy (RATING_API_URL),
+       which forwards it to Discord as an embed. One rating per post is remembered in
+       localStorage (per-browser) so the same visitor can't spam it
+       from the same reader session, and reopening a rated post shows
+       a "thanks" state instead of the form. */
+    const RATING_API_URL = 'https://rating-worker.laminaxlabs.workers.dev';
+
+    let selectedStars = 0;
+    const starsEl = document.getElementById('rating-stars');
+    const starEls = Array.from(starsEl.querySelectorAll('.star'));
+    const commentEl = document.getElementById('rating-comment');
+    const ratingSubmitBtn = document.getElementById('rating-submit');
+    const ratingFeedbackEl = document.getElementById('rating-feedback');
+
+    function paintStars(count) {
+      starEls.forEach(s => {
+        s.classList.toggle('filled', Number(s.dataset.value) <= count);
+      });
+    }
+
+    starEls.forEach(starEl => {
+      starEl.addEventListener('mouseenter', () => paintStars(Number(starEl.dataset.value)));
+      starEl.addEventListener('click', () => {
+        if (ratingSubmitBtn.disabled) return;
+        selectedStars = Number(starEl.dataset.value);
+        paintStars(selectedStars);
+      });
+    });
+    starsEl.addEventListener('mouseleave', () => paintStars(selectedStars));
+
+    function ratedKey(folder) { return 'rated_' + folder; }
+
+    function resetRatingUI() {
+      selectedStars = 0;
+      paintStars(0);
+      commentEl.value = '';
+      commentEl.disabled = false;
+      ratingSubmitBtn.disabled = false;
+      ratingSubmitBtn.textContent = ratingSubmitBtn.getAttribute(`data-${currentLang}`) || 'Submit rating';
+      ratingFeedbackEl.textContent = '';
+    }
+
+    function showAlreadyRated(folder) {
+      const prevStars = Number(localStorage.getItem(ratedKey(folder))) || 0;
+      selectedStars = prevStars;
+      paintStars(prevStars);
+      commentEl.disabled = true;
+      ratingSubmitBtn.disabled = true;
+      ratingFeedbackEl.textContent = currentLang === 'es'
+        ? 'Ya calificaste esta publicación. ¡Gracias!'
+        : 'You already rated this post. Thanks!';
+    }
+
+    async function submitRating(folder, title) {
+      if (selectedStars < 1) {
+        ratingFeedbackEl.textContent = currentLang === 'es'
+          ? 'Selecciona una cantidad de estrellas primero.'
+          : 'Pick a star rating first.';
+        return;
+      }
+
+      ratingSubmitBtn.disabled = true;
+      commentEl.disabled = true;
+      ratingSubmitBtn.textContent = currentLang === 'es' ? 'Enviando…' : 'Sending…';
+      ratingFeedbackEl.textContent = '';
+
+      const comment = commentEl.value.trim();
+      try {
+        const res = await fetch(RATING_API_URL + '/api/rating', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ post: title || folder, rating: selectedStars, comment: comment || '' })
+        });
+        if (!res.ok) throw new Error('Rating API responded with status ' + res.status);
+        localStorage.setItem(ratedKey(folder), String(selectedStars));
+        ratingSubmitBtn.textContent = currentLang === 'es' ? 'Enviado' : 'Sent';
+        ratingFeedbackEl.textContent = currentLang === 'es' ? '¡Gracias por tu calificación!' : 'Thanks for rating!';
+      } catch (err) {
+        ratingSubmitBtn.disabled = false;
+        commentEl.disabled = false;
+        ratingSubmitBtn.textContent = ratingSubmitBtn.getAttribute(`data-${currentLang}`) || 'Submit rating';
+        ratingFeedbackEl.textContent = currentLang === 'es'
+          ? 'No se pudo enviar la calificación. Intenta de nuevo.'
+          : 'Could not send the rating. Try again.';
+      }
+    }
+
+    ratingSubmitBtn.addEventListener('click', () => {
+      if (!openPostFolder) return;
+      const title = document.getElementById('reader-title').textContent;
+      submitRating(openPostFolder, title);
+    });
+
+    function openReader(title, markdown, folder) {
+      openPostFolder = folder;
+      document.getElementById('reader-title').textContent = title;
+      document.getElementById('reader-meta').textContent = currentLang === 'es' ? 'Publicación' : 'Post';
+      const bodyEl = document.getElementById('reader-body');
+      bodyEl.innerHTML = marked.parse(markdown);
+      fixRelativeAssets(bodyEl, folder);
+
+      resetRatingUI();
+      if (localStorage.getItem(ratedKey(folder))) {
+        showAlreadyRated(folder);
+      }
+
+      const modal = document.getElementById('reader-modal');
+      modal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeReader() {
+      openPostFolder = null;
+      document.getElementById('reader-modal').classList.remove('show');
+      document.body.style.overflow = '';
+    }
+    document.getElementById('reader-close').addEventListener('click', closeReader);
+    document.getElementById('reader-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'reader-modal') closeReader();
+    });
+
+    function renderPostRow(meta, markdown, folder) {
+      const row = document.createElement('div');
+      row.className = 'post-row';
+      row.setAttribute('role', 'button');
+      row.setAttribute('tabindex', '0');
+
+      const thumbHtml = meta.image
+        ? `<img src="${resolveAsset(meta.image, folder)}" alt="">`
+        : '';
+
+      row.innerHTML = `
+        <div class="post-main">
+          <div class="post-title">${meta.title}</div>
+          <div class="post-preview">${meta.preview}</div>
+        </div>
+        <div class="post-thumb-wrap ${meta.image ? '' : 'no-image'}">
+          ${thumbHtml || (currentLang === 'es' ? 'Sin imagen' : 'No image')}
+        </div>
+      `;
+
+      row.addEventListener('click', () => openReader(meta.title, markdown, folder));
+      row.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') openReader(meta.title, markdown, folder);
+      });
+
+      return row;
+    }
+
+    // Tries post-<lang>.md first, falls back to the other language if that
+    // translation doesn't exist for this post.
+    async function fetchPostMarkdown(folder, lang) {
+      const order = lang === 'es' ? ['es', 'en'] : ['en', 'es'];
+      for (const l of order) {
+        try {
+          const res = await fetch(STORIES_DIR + folder + '/post-' + l + '.md', { cache: 'no-store' });
+          if (res.ok) return { markdown: await res.text(), lang: l };
+        } catch (e) { /* try next */ }
+      }
+      return null;
+    }
+
+    async function renderPostsList() {
+      const listEl = document.getElementById('posts-list');
+      listEl.innerHTML = `<p class="state-msg">${currentLang === 'es' ? 'Cargando publicaciones…' : 'Loading posts…'}</p>`;
+
+      if (postFolders.length === 0) {
+        listEl.innerHTML = `<p class="state-msg">${currentLang === 'es' ? 'Aún no hay publicaciones.' : 'No posts yet.'}</p>`;
+        return;
+      }
+
+      const loaded = await Promise.all(postFolders.map(async (folder) => {
+        const result = await fetchPostMarkdown(folder, currentLang);
+        if (!result) return null;
+        const meta = extractMeta(result.markdown, folder);
+        return { meta, markdown: result.markdown, folder };
+      }));
+
+      const valid = loaded.filter(Boolean);
+      listEl.innerHTML = '';
+
+      if (valid.length === 0) {
+        listEl.innerHTML = `<p class="state-msg">${currentLang === 'es' ? 'No se pudieron cargar las publicaciones.' : 'Could not load any posts.'}</p>`;
+        return;
+      }
+
+      valid.forEach(({ meta, markdown, folder }) => {
+        listEl.appendChild(renderPostRow(meta, markdown, folder));
+      });
+    }
+
+    async function loadPosts() {
+      const listEl = document.getElementById('posts-list');
+      try {
+        const manifestRes = await fetch(MANIFEST_URL, { cache: 'no-store' });
+        if (!manifestRes.ok) throw new Error('manifest not found');
+        const folders = await manifestRes.json();
+        postFolders = Array.isArray(folders) ? folders : [];
+        await renderPostsList();
+      } catch (err) {
+        listEl.innerHTML = `<p class="state-msg">${currentLang === 'es'
+          ? 'No se pudo cargar la lista de publicaciones (assets/stories/manifest.json).'
+          : 'Could not load the post list (assets/stories/manifest.json).'}</p>`;
+      }
+    }
+
+    // Called when the language changes: reloads the list in the new
+    // language, and if a post is currently open in the reader, refreshes
+    // that too instead of closing it.
+    async function refreshPostsForLang() {
+      if (postFolders.length > 0) await renderPostsList();
+      if (openPostFolder) {
+        const result = await fetchPostMarkdown(openPostFolder, currentLang);
+        if (result) {
+          const meta = extractMeta(result.markdown, openPostFolder);
+          openReader(meta.title, result.markdown, openPostFolder);
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadPosts);
+  </script>
+  <script>
+    /* "View old layout" goes to /old/<this page's filename>, keeping any ?query and #hash */
+    (function(){var a=document.getElementById("old-layout");if(!a)return;var f=location.pathname.split("/").pop()||"index.html";if(f.indexOf(".")<0)f+=".html";a.href="/old/"+f+location.search+location.hash;})();
+  </script>
+</body>
+</html>

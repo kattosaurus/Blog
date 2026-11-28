@@ -4,8 +4,8 @@ on:
   push:
     branches: [main]
     paths:
-      - 'errors/template.html'
-      - 'assets/**'
+      - 'site/errors/template.html'
+      - 'assets/errors/**'
       - '.github/workflows/generate-errors.yml'
   workflow_dispatch:  # Allows manual trigger
 
@@ -21,7 +21,7 @@ jobs:
       
       - name: Generate error pages
         run: |
-          mkdir -p errors/generated
+          mkdir -p site/errors/generated
           
           # Define error data: filename|code|title|description
           # NOTE: don't use | / & \ or double quotes inside descriptions,
@@ -47,7 +47,7 @@ jobs:
             # Find the image file (try multiple extensions)
             img=""
             for ext in gif jpg jpeg png webp; do
-              if [[ -f "assets/${slug}.${ext}" ]]; then
+              if [[ -f "assets/errors/${slug}.${ext}" ]]; then
                 img="${slug}.${ext}"
                 break
               fi
@@ -63,20 +63,23 @@ jobs:
                 -e "s/{{TITLE}}/${title}/g" \
                 -e "s/{{DESCRIPTION}}/${desc}/g" \
                 -e "s/{{IMAGE}}/${img}/g" \
-                errors/template.html > "errors/generated/${code}.html"
+                -e 's|href="../styles.css"|href="../../styles.css"|g' \
+                site/errors/template.html > "site/errors/generated/${code}.html"
             
             echo "Generated ${code}.html using ${img}"
           done
           
           # Also create a 404.html in root for GitHub Pages
-          if [[ -f "errors/generated/404.html" ]]; then
-            cp errors/generated/404.html 404.html
+          if [[ -f "site/errors/generated/404.html" ]]; then
+            sed -e 's|../../assets/errors/|assets/errors/|g' \
+                -e 's|href="../../styles.css"|href="styles.css"|g' \
+                site/errors/generated/404.html > site/404.html
           fi
       
       - name: Commit generated files
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add errors/generated/ 404.html
+          git add site/errors/generated/ site/404.html
           git diff --staged --quiet || git commit -m "Auto-generate error pages [skip ci]"
           git push

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<meta property="og:title" content="Changed Addon Mods">
+<meta property="og:description" content="A ranked list of Changed: Minecraft Mod addons, with descriptions and community servers.">
+<title>Changed Addon Mods</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Hanken+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-addons">
+
+<div class="header">
+  <h1 class="your">A ranked list of</h1>
+  <h1 class="profs">Changed Addons</h1>
+</div>
+
+<section class="about">
+  <div class="age"><span class="badge">16+</span><p class="warn">MOST OF THESE REQUIRE YOU TO BE 16+!</p></div>
+  <p>Addons for Changed: Minecraft Mod, with what each one does and where its community hangs out. Download counts combine CurseForge and Modrinth.</p>
+  <p class="summary" id="summary"></p>
+</section>
+
+<div class="toolbar">
+  <div class="toolbar-in">
+    <div class="tools">
+      <label class="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Search addons" aria-label="Search addons" autocomplete="off">
+        <kbd>/</kbd>
+      </label>
+      <select id="sort" aria-label="Sort addons">
+        <option value="downloads">Most downloads</option>
+        <option value="name">Name A to Z</option>
+      </select>
+      <div class="seg" role="group" aria-label="View">
+        <button type="button" data-view="rank" aria-pressed="true">Ranking</button>
+        <button type="button" data-view="groups" aria-pressed="false">By group</button>
+      </div>
+      <button type="button" class="ghost" id="rnd">Random addon</button>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Filter by group"></div>
+  </div>
+</div>
+
+<div id="out" aria-live="polite"><p class="loading">Loading…</p></div>
+
+<p class="note" id="note"></p>
+
+<script>
+const CF='https://www.curseforge.com/minecraft/mc-mods/', MR='https://modrinth.com/mod/';
+const $=id=>document.getElementById(id);
+const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const fmt=n=>n<1000?String(n):n<1e6?Number((n/1000).toFixed(1))+'K':Number((n/1e6).toFixed(2))+'M';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const plain=s=>String(s||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
+const hue=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return h%360;};
+const initials=n=>{const w=n.replace(/[^A-Za-z0-9 ]/g,' ').trim().split(/\s+/);return((w[0]||'?')[0]+(w[1]?w[1][0]:'')) .toUpperCase();};
+
+async function getJSON(url){const r=await fetch(url,{cache:'no-cache'});if(!r.ok)throw new Error(url+' '+r.status);return r.json();}
+
+// Modrinth exposes public project summaries and downloads directly from the browser.
+async function liveModrinth(slugs){
+  const out={};
+  for(let i=0;i<slugs.length;i+=100){
+    const ids=encodeURIComponent(JSON.stringify(slugs.slice(i,i+100)));
+    const list=await getJSON('https://api.modrinth.com/v2/projects?ids='+ids);
+    list.forEach(p=>{
+      const summary = typeof p.description === 'string' ? p.description.replace(/\s+/g,' ').trim() : '';
+      const v={dl:p.downloads??0,icon:p.icon_url||'',color:p.color!=null?'#'+p.color.toString(16).padStart(6,'0'):null,summary};
+      out[p.slug.toLowerCase()]=v;out[p.id.toLowerCase()]=v;
+    });
+  }
+  return out;
+}
+
+/* ---------- State ---------- */
+const S={q:'',group:'all',sort:'downloads',view:'rank',open:new Set()};
+let DATA,DL={},LIVE={},UPDATED='',MODS=[],RANK={},MAXD=0,GKEYS=[],shownTotal=0;
+
+const gHue=k=>(GKEYS.indexOf(k)*57+215)%360;
+
+function compute(){
+  MODS=DATA.mods.map(m=>{
+    const d=DL[m.cf]||{};
+    const lv=m.mr?LIVE[m.mr.toLowerCase()]:null;
+    const cf=d.cf??0, mr=lv?lv.dl:(d.mr??0);
+    const imgs=[...new Set([m.img,d.img,lv&&lv.icon].filter(Boolean))];
+    const summary=(lv&&lv.summary&&lv.summary.trim()) || (m.desc||d.desc||'');
+    return {...m,cfN:cf,mrN:mr,total:cf+mr,imgs,accent:lv&&lv.color,desc:summary};
+  });
+  const byDl=[...MODS].sort((a,b)=>b.total-a.total);
+  RANK={};byDl.forEach((m,i)=>RANK[m.cf]=i+1);
+  MAXD=byDl[0]?byDl[0].total:0;
+}
+
+function nextImg(el){
+  let rest=[];try{rest=JSON.parse(el.dataset.next||'[]');}catch(e){}
+  if(rest.length){el.dataset.next=JSON.stringify(rest.slice(1));el.src=rest[0];}else el.remove();
+}
+
+function iconHTML(m,lg){
+  const style=`--h:${hue(m.name)}${m.accent?`;--c:${m.accent}`:''}`;
+  const img=m.imgs.length?`<img src="${esc(m.imgs[0])}" data-next="${esc(JSON.stringify(m.imgs.slice(1)))}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="nextImg(this)" />`:'';
+  return `<span class="ico${lg?' lg':''}" style="${style}"><b>${esc(initials(m.name))}</b>${img}</span>`;
+}
+
+const btns=m=>{
+  const srv=m.server?`<a href="${esc(m.server)}" class="more alt">${m.server.includes('fluxer')?'Join Fluxer':'Join Discord'}</a>`:'';
+  const mr=m.mr?`<a href="${MR+esc(m.mr)}" class="more alt">Modrinth</a>`:'';
+  return `<div class="btns"><a href="${CF+esc(m.cf)}" class="more">CurseForge</a>${mr}${srv}</div>`;
+};
+
+function rowHTML(m,i){
+  const id='m-'+m.cf, open=S.open.has(m.cf);
+  const pct=MAXD?Math.max(1.5,m.total/MAXD*100):0;
+  const split=m.mr?`<p class="split"><span>CurseForge ${fmt(m.cfN)}</span><span>Modrinth ${fmt(m.mrN)}</span></p>`:'';
+  return `<li class="row${open?' open':''}" id="${esc(id)}" data-id="${esc(m.cf)}" style="--g:${gHue(m.group)}">
+    <button type="button" class="row-head" aria-expanded="${open}" aria-controls="${esc(id)}-p">
+      <span class="n">${RANK[m.cf]}</span>${iconHTML(m)}
+      <span class="who"><span class="nm">${m.name}</span><span class="meter"><i style="--w:${pct}%;--i:${i}"></i></span></span>
+      <span class="gl"><i></i>${DATA.groups[m.group]||''}</span>
+      <span class="d" title="${m.total.toLocaleString()} downloads">${fmt(m.total)}</span>
+      <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="panel" id="${esc(id)}-p" role="region" aria-label="${esc(m.name)} details"><div class="panel-in"><div class="inner">
+      <p>${m.desc}</p>${split}${btns(m)}
+    </div></div></div>
+  </li>`;
+}
+
+function cardHTML(m){
+  return `<article class="card" id="m-${esc(m.cf)}" data-id="${esc(m.cf)}">
+    <div class="card-top">${iconHTML(m,true)}<div><h3>${m.name}</h3><span class="dl">${fmt(m.total)} downloads</span></div></div>
+    <p>${m.desc}</p>${btns(m)}
+  </article>`;
+}
+
+function filtered(ignoreGroup){
+  const q=S.q.trim().toLowerCase();
+  return MODS.filter(m=>(ignoreGroup||S.group==='all'||m.group===S.group)&&
+    (!q||(m.name+' '+plain(m.desc)+' '+(DATA.groups[m.group]||'')).toLowerCase().includes(q)));
+}
+
+function render(){
+  const list=filtered().sort(S.sort==='name'?(a,b)=>a.name.localeCompare(b.name):(a,b)=>b.total-a.total);
+
+  // chip counts (respect search, ignore the group filter)
+  const base=filtered(true), counts={all:base.length};
+  base.forEach(m=>counts[m.group]=(counts[m.group]||0)+1);
+  document.querySelectorAll('.chip').forEach(c=>c.querySelector('[data-c]').textContent=counts[c.dataset.g]||0);
+
+  const active=S.q.trim()||S.group!=='all';
+  let html=active&&list.length?`<p class="count">Showing ${list.length} of ${MODS.length} addons</p>`:'';
+
+  if(!list.length){
+    html=`<div class="empty"><p>No addons match${S.q.trim()?` “${esc(S.q.trim())}”`:' this filter'}.</p><button type="button" class="ghost" id="clear">Clear search and filter</button></div>`;
+  }else if(S.view==='rank'){
+    html+=`<ol class="rank">${list.map(rowHTML).join('')}</ol>`;
+  }else{
+    html+=GKEYS.map(k=>{
+      const items=list.filter(m=>m.group===k);
+      return items.length?`<section class="grp" style="--g:${gHue(k)}"><h2><i class="dot"></i>${DATA.groups[k]}</h2><div class="grid">${items.map(cardHTML).join('')}</div></section>`:'';
+    }).join('');
+  }
+  $('out').innerHTML=html;
+}
+
+function setSummary(animate){
+  const total=MODS.reduce((s,m)=>s+m.total,0);
+  const paint=n=>{$('summary').innerHTML=`<b>${MODS.length}</b> addons, <b>${fmt(Math.round(n))}</b> downloads combined.`;};
+  if(!animate||REDUCED){paint(total);shownTotal=total;return;}
+  const from=shownTotal,t0=performance.now(),dur=1100;
+  (function step(t){
+    const k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,3);
+    paint(from+(total-from)*e);
+    if(k<1)requestAnimationFrame(step);else shownTotal=total;
+  })(t0);
+}
+
+/* ---------- Controls ---------- */
+function buildChips(){
+  $('chips').innerHTML=[['all','All'],...GKEYS.map(k=>[k,DATA.groups[k]])].map(([k,l])=>
+    `<button type="button" class="chip" data-g="${esc(k)}" aria-pressed="${k===S.group}"${k==='all'?'':' style="--g:${gHue(k)}"'}>${k==='all'?'':'<i></i>'}${l}<span data-c></span></button>`).join('');
+}
+
+function syncControls(){
+  $('q').value=S.q;$('sort').value=S.sort;
+  document.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.g===S.group));
+  document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.view===S.view));
+}
+
+function toggle(el,force){
+  const open=force??!el.classList.contains('open');
+  el.classList.toggle('open',open);
+  const h=el.querySelector('.row-head');if(h)h.setAttribute('aria-expanded',open);
+  const id=el.dataset.id;
+  open?S.open.add(id):S.open.delete(id);
+  if(open){try{history.replaceState(null,'','#m-'+id);}catch(e){}}
+}
+
+function initUI(){
+  GKEYS=Object.keys(DATA.groups);
+  buildChips();
+
+  $('q').addEventListener('input',e=>{S.q=e.target.value;render();});
+  $('q').addEventListener('keydown',e=>{if(e.key==='Escape'){S.q='';e.target.value='';render();e.target.blur();}});
+  $('sort').addEventListener('change',e=>{S.sort=e.target.value;render();});
+  $('chips').addEventListener('click',e=>{
+    const c=e.target.closest('.chip');if(!c)return;
+    S.group=c.dataset.g;syncControls();render();
+  });
+  document.querySelector('.seg').addEventListener('click',e=>{
+    const b=e.target.closest('button');if(!b)return;
+    S.view=b.dataset.view;syncControls();render();
+  });
+  $('out').addEventListener('click',e=>{
+    if(e.target.closest('#clear')){S.q='';S.group='all';syncControls();render();return;}
+    const h=e.target.closest('.row-head');
+    if(h)toggle(h.parentElement);
+  });
+  $('rnd').addEventListener('click',()=>{
+    const m=MODS[Math.floor(Math.random()*MODS.length)];if(!m)return;
+    S.view='rank';S.q='';S.group='all';S.open.add(m.cf);
+    syncControls();render();
+    const el=$('m-'+m.cf);if(!el)return;
+    toggle(el,true);
+    el.scrollIntoView({block:'center',behavior:REDUCED?'auto':'smooth'});
+    el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),1500);
+  });
+  document.addEventListener('keydown',e=>{
+    if(e.key==='/'&&!/^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName)){e.preventDefault();$('q').focus();}
+  });
+}
+
+/* ---------- Boot ---------- */
+(async()=>{
+  try{
+    const [data,cached]=await Promise.all([getJSON('addons/mods.json'),getJSON('addons/downloads.json')]);
+    DATA=data;DL=cached.mods||{};UPDATED=cached.updated;
+    initUI();compute();
+
+    // Deep link: #m-<curseforge-slug> opens that addon
+    const hash=location.hash.slice(1);
+    if(hash.startsWith('m-'))S.open.add(hash.slice(2));
+
+    $('out').classList.add('enter');
+    render();setSummary(true);
+    setTimeout(()=>$('out').classList.remove('enter'),1800);
+    $('note').textContent=`Download counts are CurseForge + Modrinth. CurseForge numbers last refreshed ${UPDATED}; Modrinth numbers are fetched live.`;
+    if(hash.startsWith('m-')){const el=$(hash);if(el)setTimeout(()=>el.scrollIntoView({block:'center'}),150);}
+
+    try{
+      const slugs=data.mods.filter(m=>m.mr).map(m=>m.mr);
+      if(slugs.length){
+        LIVE=await liveModrinth(slugs);
+        compute();render();setSummary(true);
+      }
+    }catch(e){console.warn('Live Modrinth fetch failed, using cached values',e);}
+  }catch(e){
+    $('out').innerHTML='<p class="err">Could not load the list. Serve this page over http(s) (not file://) with the add-on data files in data/addons/.</p>';
+    console.error(e);
+  }
+})();
+
+/* ---------- Header stars (original) ---------- */
+(function(){
+  const header=document.querySelector('.header'),f=document.createDocumentFragment();
+  for(let i=0;i<45;i++){
+   const s=document.createElement('div'),z=Math.random()*1.5+1;
+   s.className='star';s.style.width=s.style.height=z+'px';
+   s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';
+   s.style.setProperty('--move-x',(Math.random()*16-8)+'px');
+   s.style.setProperty('--move-y',(Math.random()*16-8)+'px');
+   s.style.setProperty('--duration',(Math.random()*3+4)+'s');
+   s.style.animationDelay=Math.random()*-4+'s';
+   f.appendChild(s);
+  }
+  header.appendChild(f);
+})();
+</script>
+</body>
+</html>

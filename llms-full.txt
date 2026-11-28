@@ -36,7 +36,7 @@ I don't like theres a twitch streamer with the same name that I have on my socia
 
 ### C. Mod Development (Minecraft)
 - **Description:** Custom Minecraft mod creation (specializing in Forge) or character integration into the custom Minecraft mod *Changed Extras*.
-- **Links:** `portfolio.html` / `portfolio/`
+- **Links:** `portfolio.html` / `assets/portfolio/`
 
 ---
 
